@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  odoo:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
