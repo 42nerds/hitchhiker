@@ -1,6 +1,4 @@
-import re
 import pathlib
-import git
 import subprocess
 import hitchhiker_module_control.version.semver as semver
 import hitchhiker_module_control.enums as enums
@@ -32,7 +30,7 @@ def get_tag_versions(tags):
 
 
 def find_next_version(config: config.Context, project, prerelease):
-    tags = [(t, v) for t, v in get_tag_versions(config.repo.tags) if (True if prerelease else v.prerelease == None)]
+    tags = [(t, v) for t, v in get_tag_versions(config.repo.tags) if (True if prerelease else v.prerelease is None)]
     commit_list, lastsha = find_latest_tag_in_commits(tags, list(config.repo.iter_commits(config.repo.active_branch)))
     if commit_list is None:
         commit_list = list(config.repo.iter_commits(config.repo.active_branch))

@@ -1,4 +1,3 @@
-import os
 from tests.git_fixtures import *
 from click.testing import CliRunner
 from hitchhiker_module_control.cli import main

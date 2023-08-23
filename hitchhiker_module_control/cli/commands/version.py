@@ -1,6 +1,4 @@
 import click
-import git
-import hitchhiker_module_control.version.semver as semver
 import hitchhiker_module_control.version.commit as commit
 import hitchhiker_module_control.cli.config as config
 import hitchhiker_module_control.enums as enums
@@ -22,16 +20,22 @@ def version(ctx: click.Context, show, prerelease):
     changedfiles = []
     for project in ctx.obj.projects:
         print(f"project: {project.name} version: {project.version}")
-        bump, commits = commit.find_next_version(ctx.obj, project, prerelease)
+        bump, _ = commit.find_next_version(ctx.obj, project, prerelease)
         mainbump = bump if bump > mainbump else mainbump
         if bump != enums.VersionBump.NONE:
-            project.version.bump_prerelease() if prerelease else project.version.remove_prerelease_and_buildmeta()
+            if prerelease:
+                project.version.bump_prerelease()
+            else:
+                project.version.remove_prerelease_and_buildmeta()
             project.version.bump(bump)
             changedfiles += config.set_version(ctx.obj, project)
             print(f"-- new -- project: {project.name} version: {project.version}")
-    
+
     if mainbump != enums.VersionBump.NONE:
-        ctx.obj.version.bump_prerelease() if prerelease else ctx.obj.version.remove_prerelease_and_buildmeta()
+        if prerelease:
+            ctx.obj.version.bump_prerelease()
+        else:
+            ctx.obj.version.remove_prerelease_and_buildmeta()
         ctx.obj.version.bump(mainbump)
         changedfiles += config.set_version(ctx.obj, ctx.obj)
         print(f"main version bump: {ctx.obj.version}")

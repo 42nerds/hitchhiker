@@ -1,6 +1,5 @@
 import os
 import random
-import pathlib
 import git
 import pytest
 
@@ -29,7 +28,7 @@ version_toml = ["pyproject.toml:project.version"]
 path = "{project}/"
 version_variables = ["{project}/__init__.py:__version__"]
 """)
-    for project in projects: 
+    for project in projects:
         if not os.path.isdir(f"{repo.working_tree_dir}/{project}"):
             os.mkdir(f"{repo.working_tree_dir}/{project}")
         with open(f"{repo.working_tree_dir}/{project}/__init__.py", "w") as f:
@@ -37,19 +36,15 @@ version_variables = ["{project}/__init__.py:__version__"]
 
 
 def create_random_file(repo, path = ""):
-    dir = f"{repo.working_tree_dir}/{path}/"
-    if not os.path.isdir(dir):
-        os.mkdir(dir)
-    fname = f"{dir}{random.randint(0, 999999999)}"
+    fname = f"{repo.working_tree_dir}/{path}/{random.randint(0, 999999999)}"
     with open(fname, "w") as f:
         f.write(f"test file\n{fname}\n")
     repo.git.add(fname)
-    pass
 
 
 def create_commits(repo, commits):
     for commit in commits:
-        for i in range(0, random.randint(1, 5)):
+        for _ in range(0, random.randint(1, 5)):
             create_random_file(repo, commit[1])
         repo.git.commit(m=commit[0])
 
@@ -93,7 +88,7 @@ def repo_multi_project_commits(tmp_path_factory):
     repo = create_git_repo(path)
     create_configs(repo, ["project1", "project2", "1another_project", "2another_project"])
     create_commits(repo, [["Initial commit", ""], ["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "/project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
-    
+
     yield repo
     repo.close()
 

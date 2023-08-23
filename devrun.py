@@ -1,4 +1,3 @@
-import re
 import sys
 from hitchhiker_module_control.cli import main
 if __name__ == '__main__':

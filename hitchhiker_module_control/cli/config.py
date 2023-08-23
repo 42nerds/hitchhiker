@@ -110,7 +110,7 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo):
     ctx = Context(projects=[], version=semver.Version(), version_variables=[], version_toml=[], version_odoo_manifest=[], repo=repo)
     with open(tomlcfg, "r", encoding="utf-8") as f:
         tomlconf = Dotty(tomlkit.parse(f.read()))
-    __add_version_vars(tomlconf[f"tool.hitchhiker_module_control"], ctx)
+    __add_version_vars(tomlconf["tool.hitchhiker_module_control"], ctx)
     assert (len(ctx.version_variables) + len(ctx.version_toml) + len(ctx.version_odoo_manifest)) > 0, "no version store location defined for main project"
     ctx.version = __get_version(ctx, ctx)
     if "tool.hitchhiker_module_control.projects" in tomlconf:

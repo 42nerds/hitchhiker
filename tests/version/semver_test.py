@@ -80,7 +80,7 @@ def test_version_cmp():
     assert semver.Version().parse("1.0.0-beta") != semver.Version().parse("1.0.0-alpha")
     assert semver.Version().parse(
         "1.0.0-beta") == semver.Version().parse("1.0.0-beta+buildmeta")
-    
+
     assert semver.Version().parse("1.5.0-rc.197") < semver.Version().parse("1.5.0-rc.198")
 
 def test_version_prerelease():
