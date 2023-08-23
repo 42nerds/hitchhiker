@@ -4,6 +4,17 @@ import hitchhiker_module_control.enums as enums
 
 expect = [
     {
+        "input": "0.0.01-rc5", # invalid input
+        "bump": enums.VersionBump.PATCH,
+        "major": 0,
+        "minor": 0,
+        "patch": 1,
+        "prerelease": None,
+        "buildmeta": None,
+        "str": "0.0.1",
+        "repr": "0.0.1",
+    },
+    {
         "input": "0.0.0",
         "bump": enums.VersionBump.MAJOR,
         "major": 1,
@@ -12,6 +23,7 @@ expect = [
         "prerelease": None,
         "buildmeta": None,
         "str": "1.0.0",
+        "repr": "1.0.0",
     },
     {
         "input": "153.16.3-rc.7",
@@ -22,6 +34,7 @@ expect = [
         "prerelease": "rc.7",
         "buildmeta": None,
         "str": "153.17.0-rc.7",
+        "repr": "153.17.0-rc.7",
     },
     {
         "input": "153.16.3+20230821-a---build-5",
@@ -31,7 +44,8 @@ expect = [
         "patch": 4,
         "prerelease": None,
         "buildmeta": "20230821-a---build-5",
-        "str": "153.16.4+20230821-a---build-5",
+        "str": "153.16.4",
+        "repr": "153.16.4+20230821-a---build-5",
     },
     {
         "input": "153.16.25-rc29+date2023-08-22abcdef-abc",
@@ -41,7 +55,8 @@ expect = [
         "patch": 25,
         "prerelease": "rc29",
         "buildmeta": "date2023-08-22abcdef-abc",
-        "str": "153.16.25-rc29+date2023-08-22abcdef-abc",
+        "str": "153.16.25-rc29",
+        "repr": "153.16.25-rc29+date2023-08-22abcdef-abc",
     },
 ]
 
@@ -57,6 +72,7 @@ def test_version():
         assert version.prerelease == ex["prerelease"]
         assert version.buildmeta == ex["buildmeta"]
         assert str(version) == ex["str"]
+        assert repr(version) == ex["repr"]
 
 
 def test_version_cmp():
@@ -64,8 +80,12 @@ def test_version_cmp():
     assert semver.Version().parse("1.0.0") < semver.Version().parse("1.0.1") < semver.Version(
     ).parse("1.1.0") < semver.Version().parse("1.1.1") < semver.Version().parse("2.1.1")
 
+    assert not (semver.Version().parse("2.1.0") <
+                semver.Version().parse("1.0.1"))
     assert not (semver.Version().parse("1.1.0") <
                 semver.Version().parse("1.0.1"))
+    assert not (semver.Version().parse("1.7.2") <
+                semver.Version().parse("1.7.1"))
 
     assert semver.Version().parse("1.2.3-alpha") < semver.Version().parse(
         "1.2.3-beta") < semver.Version().parse("1.2.3-delta") < semver.Version().parse("1.2.3-gamma")
@@ -85,7 +105,7 @@ def test_version_cmp():
 
 def test_version_prerelease():
     assert semver.Version().parse("1.0.0-rc.0").bump_prerelease() == semver.Version().parse("1.0.0-rc.1")
-    assert semver.Version().parse("1.0.0-rc.1578").bump_prerelease() == semver.Version().parse("1.0.0-rc.1579")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump_prerelease() == semver.Version().parse("1.0.0-rc.1579")
 
     assert semver.Version().parse("1.0.0").bump_prerelease() == semver.Version().parse("1.0.0-rc.0")
 

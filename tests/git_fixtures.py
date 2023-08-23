@@ -117,7 +117,7 @@ def repo_multi_project_commits_before_tag_fix_after(tmp_path_factory):
     create_commits(repo, [["fix: something", "/project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "/project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
     repo.git.tag("v1.0.0", m="v1.0.0")
     create_commits(repo, [["fix: something", "project1"], ["fix: something else", "project2"]])
-    
+
     yield repo
     repo.close()
 

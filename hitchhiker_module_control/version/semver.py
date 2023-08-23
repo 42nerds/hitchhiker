@@ -14,10 +14,10 @@ class Version():
         pass
 
     def __str__(self):
-        return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}{'+' + self.buildmeta if self.buildmeta is not None else ''}"
+        return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
 
     def __repr__(self):
-        return self.__str__()
+        return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}{'+' + self.buildmeta if self.buildmeta is not None else ''}"
 
     def __eq__(self, obj):
         return self.major == obj.major and self.minor == obj.minor and self.patch == obj.patch and self.prerelease == obj.prerelease
@@ -65,7 +65,7 @@ class Version():
         if len(self.prerelease.split(".")) != len(obj.prerelease.split(".")):
             return len(self.prerelease.split(".")) < len(obj.prerelease.split("."))
 
-        raise RuntimeError("BUG in semver.Version:__lt__!")
+        # it should be _impossible_ to get here!
 
     def parse(self, version: str):
         """Parses semantic version string"""
