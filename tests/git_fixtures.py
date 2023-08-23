@@ -3,6 +3,15 @@ import random
 import git
 import pytest
 
+def randomid(chars=10, ranges=[("0", "9"), ("a", "z"), ("A", "Z")]):
+    allowed = []
+    for start, end in ranges:
+        allowed += range(ord(start), ord(end))
+    id = ""
+    for _ in range(chars):
+        id += chr(random.choice(allowed))
+    return id
+
 def create_git_repo(path):
     repo = git.Repo.init(path)
     repo.git.branch("-M", "main")
@@ -36,7 +45,7 @@ version_variables = ["{project}/__init__.py:__version__"]
 
 
 def create_random_file(repo, path = ""):
-    fname = f"{repo.working_tree_dir}/{path}/{random.randint(0, 999999999)}"
+    fname = f"{repo.working_tree_dir}/{path}/{randomid(chars=20)}"
     with open(fname, "w") as f:
         f.write(f"test file\n{fname}\n")
     repo.git.add(fname)
@@ -44,7 +53,7 @@ def create_random_file(repo, path = ""):
 
 def create_commits(repo, commits):
     for commit in commits:
-        for _ in range(0, random.randint(1, 5)):
+        for _ in range(10):
             create_random_file(repo, commit[1])
         repo.git.commit(m=commit[0])
 
