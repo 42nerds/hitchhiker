@@ -18,8 +18,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install pytest
+          pip install pytest coverage
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest
         run: |
-          pytest -vv
+          coverage run --source . -m pytest -vv
+      - name: Upload coverage report to codacy
+        run: |
+          coverage xml -o cobertura.xml
+          export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -Ls https://coverage.codacy.com/get.sh)
