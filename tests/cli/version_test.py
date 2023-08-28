@@ -8,20 +8,30 @@ from hitchhiker_module_control.cli import main
 def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
     workdir = repo.working_tree_dir
 
+    expected_output_ver = f"main version: {str(semver.Version().parse(main_version))}\n"
+    expected_output = f"main version: 0.0.0\n"
+    largest_version = str(
+        sorted([semver.Version().parse(v) for p, v in versions], reverse=True)[0]
+    )
+    for project, version in versions:
+        version = str(semver.Version().parse(version))
+        expected_output_ver += f"project: {project} version: {version}\n"
+        expected_output += f"project: {project} version: 0.0.0\n"
+        if version != "0.0.0":
+            expected_output += f"-- new -- project: {project} version: {version}\n"
+
+    if largest_version != "0.0.0":
+        expected_output += f"main version bump: {largest_version}\n"
+
     args = ["--workdir", workdir, "version"]
     if prerelease:
         args.append("--prerelease")
     result = CliRunner().invoke(main, args)
     assert result.exit_code == 0
-    # TODO: check output here
-
-    expected_output = f"main version: {str(semver.Version().parse(main_version))}\n"
-    for project, version in versions:
-        expected_output += (
-            f"project: {project} version: {str(semver.Version().parse(version))}\n"
-        )
-    result = CliRunner().invoke(main, ["--workdir", workdir, "version", "--show"])
     assert result.output == expected_output
+
+    result = CliRunner().invoke(main, ["--workdir", workdir, "version", "--show"])
+    assert result.output == expected_output_ver
     assert result.exit_code == 0
 
 
