@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "hitchhiker_module_control"
+name = "hitchhiker"
 version = "0.0.0"
 description = "TODO"
 requires-python = ">=3.7"
@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-hitchhiker_module_control = "hitchhiker_module_control.cli:main"
+hitchhiker = "hitchhiker.cli:main"
 
 [project.optional-dependencies]
 test = [

@@ -30,7 +30,7 @@ def create_configs(repo, projects, main_version):
             f"""[project]
 version = "{main_version}"
 
-[tool.hitchhiker_module_control]
+[tool.hitchhiker]
 projects = {str([n for n, v in projects])}
 version_toml = ["pyproject.toml:project.version"]
 """
@@ -38,7 +38,7 @@ version_toml = ["pyproject.toml:project.version"]
         for project, version in projects:
             f.write(
                 f"""
-[tool.hitchhiker_module_control.project.{project}]
+[tool.hitchhiker.project.{project}]
 path = "{project}/"
 version_variables = ["{project}/__init__.py:__version__"]
 """

@@ -1,5 +1,5 @@
 import sys
-from hitchhiker_module_control.cli import main
+from hitchhiker.cli import main
 if __name__ == '__main__':
-    sys.argv[0] = "hitchhiker_module_control"
+    sys.argv[0] = "hitchhiker"
     sys.exit(main())

@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import git
 from dotty_dict import Dotty
 import tomlkit
-import hitchhiker_module_control.version.semver as semver
-import hitchhiker_module_control.regex as regex
+import hitchhiker.version.semver as semver
+import hitchhiker.regex as regex
 
 
 @dataclass
@@ -110,12 +110,12 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo):
     ctx = Context(projects=[], version=semver.Version(), version_variables=[], version_toml=[], version_odoo_manifest=[], repo=repo)
     with open(tomlcfg, "r", encoding="utf-8") as f:
         tomlconf = Dotty(tomlkit.parse(f.read()))
-    __add_version_vars(tomlconf["tool.hitchhiker_module_control"], ctx)
+    __add_version_vars(tomlconf["tool.hitchhiker"], ctx)
     assert (len(ctx.version_variables) + len(ctx.version_toml) + len(ctx.version_odoo_manifest)) > 0, "no version store location defined for main project"
     ctx.version = __get_version(ctx, ctx)
-    if "tool.hitchhiker_module_control.projects" in tomlconf:
-        for project in tomlconf["tool.hitchhiker_module_control.projects"]:
-            conf = tomlconf[f"tool.hitchhiker_module_control.project.{project}"]
+    if "tool.hitchhiker.projects" in tomlconf:
+        for project in tomlconf["tool.hitchhiker.projects"]:
+            conf = tomlconf[f"tool.hitchhiker.project.{project}"]
             project_ctx = ProjectContext(name=project, path=conf["path"], version=semver.Version(), version_variables=[], version_toml=[], version_odoo_manifest=[])
             __add_version_vars(conf, project_ctx)
             project_ctx.version = __get_version(ctx, project_ctx)

@@ -1,6 +1,6 @@
 import re
-import hitchhiker_module_control.commitparser._base as commitparser
-import hitchhiker_module_control.enums as enums
+import hitchhiker.commitparser._base as commitparser
+import hitchhiker.enums as enums
 
 
 class ConventionalCommitParser(commitparser.CommitParser):

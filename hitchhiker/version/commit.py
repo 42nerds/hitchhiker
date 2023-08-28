@@ -1,9 +1,9 @@
 import pathlib
 import subprocess
-import hitchhiker_module_control.version.semver as semver
-import hitchhiker_module_control.enums as enums
-import hitchhiker_module_control.cli.config as config
-from hitchhiker_module_control.commitparser.conventional import ConventionalCommitParser # TODO: commit parser config
+import hitchhiker.version.semver as semver
+import hitchhiker.enums as enums
+import hitchhiker.cli.config as config
+from hitchhiker.commitparser.conventional import ConventionalCommitParser # TODO: commit parser config
 
 def find_latest_tag_in_commits(tags, commits):
     def search_commit(commit, commits):
