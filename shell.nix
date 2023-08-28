@@ -12,5 +12,6 @@ in stdenv.mkDerivation {
     python311Packages.gitpython
     python311Packages.tomlkit
     python311Packages.dotty-dict
+    python311Packages.PyGithub
   ];
 }
