@@ -84,12 +84,12 @@ def test_version_repo_multi_project_commits_before_tag(
     repo = repo_multi_project_commits_before_tag
     invoke_cli_version_cmd(
         repo,
-        ("0.0.0", "0.0.0"),
+        ("1.0.0", "1.0.0"),
         [
             ("project1", "0.0.0", "0.0.0"),
             ("project2", "0.0.0", "0.0.0"),
             ("1another_project", "0.0.0", "0.0.0"),
-            ("2another_project", "0.0.0", "0.0.0"),
+            ("2another_project", "1.0.0", "1.0.0"),
         ],
     )
 
@@ -101,12 +101,12 @@ def test_version_repo_multi_project_commits_before_tag_fix_after(
     repo = repo_multi_project_commits_before_tag_fix_after
     invoke_cli_version_cmd(
         repo,
-        ("0.0.1", "0.0.0"),
+        ("1.0.1", "1.0.0"),
         [
             ("project1", "0.0.1", "0.0.0"),
             ("project2", "0.0.1", "0.0.0"),
             ("1another_project", "0.0.0", "0.0.0"),
-            ("2another_project", "0.0.0", "0.0.0"),
+            ("2another_project", "1.0.0", "1.0.0"),
         ],
     )
 
