@@ -37,11 +37,13 @@ version_toml = ["pyproject.toml:project.version"]
 path = "{project}/"
 version_variables = ["{project}/__init__.py:__version__"]
 """)
+    repo.git.add(f"pyproject.toml")
     for project in projects:
         if not os.path.isdir(f"{repo.working_tree_dir}/{project}"):
             os.mkdir(f"{repo.working_tree_dir}/{project}")
         with open(f"{repo.working_tree_dir}/{project}/__init__.py", "w") as f:
             f.write("__version__ = \"0.0.0\"\n")
+        repo.git.add(f"{project}/__init__.py")
 
 
 def create_random_file(repo, path = ""):
@@ -96,7 +98,7 @@ def repo_multi_project_commits(tmp_path_factory):
     path = tmp_path_factory.mktemp("repo")
     repo = create_git_repo(path)
     create_configs(repo, ["project1", "project2", "1another_project", "2another_project"])
-    create_commits(repo, [["Initial commit", ""], ["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "/project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
+    create_commits(repo, [["Initial commit", ""], ["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"], ["fix: something else", "project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
 
     yield repo
     repo.close()
@@ -109,7 +111,7 @@ def repo_multi_project_commits_before_tag(tmp_path_factory):
     create_configs(repo, ["project1", "project2", "1another_project", "2another_project"])
     create_commits(repo, [["Initial commit", ""]])
     repo.git.tag("v0.0.0", m="v0.0.0")
-    create_commits(repo, [["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
+    create_commits(repo, [["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"], ["fix: something else", "project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
     repo.git.tag("v1.0.0", m="v1.0.0")
 
     yield repo
@@ -123,7 +125,7 @@ def repo_multi_project_commits_before_tag_fix_after(tmp_path_factory):
     create_configs(repo, ["project1", "project2", "1another_project", "2another_project"])
     create_commits(repo, [["Initial commit", ""]])
     repo.git.tag("v0.0.0", m="v0.0.0")
-    create_commits(repo, [["fix: something", "/project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "/project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
+    create_commits(repo, [["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"], ["fix: something else", "project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
     repo.git.tag("v1.0.0", m="v1.0.0")
     create_commits(repo, [["fix: something", "project1"], ["fix: something else", "project2"]])
 
@@ -138,7 +140,7 @@ def repo_multi_project_commits_before_prerelease_tag(tmp_path_factory):
     create_configs(repo, ["project1", "project2", "1another_project", "2another_project"])
     create_commits(repo, [["Initial commit", ""]])
     repo.git.tag("v0.0.0", m="v0.0.0")
-    create_commits(repo, [["fix: something", "/project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "/project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
+    create_commits(repo, [["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"], ["fix: something else", "project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
     repo.git.tag("v1.0.0-rc.0", m="v1.0.0-rc.0")
 
     yield repo
@@ -152,7 +154,7 @@ def repo_multi_project_commits_before_prerelease_tag_fix_after(tmp_path_factory)
     create_configs(repo, ["project1", "project2", "1another_project", "2another_project"])
     create_commits(repo, [["Initial commit", ""]])
     repo.git.tag("v0.0.0", m="v0.0.0")
-    create_commits(repo, [["fix: something", "/project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "/project2"], ["fix: something else", "/project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
+    create_commits(repo, [["fix: something", "project1"], ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"], ["fix: something else", "project2"], ["feat: some feature", "1another_project"], ["feat!: some feature that breaks things", "2another_project"]])
     repo.git.tag("v1.0.0-rc.0", m="v1.0.0-rc.0")
     create_commits(repo, [["fix: something", "1another_project"], ["fix: something else", "project2"]])
     
