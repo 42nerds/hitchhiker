@@ -2,8 +2,11 @@ import re
 import hitchhiker_module_control.enums as enums
 import hitchhiker_module_control.regex as regex
 
-class Version():
+
+# FIXME: prereleases are currently broken!
+class Version:
     """Class for parsing and bumping semantic versions"""
+
     major: int = 0
     minor: int = 0
     patch: int = 0
@@ -20,7 +23,12 @@ class Version():
         return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}{'+' + self.buildmeta if self.buildmeta is not None else ''}"
 
     def __eq__(self, obj):
-        return self.major == obj.major and self.minor == obj.minor and self.patch == obj.patch and self.prerelease == obj.prerelease
+        return (
+            self.major == obj.major
+            and self.minor == obj.minor
+            and self.patch == obj.patch
+            and self.prerelease == obj.prerelease
+        )
 
     # TODO: fix this cursed mess
     def __lt__(self, obj):
@@ -53,7 +61,9 @@ class Version():
                 return int(selfid) < int(objid)
 
             # Numeric identifiers always have lower precedence than non-numeric identifiers.
-            if (selfid.isnumeric() and (not objid.isnumeric())) or (objid.isnumeric() and (not selfid.isnumeric())):
+            if (selfid.isnumeric() and (not objid.isnumeric())) or (
+                objid.isnumeric() and (not selfid.isnumeric())
+            ):
                 return selfid.isnumeric()
 
             # Identifiers with letters or hyphens are compared lexically in ASCII sort order
@@ -105,7 +115,6 @@ class Version():
             if match is None:
                 self.prerelease = "rc.0"
             else:
-                print(match.group(1))
                 self.prerelease = f"rc.{int(match.group(1)) + 1}"
         return self
 
