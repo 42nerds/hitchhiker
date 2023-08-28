@@ -1,7 +1,7 @@
 import os
 import git
 import click
-import hitchhiker_module_control.cli.config as config
+import hitchhiker.cli.config as config
 
 __version__ = "0.0.0"
 

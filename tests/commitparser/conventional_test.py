@@ -1,6 +1,6 @@
 """tests for the ConventionalCommitParser class"""
-import hitchhiker_module_control.commitparser.conventional as conventional
-import hitchhiker_module_control.enums as enums
+import hitchhiker.commitparser.conventional as conventional
+import hitchhiker.enums as enums
 
 expect = [
     {

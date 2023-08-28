@@ -1,6 +1,6 @@
 import re
-import hitchhiker_module_control.enums as enums
-import hitchhiker_module_control.regex as regex
+import hitchhiker.enums as enums
+import hitchhiker.regex as regex
 
 
 # FIXME: prereleases are currently broken!

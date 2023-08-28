@@ -1,7 +1,7 @@
 from tests.git_fixtures import *
 from click.testing import CliRunner
-import hitchhiker_module_control.version.semver as semver
-from hitchhiker_module_control.cli import main
+import hitchhiker.version.semver as semver
+from hitchhiker.cli import main
 
 
 # main_version: (current, prev)
