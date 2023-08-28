@@ -63,7 +63,7 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
             # regex from: https://stackoverflow.com/a/25102190
             match = re.match(
                 r"^(?:(?:git@|https:\/\/)(?:[\w\.@]+)(?:\/|:))([\w,\-,\_]+)\/([\w,\-,\_]+)(?:.git){0,1}(?:(?:\/){0,1})$",
-                git.cmd.Git(".").execute(
+                git.cmd.Git(ctx.obj.repo.working_tree_dir).execute(
                     ["git", "config", "--get", "remote.origin.url"]
                 ),
             )
