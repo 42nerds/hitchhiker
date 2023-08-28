@@ -4,7 +4,7 @@ import git
 import github
 import click
 import hitchhiker.version.commit as commit
-import hitchhiker.cli.config as config
+import hitchhiker.cli.release.config as config
 import hitchhiker.enums as enums
 
 

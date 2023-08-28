@@ -2,7 +2,7 @@ import pathlib
 import subprocess
 import hitchhiker.version.semver as semver
 import hitchhiker.enums as enums
-import hitchhiker.cli.config as config
+import hitchhiker.cli.release.config as config
 from hitchhiker.commitparser.conventional import ConventionalCommitParser # TODO: commit parser config
 
 def find_latest_tag_in_commits(tags, commits):
