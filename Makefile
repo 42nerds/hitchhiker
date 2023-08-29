@@ -1,5 +1,6 @@
 .PHONY: test
 test:
+	@python3 devrun.py --help
 	@pytest -vv
 
 .PHONY: install
