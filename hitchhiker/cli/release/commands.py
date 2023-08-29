@@ -11,9 +11,9 @@ import hitchhiker.cli.release.version as version
 def release(ctx: click.Context, workdir):
     repo = git.Repo(workdir)
     try:
-        ctx.obj = config.create_context_from_raw_config(os.path.join(repo.working_tree_dir, "pyproject.toml"), repo)
+        ctx.obj["RELEASE_CONF"] = config.create_context_from_raw_config(os.path.join(repo.working_tree_dir, "pyproject.toml"), repo)
     except (FileNotFoundError, tomlkit.exceptions.NonExistentKey) as e:
         raise click.FileError("pyproject.toml", hint=str(e)) # TODO: proper exception handling inside hitchhiker.cli.release.config
-    pass
+
 
 release.add_command(version.version)
