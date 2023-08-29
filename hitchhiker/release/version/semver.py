@@ -3,7 +3,6 @@ import hitchhiker.release.enums as enums
 import hitchhiker.release.regex as regex
 
 
-# FIXME: prereleases are currently broken!
 class Version:
     """Class for parsing and bumping semantic versions"""
 
@@ -95,30 +94,31 @@ class Version:
         self.buildmeta = match.group(5)
         return self
 
-    def bump(self, bump: enums.VersionBump):
+    def bump(self, bump: enums.VersionBump, prerelease=False):
         """Bumps version by amount specified in VersionBump enum"""
+        if not prerelease:
+            self.prerelease = None
         if bump == enums.VersionBump.MAJOR:
             self.major += 1
             self.minor = self.patch = 0
-        elif bump == enums.VersionBump.MINOR:
+            if prerelease:
+                self.prerelease = "rc.1"
+        elif bump == enums.VersionBump.MINOR and not prerelease:
             self.minor += 1
             self.patch = 0
-        elif bump == enums.VersionBump.PATCH:
+        elif bump == enums.VersionBump.PATCH and not prerelease:
             self.patch += 1
-        return self
-
-    def bump_prerelease(self):
-        if self.prerelease is None:
-            self.prerelease = "rc.0"
-        else:
-            match = re.match(r"^rc\.(\d+)$", self.prerelease)
-            if match is None:
-                self.prerelease = "rc.0"
+        elif prerelease and bump is not enums.VersionBump.NONE:
+            if self.prerelease is None:
+                self.prerelease = "rc.1"
             else:
-                self.prerelease = f"rc.{int(match.group(1)) + 1}"
+                match = re.match(r"^rc\.(\d+)$", self.prerelease)
+                if match is None:
+                    self.prerelease = "rc.1"
+                else:
+                    self.prerelease = f"rc.{int(match.group(1)) + 1}"
         return self
 
-    def remove_prerelease_and_buildmeta(self):
-        self.buildmeta = None
+    def remove_prerelease(self):
         self.prerelease = None
         return self

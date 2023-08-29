@@ -30,20 +30,16 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
         bump, _ = commit.find_next_version(ctx.obj["RELEASE_CONF"], project, prerelease)
         mainbump = bump if bump > mainbump else mainbump
         if bump != enums.VersionBump.NONE:
-            if prerelease:
-                project.version.bump_prerelease()
-            else:
-                project.version.remove_prerelease_and_buildmeta()
-            project.version.bump(bump)
+            if not prerelease:
+                project.version.remove_prerelease()
+            project.version.bump(bump, prerelease)
             changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], project)
             print(f"-- new -- project: {project.name} version: {project.version}")
 
     if mainbump != enums.VersionBump.NONE:
-        if prerelease:
-            ctx.obj["RELEASE_CONF"].version.bump_prerelease()
-        else:
-            ctx.obj["RELEASE_CONF"].version.remove_prerelease_and_buildmeta()
-        ctx.obj["RELEASE_CONF"].version.bump(mainbump)
+        if not prerelease:
+            ctx.obj["RELEASE_CONF"].version.remove_prerelease()
+        ctx.obj["RELEASE_CONF"].version.bump(mainbump, prerelease)
         changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], ctx.obj["RELEASE_CONF"])
         print(f"main version bump: {ctx.obj['RELEASE_CONF'].version}")
 
@@ -73,5 +69,6 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
                 tag=newtag,
                 name=newtag,
                 message="",
+                prerelease=prerelease,
                 target_commitish=ctx.obj["RELEASE_CONF"].repo.commit(ctx.obj["RELEASE_CONF"].repo.active_branch).hexsha,
             )
