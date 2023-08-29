@@ -1,8 +1,7 @@
 import os
 import random
-import git
 import pytest
-
+git = pytest.importorskip("git")
 
 def randomid(chars=10, ranges=[("0", "9"), ("a", "z"), ("A", "Z")]):
     allowed = []

@@ -1,6 +1,6 @@
 """tests for the ConventionalCommitParser class"""
-import hitchhiker.commitparser.conventional as conventional
-import hitchhiker.enums as enums
+import hitchhiker.release.commitparser.conventional as conventional
+import hitchhiker.release.enums as enums
 
 expect = [
     {

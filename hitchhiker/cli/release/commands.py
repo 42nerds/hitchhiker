@@ -1,12 +1,19 @@
 import os
 import git
 import click
+import tomlkit
 import hitchhiker.cli.release.config as config
+import hitchhiker.cli.release.version as version
 
 @click.group()
 @click.option("--workdir", default="./", help="working directory")
 @click.pass_context
-def main(ctx: click.Context, workdir):
+def release(ctx: click.Context, workdir):
     repo = git.Repo(workdir)
-    ctx.obj = config.create_context_from_raw_config(os.path.join(repo.working_tree_dir, "pyproject.toml"), repo)
+    try:
+        ctx.obj = config.create_context_from_raw_config(os.path.join(repo.working_tree_dir, "pyproject.toml"), repo)
+    except (FileNotFoundError, tomlkit.exceptions.NonExistentKey) as e:
+        raise click.FileError("pyproject.toml", hint=str(e)) # TODO: proper exception handling inside hitchhiker.cli.release.config
     pass
+
+release.add_command(version.version)

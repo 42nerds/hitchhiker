@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import git
 from dotty_dict import Dotty
 import tomlkit
-import hitchhiker.version.semver as semver
-import hitchhiker.regex as regex
+import hitchhiker.release.version.semver as semver
+import hitchhiker.release.regex as regex
 
 
 @dataclass

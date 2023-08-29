@@ -1,11 +1,7 @@
 import click
 
-try:
-    import click_odoo
-    from click_odoo import odoo
-except ImportError:
-    import sys
-    sys.exit("Please install click-odoo")
+import click_odoo
+from click_odoo import odoo
 
 
 @click.group()

@@ -3,9 +3,9 @@ import re
 import git
 import github
 import click
-import hitchhiker.version.commit as commit
+import hitchhiker.release.version.commit as commit
 import hitchhiker.cli.release.config as config
-import hitchhiker.enums as enums
+import hitchhiker.release.enums as enums
 
 
 @click.command(short_help="Figure out new version and apply it")

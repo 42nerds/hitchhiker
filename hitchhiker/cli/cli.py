@@ -1,9 +1,6 @@
 import click
 import pkg_resources
 
-from .odoo import commands as odoo_cli
-# from .release import commands as release
-
 
 @click.group()
 @click.version_option(version=pkg_resources.get_distribution("hitchhiker").version)
@@ -14,5 +11,15 @@ def cli(ctx, debug):
 
     ctx.obj['DEBUG'] = debug
 
-cli.add_command(odoo_cli.odoo)
-# cli.add_command(release.main)
+
+try:
+    from .odoo import commands as odoo_cli
+    cli.add_command(odoo_cli.odoo)
+except ImportError as e:
+    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+
+try:
+    from .release import commands as release
+    cli.add_command(release.release)
+except ImportError as e:
+    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")

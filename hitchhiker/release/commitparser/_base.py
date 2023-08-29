@@ -1,4 +1,4 @@
-import hitchhiker.enums as enums
+import hitchhiker.release.enums as enums
 
 class CommitParser():
     def __init__(self, msg: str):

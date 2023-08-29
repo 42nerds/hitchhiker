@@ -1,8 +1,7 @@
-from tests.git_fixtures import *
 from click.testing import CliRunner
-import hitchhiker.version.semver as semver
-from hitchhiker.cli import main
-
+from tests.cli.release.git_fixtures import *
+import hitchhiker.release.version.semver as semver
+release = pytest.importorskip("hitchhiker.cli.release.commands").release
 
 # main_version: (current, prev)
 # versions: [(project, version, prev_version)]
@@ -31,11 +30,11 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
     args = ["--workdir", workdir, "version"]
     if prerelease:
         args.append("--prerelease")
-    result = CliRunner().invoke(main, args)
-    assert result.exit_code == 0
+    result = CliRunner().invoke(release, args)
     assert result.output == expected_output
+    assert result.exit_code == 0
 
-    result = CliRunner().invoke(main, ["--workdir", workdir, "version", "--show"])
+    result = CliRunner().invoke(release, ["--workdir", workdir, "version", "--show"])
     assert result.output == expected_output_ver
     assert result.exit_code == 0
 

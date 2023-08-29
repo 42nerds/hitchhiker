@@ -1,6 +1,6 @@
 """tests for the Version class"""
-import hitchhiker.version.semver as semver
-import hitchhiker.enums as enums
+import hitchhiker.release.version.semver as semver
+import hitchhiker.release.enums as enums
 
 expect = [
     {
