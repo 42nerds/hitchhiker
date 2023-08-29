@@ -1,8 +1,8 @@
-from tests.git_fixtures import *
 from click.testing import CliRunner
-import hitchhiker.version.semver as semver
-from hitchhiker.cli import main
-
+from tests.cli.release.git_fixtures import *
+import hitchhiker.release.version.semver as semver
+from hitchhiker.cli.cli import cli
+release = pytest.importorskip("hitchhiker.cli.release.commands").release
 
 # main_version: (current, prev)
 # versions: [(project, version, prev_version)]
@@ -28,17 +28,24 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
             f"main version bump: {str(semver.Version().parse(main_version[0]))}\n"
         )
 
-    args = ["--workdir", workdir, "version"]
+    args = ["release", "--workdir", workdir, "version"]
     if prerelease:
         args.append("--prerelease")
-    result = CliRunner().invoke(main, args)
+    result = CliRunner().invoke(cli, args)
+    print(f"got: \"\"\"{result.output}\"\"\" expected: \"\"\"{expected_output}\"\"\"")
     assert result.exit_code == 0
     assert result.output == expected_output
 
-    result = CliRunner().invoke(main, ["--workdir", workdir, "version", "--show"])
-    assert result.output == expected_output_ver
+    result = CliRunner().invoke(release, ["--workdir", workdir, "version", "--show"])
+    print(f"got: \"\"\"{result.output}\"\"\"\nexpected: \"\"\"{expected_output_ver}\"\"\"")
     assert result.exit_code == 0
+    assert result.output == expected_output_ver
 
+
+def test_version_norepo(tmp_path_factory):
+    workdir = tmp_path_factory.mktemp("norepo")
+    result = CliRunner().invoke(cli, ["release", "--workdir", workdir, "version"])
+    assert result.exit_code != 0
 
 def test_version_repo_empty(repo_empty):
     """test for Version"""

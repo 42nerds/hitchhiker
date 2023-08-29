@@ -1,17 +1,16 @@
 import os
 import random
-import git
 import pytest
-
+git = pytest.importorskip("git")
 
 def randomid(chars=10, ranges=[("0", "9"), ("a", "z"), ("A", "Z")]):
     allowed = []
     for start, end in ranges:
         allowed += range(ord(start), ord(end))
-    id = ""
+    rid = ""
     for _ in range(chars):
-        id += chr(random.choice(allowed))
-    return id
+        rid += chr(random.choice(allowed))
+    return rid
 
 
 def create_git_repo(path):

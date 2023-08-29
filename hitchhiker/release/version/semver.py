@@ -1,6 +1,6 @@
 import re
-import hitchhiker.enums as enums
-import hitchhiker.regex as regex
+import hitchhiker.release.enums as enums
+import hitchhiker.release.regex as regex
 
 
 # FIXME: prereleases are currently broken!
