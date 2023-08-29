@@ -19,7 +19,7 @@ jobs:
           pip install `grep -v '^\[' *.egg-info/requires.txt`
       - name: Test with pytest and generate coverage report
         run: |
-          coverage run --source . -m pytest -vv
+          coverage run --source . -m pytest -vv --tb=long
       - name: Upload coverage report to codacy
         run: |
           coverage xml -o cobertura.xml
@@ -42,7 +42,7 @@ jobs:
           pip install -e .
       - name: Test with pytest
         run: |
-          pytest -vv
+          pytest -vv --tb=long
       - name: Run
         run: |
           hitchhiker --help
