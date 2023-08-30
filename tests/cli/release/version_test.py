@@ -18,16 +18,16 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
     for project, version, prev_version in versions:
         version = str(semver.Version().parse(version))
         prev_version = str(semver.Version().parse(prev_version))
-        expected_output_ver += f"project: {project} version: {version}\n"
-        expected_output += f"project: {project} version: {prev_version}\n"
+        expected_output_ver += f"{project}: {version}\n"
+        expected_output += f"{project}: {prev_version}\n"
         if version != prev_version:
-            expected_output += f"-- new -- project: {project} version: {version}\n"
+            expected_output += f"    -> new version: {version}\n"
 
     if str(semver.Version().parse(main_version[0])) != str(
         semver.Version().parse(main_version[1])
     ):
         expected_output += (
-            f"main version bump: {str(semver.Version().parse(main_version[0]))}\n"
+            f"new main version: {str(semver.Version().parse(main_version[0]))}\n"
         )
 
     args = ["release", "--workdir", workdir, "version"]

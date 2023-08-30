@@ -18,17 +18,17 @@ import hitchhiker.release.changelog as changelog
 def version(ctx: click.Context, show, prerelease, push, ghrelease):
     """Figure out new version and apply it"""
     if show:
-        print(f"main version: {ctx.obj['RELEASE_CONF'].version}")
+        click.echo(f"main version: {ctx.obj['RELEASE_CONF'].version}")
         for project in ctx.obj["RELEASE_CONF"].projects:
-            print(f"project: {project.name} version: {project.version}")
+            click.echo(f"{project.name}: {project.version}")
         return
 
-    print(f"main version: {ctx.obj['RELEASE_CONF'].version}")
+    click.echo(f"main version: {ctx.obj['RELEASE_CONF'].version}")
     mainbump = enums.VersionBump.NONE
     changedfiles = []
     change_commits = {}
     for project in ctx.obj["RELEASE_CONF"].projects:
-        print(f"project: {project.name} version: {project.version}")
+        click.echo(f"{project.name}: {project.version}")
         bump, commits = commit.find_next_version(ctx.obj["RELEASE_CONF"], project, prerelease)
         mainbump = bump if bump > mainbump else mainbump
         if bump != enums.VersionBump.NONE:
@@ -41,18 +41,18 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
             change_commits[project.name][1] += [commitmsg for commitmsg, _ in commits]
 
             changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], project)
-            print(f"-- new -- project: {project.name} version: {project.version}")
+            click.secho(f"    -> new version: {project.version}", fg="green")
 
     if mainbump != enums.VersionBump.NONE:
         if not prerelease:
             ctx.obj["RELEASE_CONF"].version.remove_prerelease()
         ctx.obj["RELEASE_CONF"].version.bump(mainbump, prerelease)
         changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], ctx.obj["RELEASE_CONF"])
-        print(f"main version bump: {ctx.obj['RELEASE_CONF'].version}")
+        click.secho(f"new main version: {ctx.obj['RELEASE_CONF'].version}", fg="green")
 
     if len(changedfiles) > 0:
-         # regex from: https://stackoverflow.com/a/25102190
         try:
+            # regex from: https://stackoverflow.com/a/25102190
             _match = re.match(
             r"^(?:(?:git@|https:\/\/)(?:[\w\.@]+)(?:\/|:))([\w,\-,\_]+)\/([\w,\-,\_]+)(?:.git){0,1}(?:(?:\/){0,1})$",
             git.cmd.Git(ctx.obj["RELEASE_CONF"].repo.working_tree_dir).execute(
@@ -81,7 +81,7 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
         if newtag not in [tag.name for tag in ctx.obj["RELEASE_CONF"].repo.tags]:
             ctx.obj["RELEASE_CONF"].repo.git.tag("-a", newtag, m=newtag)
         else:
-            print(f'tag "{newtag}" already exists')
+            click.secho(f'tag "{newtag}" already exists', fg="red", err=True)
         if push:
             try:
                 ctx.obj["RELEASE_CONF"].repo.remote(name="origin").push().raise_if_error()
@@ -113,5 +113,5 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
                     prerelease=prerelease,
                     target_commitish=ctx.obj["RELEASE_CONF"].repo.commit(ctx.obj["RELEASE_CONF"].repo.active_branch).hexsha,
                 )
-            except:
+            except: # TODO: figure out which exceptions could be thrown here
                 raise click.ClickException(message="Failed to create release on GitHub")

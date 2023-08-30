@@ -3,7 +3,9 @@ import random
 import pytest
 git = pytest.importorskip("git")
 
-def randomid(chars=10, ranges=[("0", "9"), ("a", "z"), ("A", "Z")]):
+def randomid(chars=10, ranges=None):
+    if ranges is None:
+        ranges = [("0", "9"), ("a", "z"), ("A", "Z")]
     allowed = []
     for start, end in ranges:
         allowed += range(ord(start), ord(end))
