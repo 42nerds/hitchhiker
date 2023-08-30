@@ -42,9 +42,18 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
     assert result.output == expected_output_ver
 
 
-def test_version_norepo(tmp_path_factory):
+def test_version_err_norepo(tmp_path_factory):
     workdir = tmp_path_factory.mktemp("norepo")
     result = CliRunner().invoke(cli, ["release", "--workdir", workdir, "version"])
+    assert "Could not find git repository" in result.output
+    assert result.exit_code != 0
+
+def test_version_err_invalidconf(repo_empty):
+    repo = repo_empty
+    with open(f"{repo.working_tree_dir}/pyproject.toml", "w") as f:
+        f.write("[project]")
+    result = CliRunner().invoke(cli, ["release", "--workdir", repo.working_tree_dir, "version"])
+    assert "pyproject.toml" in result.output
     assert result.exit_code != 0
 
 def test_version_repo_empty(repo_empty):

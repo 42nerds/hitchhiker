@@ -86,7 +86,7 @@ class Version:
             self.patch = 0
             self.prerelease = None
             self.buildmeta = None
-            return self
+            raise RuntimeError(f"error parsing version \"{version}\"")
         self.major = int(match.group(1))
         self.minor = int(match.group(2))
         self.patch = int(match.group(3))

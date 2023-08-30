@@ -5,6 +5,7 @@ import hitchhiker.release.enums as enums
 expect = [
     {
         "input": "0.0.01-rc5", # invalid input
+        "error": True,
         "bump": enums.VersionBump.PATCH,
         "bump_prerelease": False,
         "major": 0,
@@ -16,7 +17,21 @@ expect = [
         "repr": "0.0.1",
     },
     {
+        "input": "1.153.16.25-rc.29+date2023-08-22abcdef-abc",
+        "error": True,
+        "bump": enums.VersionBump.NONE,
+        "bump_prerelease": False,
+        "major": 0,
+        "minor": 0,
+        "patch": 0,
+        "prerelease": None,
+        "buildmeta": None,
+        "str": "0.0.0",
+        "repr": "0.0.0",
+    },
+    {
         "input": "0.0.0",
+        "error": False,
         "bump": enums.VersionBump.MAJOR,
         "bump_prerelease": False,
         "major": 1,
@@ -29,6 +44,7 @@ expect = [
     },
     {
         "input": "153.16.3-rc.7",
+        "error": False,
         "bump": enums.VersionBump.MINOR,
         "bump_prerelease": False,
         "major": 153,
@@ -41,6 +57,7 @@ expect = [
     },
     {
         "input": "153.16.3+20230821-a---build-5",
+        "error": False,
         "bump": enums.VersionBump.PATCH,
         "bump_prerelease": False,
         "major": 153,
@@ -53,6 +70,7 @@ expect = [
     },
     {
         "input": "153.16.25-rc.29+date2023-08-22abcdef-abc",
+        "error": False,
         "bump": enums.VersionBump.NONE,
         "bump_prerelease": False,
         "major": 153,
@@ -70,7 +88,12 @@ def test_semver():
     """test for semver"""
     for ex in expect:
         print(f"INPUT: \"\"\"{ex['input']}\"\"\"")
-        version = semver.Version().parse(ex["input"]).bump(ex["bump"], ex["prerelease"])
+        version = semver.Version().parse("0.0.0").bump(ex["bump"], ex["prerelease"])
+        try:
+            version = semver.Version().parse(ex["input"]).bump(ex["bump"], ex["prerelease"])
+        except Exception as e:
+            if not ex["error"]:
+                raise e
         assert version.major == ex["major"]
         assert version.minor == ex["minor"]
         assert version.patch == ex["patch"]

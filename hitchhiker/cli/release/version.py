@@ -52,10 +52,20 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
         else:
             print(f'tag "{newtag}" already exists')
         if push:
-            ctx.obj["RELEASE_CONF"].repo.remote(name="origin").push()
+            try:
+                ctx.obj["RELEASE_CONF"].repo.remote(name="origin").push().raise_if_error()
+            except:
+                raise click.ClickException(message="Failed to push")
         if ghrelease:
-            auth = github.Auth.Token(os.getenv("GITHUB_TOKEN"))
-            gh = github.Github(auth=auth)
+            tokenstr = os.getenv("GITHUB_TOKEN")
+            if tokenstr is None:
+                raise click.ClickException(message="Failed to get \"GITHUB_TOKEN\" environment variable")
+            try:
+                auth = github.Auth.Token(tokenstr)
+                gh = github.Github(auth=auth)
+            except: # TODO: figure out which exceptions could be thrown here
+                raise click.ClickException(message="Failed to authenticate at GitHub with token")
+
             # regex from: https://stackoverflow.com/a/25102190
             match = re.match(
                 r"^(?:(?:git@|https:\/\/)(?:[\w\.@]+)(?:\/|:))([\w,\-,\_]+)\/([\w,\-,\_]+)(?:.git){0,1}(?:(?:\/){0,1})$",
@@ -63,12 +73,20 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
                     ["git", "config", "--get", "remote.origin.url"]
                 ),
             )
-            assert match is not None
-            # FIXME: error handling
-            gh.get_repo(f"{match.group(1)}/{match.group(2)}").create_git_release(
-                tag=newtag,
-                name=newtag,
-                message="",
-                prerelease=prerelease,
-                target_commitish=ctx.obj["RELEASE_CONF"].repo.commit(ctx.obj["RELEASE_CONF"].repo.active_branch).hexsha,
-            )
+            if match is None:
+                raise click.ClickException(message="could not parse remote URL to get owner & repository name")
+            try:
+                repo = gh.get_repo(f"{match.group(1)}/{match.group(2)}")
+            except: # TODO: figure out which exceptions could be thrown here
+                raise click.ClickException(message="Failed to get repository from github")
+            
+            try:
+                repo.create_git_release(
+                    tag=newtag,
+                    name=newtag,
+                    message="",
+                    prerelease=prerelease,
+                    target_commitish=ctx.obj["RELEASE_CONF"].repo.commit(ctx.obj["RELEASE_CONF"].repo.active_branch).hexsha,
+                )
+            except:
+                raise click.ClickException(message="Failed to create release on GitHub")
