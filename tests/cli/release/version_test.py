@@ -1,3 +1,4 @@
+import os
 from click.testing import CliRunner
 from tests.cli.release.git_fixtures import *
 import hitchhiker.release.version.semver as semver
@@ -23,9 +24,9 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
         if version != prev_version:
             expected_output += f"    -> new version: {version}\n"
 
-    if str(semver.Version().parse(main_version[0])) != str(
-        semver.Version().parse(main_version[1])
-    ):
+    main_version_change = str(semver.Version().parse(main_version[0])) != str(semver.Version().parse(main_version[1]))
+
+    if main_version_change:
         expected_output += (
             f"new main version: {str(semver.Version().parse(main_version[0]))}\n"
         )
@@ -42,6 +43,9 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
     print(f"got: \"\"\"{result.output}\"\"\"\nexpected: \"\"\"{expected_output_ver}\"\"\"")
     assert result.exit_code == 0
     assert result.output == expected_output_ver
+
+    if main_version_change:
+        assert os.path.isfile(os.path.join(workdir, "CHANGELOG.md"))
 
 
 def test_version_err_norepo(tmp_path_factory):
