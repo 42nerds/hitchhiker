@@ -12,12 +12,12 @@ def release(ctx: click.Context, workdir):
     ctx.ensure_object(dict)
     try:
         repo = git.Repo(workdir)
-    except (git.InvalidGitRepositoryError, git.NoSuchPathError) as e:
+    except (git.InvalidGitRepositoryError, git.NoSuchPathError):
         raise click.ClickException(message="Could not find git repository")
     try:
         ctx.obj["RELEASE_CONF"] = config.create_context_from_raw_config(os.path.join(repo.working_tree_dir, "pyproject.toml"), repo)
     except (FileNotFoundError, tomlkit.exceptions.NonExistentKey) as e:
-        raise click.FileError("pyproject.toml", hint=str(e)) # TODO: proper exception handling inside hitchhiker.cli.release.config
+        raise click.FileError("pyproject.toml", hint=str(e))
 
 
 release.add_command(version.version)

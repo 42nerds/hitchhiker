@@ -4,6 +4,8 @@ import hitchhiker.release.version.semver as semver
 from hitchhiker.cli.cli import cli
 release = pytest.importorskip("hitchhiker.cli.release.commands").release
 
+# FIXME: changelog tests
+
 # main_version: (current, prev)
 # versions: [(project, version, prev_version)]
 def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):

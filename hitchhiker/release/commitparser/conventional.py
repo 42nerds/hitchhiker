@@ -74,9 +74,8 @@ class ConventionalCommitParser(commitparser.CommitParser):
         return body
 
     def get_footers(self):
-        """returns the footers of a conventional commit in the format [(token, text, isissue)] - isissue means the footer has the format 'name #123'"""
-        # TODO: find better name than "isissue" (if changed replace it in other files too!!!)
-        footers = []  # (token, text, isissue)
+        """returns the footers of a conventional commit in the format [(token, text, is_issue)] - is_issue means the footer has the format 'name #123'"""
+        footers = []  # (token, text, is_issue)
         footer_started = False
         for line in self.get_raw_body().split("\n"):
             match = re.match(self.__FOOTER_REGEX, line)
@@ -85,9 +84,9 @@ class ConventionalCommitParser(commitparser.CommitParser):
                 token = match.group(1)
                 text = match.group(3) if match.group(
                     2) is not None else match.group(5)
-                isissue = match.group(4) is not None
-                footers.append((token, text, isissue))
-            # TODO: assuming issue footer cannot be multiline?? - is this correct?
+                is_issue = match.group(4) is not None
+                footers.append((token, text, is_issue))
+            # assuming issue footer cannot be multiline?? - is this correct?
             # According to angular commit guidelines this is indeed the case but the conventional commits spec does not seem to mention this
             elif footer_started and not footers[-1][2]:
                 footers[-1] = (footers[-1][0], footers[-1]
