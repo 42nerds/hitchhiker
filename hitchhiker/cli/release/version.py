@@ -1,3 +1,4 @@
+import copy
 import os
 import re
 import git
@@ -25,6 +26,7 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
 
     click.echo(f"main version: {ctx.obj['RELEASE_CONF'].version}")
     mainbump = enums.VersionBump.NONE
+    bumped = False
     changedfiles = []
     change_commits = {}
     for project in ctx.obj["RELEASE_CONF"].projects:
@@ -32,9 +34,12 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
         bump, commits = commit.find_next_version(ctx.obj["RELEASE_CONF"], project, prerelease)
         mainbump = bump if bump > mainbump else mainbump
         if bump != enums.VersionBump.NONE:
+            ver_prev = copy.deepcopy(project.version)
             if not prerelease:
                 project.version.remove_prerelease()
             project.version.bump(bump, prerelease)
+            if ver_prev != project.version:
+                bumped = True
 
             if project.name not in change_commits:
                 change_commits[project.name] = [project.version, []]
@@ -43,12 +48,14 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
             changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], project)
             click.secho(f"    -> new version: {project.version}", fg="green")
 
-    if mainbump != enums.VersionBump.NONE:
+    if bumped:
         if not prerelease:
             ctx.obj["RELEASE_CONF"].version.remove_prerelease()
         ctx.obj["RELEASE_CONF"].version.bump(mainbump, prerelease)
         changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], ctx.obj["RELEASE_CONF"])
         click.secho(f"new main version: {ctx.obj['RELEASE_CONF'].version}", fg="green")
+
+    assert len(changedfiles) > 0 if bumped else True
 
     if len(changedfiles) > 0:
         try:

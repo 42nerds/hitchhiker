@@ -148,6 +148,6 @@ def test_semver_prerelease():
     assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MINOR, False) == semver.Version().parse("1.1.0+abc")
     assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MAJOR, False) == semver.Version().parse("2.0.0+abc")
 
-    assert semver.Version().parse("1.0.0").bump(enums.VersionBump.MINOR, True) == semver.Version().parse("1.0.0-rc.1")
+    assert semver.Version().parse("1.0.0").bump(enums.VersionBump.MINOR, True) == semver.Version().parse("1.1.0-rc.1")
 
     assert semver.Version().parse("1.0.0-rc29").bump(enums.VersionBump.PATCH, True) == semver.Version().parse("1.0.0-rc.1")

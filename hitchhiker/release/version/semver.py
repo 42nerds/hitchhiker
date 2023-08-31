@@ -96,6 +96,9 @@ class Version:
 
     def bump(self, bump: enums.VersionBump, prerelease=False):
         """Bumps version by amount specified in VersionBump enum"""
+        # if last version was not a prerelease bump it before making it one
+        if prerelease and bump != enums.VersionBump.NONE and self.prerelease is None:
+            self.bump(bump, False)
         if not prerelease:
             self.prerelease = None
         if bump == enums.VersionBump.MAJOR:
