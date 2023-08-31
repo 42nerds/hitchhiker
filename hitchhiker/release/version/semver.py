@@ -100,8 +100,11 @@ class Version:
         # if last version was not a prerelease bump it before making it one
         if prerelease and bump != enums.VersionBump.NONE and bump != enums.VersionBump.MAJOR and self.prerelease is None:
             self.bump(bump, False)
-        if not prerelease:
+        # if the last version was a prerelease make the next one a full release (unless bump is major)
+        if not prerelease and self.prerelease is not None:
             self.prerelease = None
+            if bump != enums.VersionBump.MAJOR:
+                return self
         if bump == enums.VersionBump.MAJOR:
             self.major += 1
             self.minor = self.patch = 0
@@ -121,8 +124,4 @@ class Version:
                     self.prerelease = "rc.1"
                 else:
                     self.prerelease = f"rc.{int(match.group(1)) + 1}"
-        return self
-
-    def remove_prerelease(self):
-        self.prerelease = None
         return self

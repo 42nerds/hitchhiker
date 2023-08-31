@@ -32,20 +32,21 @@ def create_configs(repo, projects, main_version):
 version = "{main_version}"
 
 [tool.hitchhiker]
-projects = {str([n for n, v in projects])}
+projects = {str([n for n, _, _ in projects])}
 version_toml = ["pyproject.toml:project.version"]
 """
         )
-        for project, version in projects:
+        for project, version, prerelease in projects:
             f.write(
                 f"""
 [tool.hitchhiker.project.{project}]
 path = "{project}/"
 version_variables = ["{project}/__init__.py:__version__"]
+prerelease = {"true" if prerelease else "false"}
 """
             )
     repo.git.add(f"pyproject.toml")
-    for project, version in projects:
+    for project, version, prerelease in projects:
         if not os.path.isdir(f"{repo.working_tree_dir}/{project}"):
             os.mkdir(f"{repo.working_tree_dir}/{project}")
         with open(f"{repo.working_tree_dir}/{project}/__init__.py", "w") as f:
@@ -71,7 +72,7 @@ def create_commits(repo, commits):
 def repo_empty(tmp_path_factory):
     path = tmp_path_factory.mktemp("repo")
     repo = create_git_repo(path)
-    create_configs(repo, [("project1", "0.0.0")], "0.0.0")
+    create_configs(repo, [("project1", "0.0.0", False)], "0.0.0")
     create_commits(repo, [["Initial commit", ""]])
 
     yield repo
@@ -82,7 +83,7 @@ def repo_empty(tmp_path_factory):
 def repo_one_fix(tmp_path_factory):
     path = tmp_path_factory.mktemp("repo")
     repo = create_git_repo(path)
-    create_configs(repo, [("project1", "0.0.0")], "0.0.0")
+    create_configs(repo, [("project1", "0.0.0", False)], "0.0.0")
     create_commits(repo, [["Initial commit", ""], ["fix: abcd", "project1"]])
 
     yield repo
@@ -93,7 +94,7 @@ def repo_one_fix(tmp_path_factory):
 def repo_multi_one_breaking_change(tmp_path_factory):
     path = tmp_path_factory.mktemp("repo")
     repo = create_git_repo(path)
-    create_configs(repo, [("project1", "0.0.0"), ("project2", "0.0.0")], "0.0.0")
+    create_configs(repo, [("project1", "0.0.0", False), ("project2", "0.0.0", False)], "0.0.0")
     create_commits(
         repo,
         [
@@ -115,10 +116,10 @@ def repo_multi_project_commits(tmp_path_factory):
     create_configs(
         repo,
         [
-            ("project1", "0.0.0"),
-            ("project2", "0.0.0"),
-            ("1another_project", "0.0.0"),
-            ("2another_project", "0.0.0"),
+            ("project1", "0.0.0", False),
+            ("project2", "0.0.0", False),
+            ("1another_project", "0.0.0", False),
+            ("2another_project", "0.0.0", False),
         ],
         "0.0.0",
     )
@@ -145,10 +146,10 @@ def repo_multi_project_commits_before_tag(tmp_path_factory):
     create_configs(
         repo,
         [
-            ("project1", "0.0.0"),
-            ("project2", "0.0.0"),
-            ("1another_project", "0.0.0"),
-            ("2another_project", "1.0.0"),
+            ("project1", "0.0.0", False),
+            ("project2", "0.0.0", False),
+            ("1another_project", "0.0.0", False),
+            ("2another_project", "1.0.0", False),
         ],
         "1.0.0",
     )
@@ -177,10 +178,10 @@ def repo_multi_project_commits_before_tag_fix_after(tmp_path_factory):
     create_configs(
         repo,
         [
-            ("project1", "0.0.0"),
-            ("project2", "0.0.0"),
-            ("1another_project", "0.0.0"),
-            ("2another_project", "1.0.0"),
+            ("project1", "0.0.0", False),
+            ("project2", "0.0.0", False),
+            ("1another_project", "0.0.0", False),
+            ("2another_project", "1.0.0", False),
         ],
         "1.0.0",
     )
@@ -212,10 +213,10 @@ def repo_multi_project_commits_before_prerelease_tag(tmp_path_factory):
     create_configs(
         repo,
         [
-            ("project1", "0.0.0"),
-            ("project2", "0.0.0"),
-            ("1another_project", "0.0.0"),
-            ("2another_project", "0.0.0"),
+            ("project1", "0.0.0", True),
+            ("project2", "0.0.0", True),
+            ("1another_project", "0.0.0", True),
+            ("2another_project", "0.0.0", False),
         ],
         "0.0.0",
     )
@@ -244,10 +245,10 @@ def repo_multi_project_commits_before_prerelease_tag_fix_after(tmp_path_factory)
     create_configs(
         repo,
         [
-            ("project1", "0.0.0"),
-            ("project2", "0.0.0"),
-            ("1another_project", "0.0.0"),
-            ("2another_project", "0.0.0"),
+            ("project1", "0.0.0", True),
+            ("project2", "0.0.0", False),
+            ("1another_project", "0.0.0", False),
+            ("2another_project", "0.0.0", True),
         ],
         "0.0.0",
     )
@@ -266,7 +267,7 @@ def repo_multi_project_commits_before_prerelease_tag_fix_after(tmp_path_factory)
     repo.git.tag("v1.0.0-rc.0", m="v1.0.0-rc.0")
     create_commits(
         repo,
-        [["fix: something", "1another_project"], ["fix: something else", "project2"]],
+        [["fix: something", "1another_project"], ["fix: something else", "project2"], ["feat: something else", "project1"]],
     )
 
     yield repo

@@ -18,6 +18,7 @@ class ProjectContext():
     version_variables: list
     version_toml: list
     version_odoo_manifest: list
+    prerelease: bool
 
 
 @dataclass
@@ -71,6 +72,7 @@ def set_version(config, ctx):
                 1)[0]] + f"\"{str(ctx.version)}\"" + contents[match.span(1)[1]:]
             f.seek(0)
             f.write(contents)
+            f.truncate(f.tell())
     for var in ctx.version_toml:
         changedfiles.append(var[0])
         with open(os.path.join(config.repo.working_tree_dir, var[0]), "r+", encoding="utf-8") as f:
@@ -78,6 +80,7 @@ def set_version(config, ctx):
             tomlconf[var[1]] = str(ctx.version)
             f.seek(0)
             f.write(tomlkit.dumps(tomlconf))
+            f.truncate(f.tell())
     for var in ctx.version_odoo_manifest:
         changedfiles.append(var[0])
         with open(os.path.join(config.repo.working_tree_dir, var[0]), "r+", encoding="utf-8") as f:
@@ -89,7 +92,7 @@ def set_version(config, ctx):
                     1)[0]] + f"\"{str(ctx.version)}\"" + contents[match.span(1)[1]:]
             f.seek(0)
             f.write(contents)
-
+            f.truncate(f.tell())
     return changedfiles
 
 def __add_version_vars(conf, project_ctx):
@@ -111,12 +114,15 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo):
     with open(tomlcfg, "r", encoding="utf-8") as f:
         tomlconf = Dotty(tomlkit.parse(f.read()))
     __add_version_vars(tomlconf["tool.hitchhiker"], ctx)
-    assert (len(ctx.version_variables) + len(ctx.version_toml) + len(ctx.version_odoo_manifest)) > 0, "no version store location defined for main project"
+    assert (len(ctx.version_variables) + len(ctx.version_toml) + len(ctx.version_odoo_manifest)
+            ) > 0,"no version store location defined for main project"
     ctx.version = __get_version(ctx, ctx)
     if "tool.hitchhiker.projects" in tomlconf:
         for project in tomlconf["tool.hitchhiker.projects"]:
             conf = tomlconf[f"tool.hitchhiker.project.{project}"]
-            project_ctx = ProjectContext(name=project, path=conf["path"], version=semver.Version(), version_variables=[], version_toml=[], version_odoo_manifest=[])
+            project_ctx = ProjectContext(name=project, path=conf["path"], version=semver.Version(), version_variables=[],
+                                          version_toml=[], version_odoo_manifest=[],
+                                          prerelease=(conf["prerelease"] if "prerelease" in conf else False))
             __add_version_vars(conf, project_ctx)
             project_ctx.version = __get_version(ctx, project_ctx)
             assert (len(project_ctx.version_variables) + len(project_ctx.version_toml) + len(project_ctx.version_odoo_manifest)) > 0, f"no version store location defined for project \"{project_ctx.name}\""
