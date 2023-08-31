@@ -68,12 +68,13 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
             )
             repo_owner = _match.group(1) if _match is not None else None
             repo_name = _match.group(2) if _match is not None else None
-        except:
+        except: # TODO: figure out which exceptions could be thrown here
             repo_owner = None
             repo_name = None
 
         changelog_path = os.path.join(ctx.obj['RELEASE_CONF'].repo.working_tree_dir, "CHANGELOG.md")
-        changelog_newtext = changelog.gen_changelog(change_commits=change_commits, new_version=str(ctx.obj["RELEASE_CONF"].version), repo_owner= repo_owner, repo_name=repo_name)
+        changelog_newtext = changelog.gen_changelog(change_commits=change_commits,new_version=str(ctx.obj["RELEASE_CONF"].version),
+                                                    repo_owner= repo_owner, repo_name=repo_name)
         if not os.path.isfile(changelog_path):
             with open(changelog_path, "w") as f:
                 f.write("# CHANGELOG\n" + changelog_newtext)
@@ -111,7 +112,7 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
                 repo = gh.get_repo(f"{repo_owner}/{repo_name}")
             except: # TODO: figure out which exceptions could be thrown here
                 raise click.ClickException(message="Failed to get repository from github")
-            
+
             try:
                 repo.create_git_release(
                     tag=newtag,

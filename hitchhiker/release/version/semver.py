@@ -19,7 +19,8 @@ class Version:
         return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
 
     def __repr__(self):
-        return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}{'+' + self.buildmeta if self.buildmeta is not None else ''}"
+        return (f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
+                f"{'+' + self.buildmeta if self.buildmeta is not None else ''}")
 
     def __eq__(self, obj):
         return (
