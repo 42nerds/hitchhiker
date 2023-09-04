@@ -2,7 +2,7 @@ import os
 import git
 import click
 import tomlkit
-import hitchhiker.cli.release.config as rconfig
+import hitchhiker.cli.release.config as conf
 import hitchhiker.cli.release.version as version
 
 @click.group()
@@ -16,7 +16,7 @@ def release(ctx: click.Context, workdir, config):
     except (git.InvalidGitRepositoryError, git.NoSuchPathError):
         raise click.ClickException(message="Could not find git repository")
     try:
-        ctx.obj["RELEASE_CONF"] = rconfig.create_context_from_raw_config(os.path.join(repo.working_tree_dir, config), repo)
+        ctx.obj["RELEASE_CONF"] = conf.create_context_from_raw_config(os.path.join(repo.working_tree_dir, config), repo)
     except (FileNotFoundError, tomlkit.exceptions.NonExistentKey) as e:
         raise click.FileError(os.path.join(repo.working_tree_dir, config), hint=str(e))
 

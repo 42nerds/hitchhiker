@@ -100,6 +100,9 @@ def version(ctx: click.Context, show, prerelease, prerelease_token, push, ghrele
     change_commits = {}
     for project in ctx.obj["RELEASE_CONF"]["projects"]:
         click.echo(f"{project['name']}: {project['version']}")
+        if re.match(f"^{project['branch_match']}$", str(ctx.obj["RELEASE_CONF"]["repo"].active_branch)) is None:
+            click.secho(f"    -> ignoring project (branch_match does not match)", fg="yellow")
+            continue
         bump, commits = commit.find_next_version(ctx.obj["RELEASE_CONF"], project, project["prerelease"])
         mainbump = bump if bump > mainbump else mainbump
         if bump != enums.VersionBump.NONE:

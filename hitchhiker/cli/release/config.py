@@ -91,7 +91,7 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo):
     if "tool.hitchhiker.projects" in tomlconf:
         for project in tomlconf["tool.hitchhiker.projects"]:
             conf = tomlconf[f"tool.hitchhiker.project.{project}"]
-            project_ctx = {"name": project, "path": conf["path"], "version": semver.Version(), "prerelease": (conf["prerelease"] if "prerelease" in conf else False), "prerelease_token": (conf["prerelease_token"] if "prerelease_token" in conf else "rc"), "version_variables": [], "version_toml": [], "version_odoo_manifest": []}
+            project_ctx = {"name": project, "path": conf["path"], "version": semver.Version(), "prerelease": (conf["prerelease"] if "prerelease" in conf else False), "prerelease_token": (conf["prerelease_token"] if "prerelease_token" in conf else "rc"), "branch_match": (conf["branch_match"] if "branch_match" in conf else "(main|master)"), "version_variables": [], "version_toml": [], "version_odoo_manifest": []}
             __add_version_vars(conf, project_ctx)
             project_ctx["version"] = __get_version(ctx, project_ctx)
             assert (len(project_ctx["version_variables"]) + len(project_ctx["version_toml"]) + len(project_ctx["version_odoo_manifest"])) > 0, f"no version store location defined for project \"{project_ctx['name']}\""
