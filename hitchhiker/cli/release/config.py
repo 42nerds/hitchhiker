@@ -80,6 +80,8 @@ def __add_version_vars(conf, project_ctx):
             project_ctx["version_odoo_manifest"].append(
             [var.split(":")[0], var.split(":")[1]])
 
+# TODO: place default option dicts somewhere else
+
 def create_context_from_raw_config(tomlcfg: str, repo: git.Repo):
     ctx = {"projects": [], "version": semver.Version(), "repo": repo, "version_variables": [], "version_toml": [], "version_odoo_manifest": []}
     with open(tomlcfg, "r", encoding="utf-8") as f:
