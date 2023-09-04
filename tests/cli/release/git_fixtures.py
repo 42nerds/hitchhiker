@@ -24,7 +24,7 @@ def create_git_repo(path):
     return repo
 
 
-def create_configs(repo, projects, main_version):
+def create_configs(repo, projects, main_version, prerelease_token="rc"):
     print(repo.working_tree_dir)
     with open(f"{repo.working_tree_dir}/pyproject.toml", "w") as f:
         f.write(
@@ -43,6 +43,7 @@ version_toml = ["pyproject.toml:project.version"]
 path = "{project}/"
 version_variables = ["{project}/__init__.py:__version__"]
 prerelease = {"true" if prerelease else "false"}
+prerelease_token = "{prerelease_token}"
 """
             )
     repo.git.add(f"pyproject.toml")
@@ -251,6 +252,7 @@ def repo_multi_project_commits_before_prerelease_tag_fix_after(tmp_path_factory)
             ("2another_project", "0.0.0", True),
         ],
         "0.0.0",
+        prerelease_token="alpha",
     )
     create_commits(repo, [["Initial commit", ""]])
     repo.git.tag("v0.0.0", m="v0.0.0")

@@ -152,6 +152,15 @@ def test_semver_prerelease():
     assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MINOR, False) == semver.Version().parse("1.0.0+abc")
     assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MAJOR, False) == semver.Version().parse("2.0.0+abc")
 
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.NONE, True, prerelease_token="alpha") == semver.Version().parse("1.0.0-alpha.1578+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.PATCH, True, prerelease_token="alpha") == semver.Version().parse("1.0.0-alpha.1579+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MINOR, True, prerelease_token="alpha") == semver.Version().parse("1.0.0-alpha.1579+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MAJOR, True, prerelease_token="alpha") == semver.Version().parse("2.0.0-alpha.1+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.NONE, False, prerelease_token="alpha") == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.PATCH, False, prerelease_token="alpha") == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MINOR, False, prerelease_token="alpha") == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MAJOR, False, prerelease_token="alpha") == semver.Version().parse("2.0.0+abc")
+
     assert semver.Version().parse("1.0.0").bump(enums.VersionBump.NONE, True) == semver.Version().parse("1.0.0")
     assert semver.Version().parse("1.0.0").bump(enums.VersionBump.PATCH, True) == semver.Version().parse("1.0.1-rc.1")
     assert semver.Version().parse("1.0.0").bump(enums.VersionBump.MINOR, True) == semver.Version().parse("1.1.0-rc.1")

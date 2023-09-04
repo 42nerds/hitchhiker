@@ -95,7 +95,7 @@ class Version:
         self.buildmeta = match.group(5)
         return self
 
-    def bump(self, bump: enums.VersionBump, prerelease=False):
+    def bump(self, bump: enums.VersionBump, prerelease=False, prerelease_token="rc"):
         """Bumps version by amount specified in VersionBump enum"""
         # if last version was not a prerelease bump it before making it one
         if prerelease and bump != enums.VersionBump.NONE and bump != enums.VersionBump.MAJOR and self.prerelease is None:
@@ -109,7 +109,7 @@ class Version:
             self.major += 1
             self.minor = self.patch = 0
             if prerelease:
-                self.prerelease = "rc.1"
+                self.prerelease = f"{prerelease_token}.1"
         elif bump == enums.VersionBump.MINOR and not prerelease:
             self.minor += 1
             self.patch = 0
@@ -117,11 +117,11 @@ class Version:
             self.patch += 1
         elif prerelease and bump is not enums.VersionBump.NONE:
             if self.prerelease is None:
-                self.prerelease = "rc.1"
+                self.prerelease = f"{prerelease_token}.1"
             else:
-                match = re.match(r"^rc\.(\d+)$", self.prerelease)
+                match = re.match(rf"^{prerelease_token}\.(\d+)$", self.prerelease)
                 if match is None:
-                    self.prerelease = "rc.1"
+                    self.prerelease = f"{prerelease_token}.1"
                 else:
-                    self.prerelease = f"rc.{int(match.group(1)) + 1}"
+                    self.prerelease = f"{prerelease_token}.{int(match.group(1)) + 1}"
         return self

@@ -79,10 +79,11 @@ def do_gh_release(ctx, newtag, changelog_newtext, prerelease):
 @click.command(short_help="Figure out new version and apply it")
 @click.option("--show", is_flag=True, default=False, help="print versions and exit")
 @click.option("--prerelease", is_flag=True, default=False, help="do main release as prerelease")
+@click.option("--prerelease-token", is_flag=False, default="rc", help="main prerelease token")
 @click.option("--push", is_flag=True, default=False, help="push to origin")
 @click.option("--ghrelease", is_flag=True, default=False, help="create github release")
 @click.pass_context
-def version(ctx: click.Context, show, prerelease, push, ghrelease):
+def version(ctx: click.Context, show, prerelease, prerelease_token, push, ghrelease):
     """Figure out new version and apply it"""
     if ghrelease and not push:
         raise click.BadOptionUsage("ghrelease", "--ghrelease must be used together with --push")
@@ -103,7 +104,7 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
         mainbump = bump if bump > mainbump else mainbump
         if bump != enums.VersionBump.NONE:
             ver_prev = copy.deepcopy(project["version"])
-            project["version"].bump(bump, project["prerelease"])
+            project["version"].bump(bump, project["prerelease"], prerelease_token=project["prerelease_token"])
             if ver_prev != project["version"]:
                 bumped = True
 
@@ -115,7 +116,7 @@ def version(ctx: click.Context, show, prerelease, push, ghrelease):
             click.secho(f"    -> new version: {project['version']}", fg="green")
 
     if bumped:
-        ctx.obj["RELEASE_CONF"]["version"].bump(mainbump, prerelease)
+        ctx.obj["RELEASE_CONF"]["version"].bump(mainbump, prerelease, prerelease_token=prerelease_token)
         changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], ctx.obj["RELEASE_CONF"])
         click.secho(f"new main version: {ctx.obj['RELEASE_CONF']['version']}", fg="green")
 
