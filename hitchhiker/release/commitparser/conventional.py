@@ -1,10 +1,10 @@
 import re
-import hitchhiker.release.commitparser._base as commitparser
 import hitchhiker.release.enums as enums
 
 
-class ConventionalCommitParser(commitparser.CommitParser):
+class ConventionalCommitParser:
     """Parses conventional commits"""
+
     # constants
     __FOOTER_REGEX = r"^((?:[a-zA-Z\-]+)|(?:BREAKING CHANGE))(?:(?:(: )(.+))|(?:( #)([0-9]+)))(?:[ ]*)$"
     __SUBJECT_REGEX = r"^([a-zA-Z]+)(?:\(([a-zA-Z]+)\))?(!)?: (.+)$"
@@ -29,8 +29,7 @@ class ConventionalCommitParser(commitparser.CommitParser):
         """initializes this class with the commit message passed in msg"""
         self.__reset()
         self.__message = msg
-        match = re.match(self.__SUBJECT_REGEX,
-                         self.get_raw_subject(), re.DOTALL)
+        match = re.match(self.__SUBJECT_REGEX, self.get_raw_subject(), re.DOTALL)
         if not match:
             return
         self.type = match.group(1)
@@ -58,8 +57,7 @@ class ConventionalCommitParser(commitparser.CommitParser):
 
     def get_description(self):
         """returns the description of a conventional commit"""
-        match = re.match(self.__SUBJECT_REGEX,
-                         self.get_raw_subject(), re.DOTALL)
+        match = re.match(self.__SUBJECT_REGEX, self.get_raw_subject(), re.DOTALL)
         if match is None:
             return self.get_raw_subject()
         return match.group(4)
@@ -82,15 +80,17 @@ class ConventionalCommitParser(commitparser.CommitParser):
             if match is not None:
                 footer_started = True
                 token = match.group(1)
-                text = match.group(3) if match.group(
-                    2) is not None else match.group(5)
+                text = match.group(3) if match.group(2) is not None else match.group(5)
                 is_issue = match.group(4) is not None
                 footers.append((token, text, is_issue))
             # assuming issue footer cannot be multiline?? - is this correct?
             # According to angular commit guidelines this is indeed the case but the conventional commits spec does not seem to mention this
             elif footer_started and not footers[-1][2]:
-                footers[-1] = (footers[-1][0], footers[-1]
-                               [1] + "\n" + line, footers[-1][2])
+                footers[-1] = (
+                    footers[-1][0],
+                    footers[-1][1] + "\n" + line,
+                    footers[-1][2],
+                )
         return footers
 
     def get_version_bump(self):

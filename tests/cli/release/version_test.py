@@ -3,9 +3,11 @@ from click.testing import CliRunner
 from tests.cli.release.git_fixtures import *
 import hitchhiker.release.version.semver as semver
 from hitchhiker.cli.cli import cli
+
 release = pytest.importorskip("hitchhiker.cli.release.commands").release
 
 # FIXME: changelog tests
+
 
 # main_version: (current, prev)
 # versions: [(project, version, prev_version)]
@@ -24,7 +26,9 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
         if version != prev_version:
             expected_output += f"    -> new version: {version}\n"
 
-    main_version_change = str(semver.Version().parse(main_version[0])) != str(semver.Version().parse(main_version[1]))
+    main_version_change = str(semver.Version().parse(main_version[0])) != str(
+        semver.Version().parse(main_version[1])
+    )
 
     if main_version_change:
         expected_output += (
@@ -35,12 +39,12 @@ def invoke_cli_version_cmd(repo, main_version, versions, prerelease=False):
     if prerelease:
         args.append("--prerelease")
     result = CliRunner().invoke(cli, args)
-    print(f"got: \"\"\"{result.output}\"\"\" expected: \"\"\"{expected_output}\"\"\"")
+    print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
 
     result = CliRunner().invoke(release, ["--workdir", workdir, "version", "--show"])
-    print(f"got: \"\"\"{result.output}\"\"\"\nexpected: \"\"\"{expected_output_ver}\"\"\"")
+    print(f'got: """{result.output}"""\nexpected: """{expected_output_ver}"""')
     assert result.exit_code == 0
     assert result.output == expected_output_ver
 
@@ -54,13 +58,17 @@ def test_version_err_norepo(tmp_path_factory):
     assert "Could not find git repository" in result.output
     assert result.exit_code != 0
 
+
 def test_version_err_invalidconf(repo_empty):
     repo = repo_empty
     with open(f"{repo.working_tree_dir}/pyproject.toml", "w") as f:
         f.write("[project]")
-    result = CliRunner().invoke(cli, ["release", "--workdir", repo.working_tree_dir, "version"])
+    result = CliRunner().invoke(
+        cli, ["release", "--workdir", repo.working_tree_dir, "version"]
+    )
     assert "pyproject.toml" in result.output
     assert result.exit_code != 0
+
 
 def test_version_repo_empty(repo_empty):
     """test for Version"""

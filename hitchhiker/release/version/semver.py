@@ -1,6 +1,12 @@
 import re
 import hitchhiker.release.enums as enums
-import hitchhiker.release.regex as regex
+
+
+# regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start)
+_semver_parse = (
+    r"^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
+    r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+)
 
 
 class Version:
@@ -19,8 +25,10 @@ class Version:
         return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
 
     def __repr__(self):
-        return (f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
-                f"{'+' + self.buildmeta if self.buildmeta is not None else ''}")
+        return (
+            f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
+            f"{'+' + self.buildmeta if self.buildmeta is not None else ''}"
+        )
 
     def __eq__(self, obj):
         return (
@@ -80,14 +88,14 @@ class Version:
     def parse(self, version: str):
         """Parses semantic version string"""
         # regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start)
-        match = re.match(regex.semver_parse, version)
+        match = re.match(_semver_parse, version)
         if match is None:
             self.major = 0
             self.minor = 0
             self.patch = 0
             self.prerelease = None
             self.buildmeta = None
-            raise RuntimeError(f"error parsing version \"{version}\"")
+            raise RuntimeError(f'error parsing version "{version}"')
         self.major = int(match.group(1))
         self.minor = int(match.group(2))
         self.patch = int(match.group(3))
@@ -98,7 +106,12 @@ class Version:
     def bump(self, bump: enums.VersionBump, prerelease=False, prerelease_token="rc"):
         """Bumps version by amount specified in VersionBump enum"""
         # if last version was not a prerelease bump it before making it one
-        if prerelease and bump != enums.VersionBump.NONE and bump != enums.VersionBump.MAJOR and self.prerelease is None:
+        if (
+            prerelease
+            and bump != enums.VersionBump.NONE
+            and bump != enums.VersionBump.MAJOR
+            and self.prerelease is None
+        ):
             self.bump(bump, False)
         # if the last version was a prerelease make the next one a full release (unless bump is major)
         if not prerelease and self.prerelease is not None:

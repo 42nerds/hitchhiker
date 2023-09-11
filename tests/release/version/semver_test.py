@@ -4,7 +4,7 @@ import hitchhiker.release.enums as enums
 
 expect = [
     {
-        "input": "0.0.01-rc5", # invalid input
+        "input": "0.0.01-rc5",  # invalid input
         "error": True,
         "bump": enums.VersionBump.PATCH,
         "bump_prerelease": False,
@@ -90,7 +90,9 @@ def test_semver():
         print(f"INPUT: \"\"\"{ex['input']}\"\"\"")
         version = semver.Version().parse("0.0.0").bump(ex["bump"], ex["prerelease"])
         try:
-            version = semver.Version().parse(ex["input"]).bump(ex["bump"], ex["prerelease"])
+            version = (
+                semver.Version().parse(ex["input"]).bump(ex["bump"], ex["prerelease"])
+            )
         except Exception as e:
             if not ex["error"]:
                 raise e
@@ -105,68 +107,150 @@ def test_semver():
 
 def test_semver_cmp():
     """test semver comparison functions"""
-    assert semver.Version().parse("1.0.0") < semver.Version().parse("1.0.1") < semver.Version(
-    ).parse("1.1.0") < semver.Version().parse("1.1.1") < semver.Version().parse("2.1.1")
+    assert (
+        semver.Version().parse("1.0.0")
+        < semver.Version().parse("1.0.1")
+        < semver.Version().parse("1.1.0")
+        < semver.Version().parse("1.1.1")
+        < semver.Version().parse("2.1.1")
+    )
 
-    assert not (semver.Version().parse("2.1.0") <
-                semver.Version().parse("1.0.1"))
-    assert not (semver.Version().parse("1.1.0") <
-                semver.Version().parse("1.0.1"))
-    assert not (semver.Version().parse("1.7.2") <
-                semver.Version().parse("1.7.1"))
+    assert not (semver.Version().parse("2.1.0") < semver.Version().parse("1.0.1"))
+    assert not (semver.Version().parse("1.1.0") < semver.Version().parse("1.0.1"))
+    assert not (semver.Version().parse("1.7.2") < semver.Version().parse("1.7.1"))
 
-    assert semver.Version().parse("1.2.3-alpha") < semver.Version().parse(
-        "1.2.3-beta") < semver.Version().parse("1.2.3-delta") < semver.Version().parse("1.2.3-gamma")
+    assert (
+        semver.Version().parse("1.2.3-alpha")
+        < semver.Version().parse("1.2.3-beta")
+        < semver.Version().parse("1.2.3-delta")
+        < semver.Version().parse("1.2.3-gamma")
+    )
 
-    assert semver.Version().parse("1.0.0-alpha") < semver.Version().parse("1.0.0-alpha.1") < semver.Version().parse("1.0.0-alpha.beta") < semver.Version().parse(
-        "1.0.0-beta") < semver.Version().parse("1.0.0-beta.2") < semver.Version().parse("1.0.0-beta.11") < semver.Version().parse("1.0.0-rc.1") < semver.Version().parse("1.0.0")
+    assert (
+        semver.Version().parse("1.0.0-alpha")
+        < semver.Version().parse("1.0.0-alpha.1")
+        < semver.Version().parse("1.0.0-alpha.beta")
+        < semver.Version().parse("1.0.0-beta")
+        < semver.Version().parse("1.0.0-beta.2")
+        < semver.Version().parse("1.0.0-beta.11")
+        < semver.Version().parse("1.0.0-rc.1")
+        < semver.Version().parse("1.0.0")
+    )
 
-    assert not (semver.Version().parse("1.0.0-alpha") <
-                semver.Version().parse("1.0.0-alpha"))
+    assert not (
+        semver.Version().parse("1.0.0-alpha") < semver.Version().parse("1.0.0-alpha")
+    )
 
-    assert semver.Version().parse("1.0.0-alpha") == semver.Version().parse("1.0.0-alpha")
+    assert semver.Version().parse("1.0.0-alpha") == semver.Version().parse(
+        "1.0.0-alpha"
+    )
     assert semver.Version().parse("1.0.0-beta") != semver.Version().parse("1.0.0-alpha")
-    assert semver.Version().parse(
-        "1.0.0-beta") == semver.Version().parse("1.0.0-beta+buildmeta")
+    assert semver.Version().parse("1.0.0-beta") == semver.Version().parse(
+        "1.0.0-beta+buildmeta"
+    )
 
-    assert semver.Version().parse("1.5.0-rc.197") < semver.Version().parse("1.5.0-rc.198")
+    assert semver.Version().parse("1.5.0-rc.197") < semver.Version().parse(
+        "1.5.0-rc.198"
+    )
+
 
 def test_semver_prerelease():
-    assert semver.Version().parse("1.0.0-rc.0").bump(enums.VersionBump.PATCH, True) == semver.Version().parse("1.0.0-rc.1")
-    assert semver.Version().parse("1.0.0-rc.1").bump(enums.VersionBump.MINOR, True) == semver.Version().parse("1.0.0-rc.2")
-    assert semver.Version().parse("1.0.0-rc.2").bump(enums.VersionBump.MAJOR, True) == semver.Version().parse("2.0.0-rc.1")
-    assert semver.Version().parse("1.0.0-rc.0").bump(enums.VersionBump.PATCH, False) == semver.Version().parse("1.0.0")
-    assert semver.Version().parse("1.0.0-rc.1").bump(enums.VersionBump.MINOR, False) == semver.Version().parse("1.0.0")
-    assert semver.Version().parse("1.0.0-rc.2").bump(enums.VersionBump.MAJOR, False) == semver.Version().parse("2.0.0")
+    assert semver.Version().parse("1.0.0-rc.0").bump(
+        enums.VersionBump.PATCH, True
+    ) == semver.Version().parse("1.0.0-rc.1")
+    assert semver.Version().parse("1.0.0-rc.1").bump(
+        enums.VersionBump.MINOR, True
+    ) == semver.Version().parse("1.0.0-rc.2")
+    assert semver.Version().parse("1.0.0-rc.2").bump(
+        enums.VersionBump.MAJOR, True
+    ) == semver.Version().parse("2.0.0-rc.1")
+    assert semver.Version().parse("1.0.0-rc.0").bump(
+        enums.VersionBump.PATCH, False
+    ) == semver.Version().parse("1.0.0")
+    assert semver.Version().parse("1.0.0-rc.1").bump(
+        enums.VersionBump.MINOR, False
+    ) == semver.Version().parse("1.0.0")
+    assert semver.Version().parse("1.0.0-rc.2").bump(
+        enums.VersionBump.MAJOR, False
+    ) == semver.Version().parse("2.0.0")
 
-    assert semver.Version().parse("1.0.0-rc.2").bump(enums.VersionBump.PATCH, False) == semver.Version().parse("1.0.0")
-    assert semver.Version().parse("1.0.0-rc.2").bump(enums.VersionBump.MINOR, False) == semver.Version().parse("1.0.0")
-    assert semver.Version().parse("1.0.0-rc.2").bump(enums.VersionBump.MAJOR, False) == semver.Version().parse("2.0.0")
+    assert semver.Version().parse("1.0.0-rc.2").bump(
+        enums.VersionBump.PATCH, False
+    ) == semver.Version().parse("1.0.0")
+    assert semver.Version().parse("1.0.0-rc.2").bump(
+        enums.VersionBump.MINOR, False
+    ) == semver.Version().parse("1.0.0")
+    assert semver.Version().parse("1.0.0-rc.2").bump(
+        enums.VersionBump.MAJOR, False
+    ) == semver.Version().parse("2.0.0")
 
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.NONE, True) == semver.Version().parse("1.0.0-rc.1578+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.PATCH, True) == semver.Version().parse("1.0.0-rc.1579+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MINOR, True) == semver.Version().parse("1.0.0-rc.1579+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MAJOR, True) == semver.Version().parse("2.0.0-rc.1+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.NONE, False) == semver.Version().parse("1.0.0+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.PATCH, False) == semver.Version().parse("1.0.0+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MINOR, False) == semver.Version().parse("1.0.0+abc")
-    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(enums.VersionBump.MAJOR, False) == semver.Version().parse("2.0.0+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.NONE, True
+    ) == semver.Version().parse("1.0.0-rc.1578+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.PATCH, True
+    ) == semver.Version().parse("1.0.0-rc.1579+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.MINOR, True
+    ) == semver.Version().parse("1.0.0-rc.1579+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.MAJOR, True
+    ) == semver.Version().parse("2.0.0-rc.1+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.NONE, False
+    ) == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.PATCH, False
+    ) == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.MINOR, False
+    ) == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-rc.1578+abc").bump(
+        enums.VersionBump.MAJOR, False
+    ) == semver.Version().parse("2.0.0+abc")
 
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.NONE, True, prerelease_token="alpha") == semver.Version().parse("1.0.0-alpha.1578+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.PATCH, True, prerelease_token="alpha") == semver.Version().parse("1.0.0-alpha.1579+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MINOR, True, prerelease_token="alpha") == semver.Version().parse("1.0.0-alpha.1579+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MAJOR, True, prerelease_token="alpha") == semver.Version().parse("2.0.0-alpha.1+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.NONE, False, prerelease_token="alpha") == semver.Version().parse("1.0.0+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.PATCH, False, prerelease_token="alpha") == semver.Version().parse("1.0.0+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MINOR, False, prerelease_token="alpha") == semver.Version().parse("1.0.0+abc")
-    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(enums.VersionBump.MAJOR, False, prerelease_token="alpha") == semver.Version().parse("2.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.NONE, True, prerelease_token="alpha"
+    ) == semver.Version().parse("1.0.0-alpha.1578+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.PATCH, True, prerelease_token="alpha"
+    ) == semver.Version().parse("1.0.0-alpha.1579+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.MINOR, True, prerelease_token="alpha"
+    ) == semver.Version().parse("1.0.0-alpha.1579+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.MAJOR, True, prerelease_token="alpha"
+    ) == semver.Version().parse("2.0.0-alpha.1+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.NONE, False, prerelease_token="alpha"
+    ) == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.PATCH, False, prerelease_token="alpha"
+    ) == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.MINOR, False, prerelease_token="alpha"
+    ) == semver.Version().parse("1.0.0+abc")
+    assert semver.Version().parse("1.0.0-alpha.1578+abc").bump(
+        enums.VersionBump.MAJOR, False, prerelease_token="alpha"
+    ) == semver.Version().parse("2.0.0+abc")
 
-    assert semver.Version().parse("1.0.0").bump(enums.VersionBump.NONE, True) == semver.Version().parse("1.0.0")
-    assert semver.Version().parse("1.0.0").bump(enums.VersionBump.PATCH, True) == semver.Version().parse("1.0.1-rc.1")
-    assert semver.Version().parse("1.0.0").bump(enums.VersionBump.MINOR, True) == semver.Version().parse("1.1.0-rc.1")
-    assert semver.Version().parse("1.0.0").bump(enums.VersionBump.MAJOR, True) == semver.Version().parse("2.0.0-rc.1")
+    assert semver.Version().parse("1.0.0").bump(
+        enums.VersionBump.NONE, True
+    ) == semver.Version().parse("1.0.0")
+    assert semver.Version().parse("1.0.0").bump(
+        enums.VersionBump.PATCH, True
+    ) == semver.Version().parse("1.0.1-rc.1")
+    assert semver.Version().parse("1.0.0").bump(
+        enums.VersionBump.MINOR, True
+    ) == semver.Version().parse("1.1.0-rc.1")
+    assert semver.Version().parse("1.0.0").bump(
+        enums.VersionBump.MAJOR, True
+    ) == semver.Version().parse("2.0.0-rc.1")
 
-    assert semver.Version().parse("2.1.5-rc.3").bump(enums.VersionBump.MAJOR, True) == semver.Version().parse("3.0.0-rc.1")
+    assert semver.Version().parse("2.1.5-rc.3").bump(
+        enums.VersionBump.MAJOR, True
+    ) == semver.Version().parse("3.0.0-rc.1")
 
-
-    assert semver.Version().parse("1.0.0-rc29").bump(enums.VersionBump.PATCH, True) == semver.Version().parse("1.0.0-rc.1")
+    assert semver.Version().parse("1.0.0-rc29").bump(
+        enums.VersionBump.PATCH, True
+    ) == semver.Version().parse("1.0.0-rc.1")

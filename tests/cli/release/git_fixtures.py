@@ -1,7 +1,9 @@
 import os
 import random
 import pytest
+
 git = pytest.importorskip("git")
+
 
 def randomid(chars=10, ranges=None):
     if ranges is None:
@@ -95,7 +97,9 @@ def repo_one_fix(tmp_path_factory):
 def repo_multi_one_breaking_change(tmp_path_factory):
     path = tmp_path_factory.mktemp("repo")
     repo = create_git_repo(path)
-    create_configs(repo, [("project1", "0.0.0", False), ("project2", "0.0.0", False)], "0.0.0")
+    create_configs(
+        repo, [("project1", "0.0.0", False), ("project2", "0.0.0", False)], "0.0.0"
+    )
     create_commits(
         repo,
         [
@@ -269,7 +273,11 @@ def repo_multi_project_commits_before_prerelease_tag_fix_after(tmp_path_factory)
     repo.git.tag("v1.0.0-rc.0", m="v1.0.0-rc.0")
     create_commits(
         repo,
-        [["fix: something", "1another_project"], ["fix: something else", "project2"], ["feat: something else", "project1"]],
+        [
+            ["fix: something", "1another_project"],
+            ["fix: something else", "project2"],
+            ["feat: something else", "project1"],
+        ],
     )
 
     yield repo

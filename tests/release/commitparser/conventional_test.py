@@ -78,7 +78,14 @@ expect = [
         "get_raw_body": "this is a commit body\n\nthis is another paragraph in the commit body\nfixes #530\nsome-footer: this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog",
         "get_description": "this and that",
         "get_body": "this is a commit body\n\nthis is another paragraph in the commit body\n",
-        "get_footers": [("fixes", "530", True), ("some-footer", "this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog", False)],
+        "get_footers": [
+            ("fixes", "530", True),
+            (
+                "some-footer",
+                "this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog",
+                False,
+            ),
+        ],
         "get_version_bump": enums.VersionBump.MAJOR,
     },
     {
@@ -91,7 +98,15 @@ expect = [
         "get_raw_body": "this is a commit body\n\nthis is another paragraph in the commit body\nfixes #530\nsome-footer: this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog\nBREAKING-CHANGE: this is a multiline\nbreaking change",
         "get_description": "this and that",
         "get_body": "this is a commit body\n\nthis is another paragraph in the commit body\n",
-        "get_footers": [("fixes", "530", True), ("some-footer", "this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog", False), ("BREAKING-CHANGE", "this is a multiline\nbreaking change", False)],
+        "get_footers": [
+            ("fixes", "530", True),
+            (
+                "some-footer",
+                "this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog",
+                False,
+            ),
+            ("BREAKING-CHANGE", "this is a multiline\nbreaking change", False),
+        ],
         "get_version_bump": enums.VersionBump.MAJOR,
     },
     {
@@ -104,7 +119,15 @@ expect = [
         "get_raw_body": "this is a commit body\n\nthis is another paragraph in the commit body\nfixes #530\nsome-footer: this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog\nBREAKING CHANGE: this is a multiline\nbreaking change",
         "get_description": "this and that",
         "get_body": "this is a commit body\n\nthis is another paragraph in the commit body\n",
-        "get_footers": [("fixes", "530", True), ("some-footer", "this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog", False), ("BREAKING CHANGE", "this is a multiline\nbreaking change", False)],
+        "get_footers": [
+            ("fixes", "530", True),
+            (
+                "some-footer",
+                "this a very long footer \n it even has multiple lines\n the quick brown fox jumps over the lazy dog",
+                False,
+            ),
+            ("BREAKING CHANGE", "this is a multiline\nbreaking change", False),
+        ],
         "get_version_bump": enums.VersionBump.MAJOR,
     },
     {
