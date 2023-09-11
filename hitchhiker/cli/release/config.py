@@ -118,9 +118,6 @@ def __add_version_vars(conf, project_ctx):
             )
 
 
-# TODO: place default option dicts somewhere else
-
-
 def create_context_from_raw_config(tomlcfg: str, repo: git.Repo):
     ctx = {
         "projects": [],

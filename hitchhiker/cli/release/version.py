@@ -22,7 +22,7 @@ def get_repo_owner_name(ctx):
         )
         repo_owner = _match.group(1) if _match is not None else None
         repo_name = _match.group(2) if _match is not None else None
-    except:  # TODO: figure out which exceptions could be thrown here
+    except git.GitCommandError:
         repo_owner = None
         repo_name = None
     return (repo_owner, repo_name)
@@ -67,14 +67,14 @@ def do_gh_release(ctx, newtag, message, prerelease):
     try:
         auth = github.Auth.Token(tokenstr)
         gh = github.Github(auth=auth)
-    except:  # TODO: figure out which exceptions could be thrown here
+    except Exception:  # TODO: figure out which exceptions could be thrown here
         raise click.ClickException(
             message="Failed to authenticate at GitHub with token"
         )
 
     try:
         repo = gh.get_repo(f"{repo_owner}/{repo_name}")
-    except:  # TODO: figure out which exceptions could be thrown here
+    except Exception:  # TODO: figure out which exceptions could be thrown here
         raise click.ClickException(message="Failed to get repository from github")
 
     try:
@@ -87,7 +87,7 @@ def do_gh_release(ctx, newtag, message, prerelease):
             .commit(ctx.obj["RELEASE_CONF"]["repo"].active_branch)
             .hexsha,
         )
-    except:  # TODO: figure out which exceptions could be thrown here
+    except Exception:  # TODO: figure out which exceptions could be thrown here
         raise click.ClickException(message="Failed to create release on GitHub")
 
 
@@ -190,7 +190,7 @@ def version(ctx: click.Context, show, prerelease, prerelease_token, push, ghrele
                 ctx.obj["RELEASE_CONF"]["repo"].remote(
                     name="origin"
                 ).push().raise_if_error()
-            except:  # TODO: figure out which exceptions could be thrown here
+            except Exception:  # TODO: figure out which exceptions could be thrown here
                 raise click.ClickException(message="Failed to push")
         if ghrelease:
             do_gh_release(ctx, newtag, changelog_newtext, prerelease)

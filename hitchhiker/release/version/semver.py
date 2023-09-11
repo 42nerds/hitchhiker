@@ -38,8 +38,7 @@ class Version:
             and self.prerelease == obj.prerelease
         )
 
-    # TODO: fix this cursed mess
-    def __lt__(self, obj):
+    def __ver_lt(self, obj):
         if self.major < obj.major:
             return True
         elif self.major > obj.major:
@@ -61,6 +60,9 @@ class Version:
         if self.prerelease is None or obj.prerelease is None:
             return self.prerelease is not None
 
+        return None
+
+    def __prerelease_lt(self, obj):
         for selfid, objid in zip(self.prerelease.split("."), obj.prerelease.split(".")):
             if selfid == objid:
                 continue
@@ -84,6 +86,12 @@ class Version:
             return len(self.prerelease.split(".")) < len(obj.prerelease.split("."))
 
         # it should be _impossible_ to get here!
+
+    def __lt__(self, obj):
+        if self.__ver_lt(obj) is not None:
+            return self.__ver_lt(obj)
+
+        return self.__prerelease_lt(obj)
 
     def parse(self, version: str):
         """Parses semantic version string"""
