@@ -95,7 +95,6 @@ class Version:
 
     def parse(self, version: str):
         """Parses semantic version string"""
-        # regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start)
         match = re.match(_semver_parse, version)
         if match is None:
             self.major = 0

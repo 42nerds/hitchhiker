@@ -18,12 +18,13 @@ def _find_latest_tag_in_commits(tags, commits):
         r = search_commit(tag[0].commit, commits)
         if r is not None:
             return r
+    # get empty tree SHA
     emptysha = subprocess.run(
         ["git", "hash-object", "-t", "tree", "/dev/null"],
         capture_output=True,
         text=True,
         check=True,
-    ).stdout.strip()  # get empty tree SHA
+    ).stdout.strip()
     return (None, emptysha)
 
 
@@ -45,7 +46,7 @@ def find_next_version(config, project, prerelease):
     )
     if commit_list is None:
         commit_list = list(config["repo"].iter_commits(config["repo"].active_branch))
-    commits = []  # [(msg: str, [file: str])]
+    commits = []
     bump = enums.VersionBump.NONE
 
     for commit in reversed(commit_list):
