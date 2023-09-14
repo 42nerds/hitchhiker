@@ -13,13 +13,10 @@ def discover_modules(glob: str):
         )
     )
     for fname in modulefiles:
-        try:
-            module = Module(fname)
-            if not module.is_valid():
-                continue
-            modules.append(module)
-        except Exception:
-            pass
+        module = Module(fname)
+        if not module.is_valid():
+            continue
+        modules.append(module)
 
     return modules
 
@@ -32,10 +29,10 @@ class Module:
     def __init__(self, manifest_path):
         self._int_name = Path(manifest_path).resolve().parent.name
         with open(manifest_path) as f:
-            eval = ast.literal_eval(f.read())
-            if type(eval) == dict:
+            d = ast.literal_eval(f.read())
+            if isinstance(d, dict):
                 self._valid = True
-                self._manifest_dict = eval
+                self._manifest_dict = d
 
     def is_valid(self):
         return self._valid

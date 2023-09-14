@@ -1,5 +1,5 @@
 import click
-import hitchhiker.cli.modules.list as list
+import hitchhiker.cli.modules.list as list_mod
 
 
 @click.group()
@@ -8,4 +8,4 @@ def modules(ctx: click.Context):
     ctx.ensure_object(dict)
 
 
-modules.add_command(list.list_cmd)
+modules.add_command(list_mod.list_cmd)
