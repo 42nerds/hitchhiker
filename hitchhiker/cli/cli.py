@@ -1,5 +1,6 @@
 import click
 import pkg_resources
+from .modules import commands as modules
 
 
 @click.group()
@@ -11,6 +12,8 @@ def cli(ctx, debug):
 
     ctx.obj["DEBUG"] = debug
 
+
+cli.add_command(modules.modules)
 
 try:
     from .odoo import commands as odoo_cli
