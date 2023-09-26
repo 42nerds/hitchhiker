@@ -52,20 +52,15 @@ def commit_and_tag(ctx, changedfiles, commitmsg, newtag):
         click.secho(f'tag "{newtag}" already exists', fg="red", err=True)
 
 
-def do_gh_release(ctx, newtag, message, prerelease):
+def do_gh_release(ctx, newtag, message, prerelease, ghtoken):
     """Creates a github release"""
     repo_owner, repo_name = get_repo_owner_name(ctx)
     if repo_owner is None or repo_name is None:
         raise click.ClickException(
             message="could not parse remote URL to get owner & repository name"
         )
-    tokenstr = os.getenv("GITHUB_TOKEN")
-    if tokenstr is None:
-        raise click.ClickException(
-            message='Failed to get "GITHUB_TOKEN" environment variable'
-        )
     try:
-        auth = github.Auth.Token(tokenstr)
+        auth = github.Auth.Token(ghtoken)
         gh = github.Github(auth=auth)
     except Exception:  # TODO: figure out which exceptions could be thrown here
         raise click.ClickException(
@@ -101,8 +96,13 @@ def do_gh_release(ctx, newtag, message, prerelease):
 )
 @click.option("--push", is_flag=True, default=False, help="push to origin")
 @click.option("--ghrelease", is_flag=True, default=False, help="create github release")
+@click.option(
+    "--ghtoken", default=lambda: os.getenv("GITHUB_TOKEN"), help="GitHub token"
+)
 @click.pass_context
-def version(ctx: click.Context, show, prerelease, prerelease_token, push, ghrelease):
+def version(
+    ctx: click.Context, show, prerelease, prerelease_token, push, ghrelease, ghtoken
+):
     """Figure out new version and apply it"""
     if ghrelease and not push:
         raise click.BadOptionUsage(
@@ -193,4 +193,6 @@ def version(ctx: click.Context, show, prerelease, prerelease_token, push, ghrele
             except Exception:  # TODO: figure out which exceptions could be thrown here
                 raise click.ClickException(message="Failed to push")
         if ghrelease:
-            do_gh_release(ctx, newtag, changelog_newtext, prerelease)
+            if ghtoken is None:
+                raise click.ClickException(message='Failed to get "GITHUB_TOKEN"')
+            do_gh_release(ctx, newtag, changelog_newtext, prerelease, ghtoken)

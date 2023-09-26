@@ -37,3 +37,7 @@ Will push to origin.
 #### `--ghrelease`
 
 Creates a github release (--push is required for this).
+
+#### `--ghtoken`
+
+GitHub API token.

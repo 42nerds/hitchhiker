@@ -4,7 +4,7 @@ Release uses a TOML configuration, the configuration file can be specified with 
 
 ## Environment variables
 
-- `GITHUB_TOKEN` GitHub API token, used to create releases on GitHub
+- `GITHUB_TOKEN` GitHub API token, used to create releases on GitHub. Can also be specified with argument.
 
 ## TOML config options
 
