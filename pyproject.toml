@@ -27,6 +27,9 @@ odoo = [
 test = [
     "pytest>=7,<8",
 ]
+copier = [
+    "copier>=8.3.0,<9",
+]
 
 [tool.pytest.ini_options]
 python_files = ["tests/*.py", "tests/**/*.py"]
