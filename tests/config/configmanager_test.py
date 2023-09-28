@@ -17,32 +17,40 @@ def test_configmanager(tmp_path_factory):
             "testkey3": "this is a long string",
         },
     )
+    cfg2.set_key("testkey1", ["this", "is", "another", "list"])
 
-    assert cfg2.get_key("testkey1") == "x"
+    assert cfg2.get_key("testkey1") == ["this", "is", "another", "list"]
     assert cfg2.get_key("testkey2") == ["x", "y"]
     assert cfg2.get_key("somekey") == ["this", "is", "a", "list"]
 
     cfg3 = ConfigManager(tmpf, {})
 
-    assert cfg2.get_key("testkey1") == "x"
-    assert cfg2.get_key("testkey2") == ["x", "y"]
-    assert cfg2.get_key("testkey3") == "this is a long string"
-    assert cfg2.get_key("somekey") == ["this", "is", "a", "list"]
-
-    open(tmpf, "w").close()
+    assert cfg3.get_key("testkey1") == ["this", "is", "another", "list"]
+    assert cfg3.get_key("testkey2") == ["x", "y"]
+    assert cfg3.get_key("testkey3") == "this is a long string"
+    assert cfg3.get_key("somekey") == ["this", "is", "a", "list"]
 
     cfg4 = ConfigManager(tmpf, {"testkey1": "x", "testkey2": ["x", "y"]})
 
-    assert cfg4.get_key("testkey1") == "x"
+    assert cfg4.get_key("testkey1") == ["this", "is", "another", "list"]
     assert cfg4.get_key("testkey2") == ["x", "y"]
+    assert cfg4.get_key("testkey3") == "this is a long string"
+    assert cfg4.get_key("somekey") == ["this", "is", "a", "list"]
+
+    open(tmpf, "w").close()
+
+    cfg5 = ConfigManager(tmpf, {"testkey1": "x", "testkey2": ["x", "y"]})
+
+    assert cfg5.get_key("testkey1") == "x"
+    assert cfg5.get_key("testkey2") == ["x", "y"]
     try:
-        cfg4.get_key("somekey")
+        cfg5.get_key("somekey")
         assert False
     except KeyError:
         pass
 
     try:
-        cfg4.get_key("testkey3")
+        cfg5.get_key("testkey3")
         assert False
     except KeyError:
         pass

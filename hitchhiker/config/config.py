@@ -32,6 +32,12 @@ class ConfigManager:
         self._default_conf = defaultconf
         self._confdict = self._read_config()
 
+        # append new default config keys to config
+        for key in self._default_conf.keys():
+            if key not in self._confdict.keys():
+                self._confdict[key] = self._default_conf[key]
+                self._write_config()
+
     def get_key(self, key):
         if key in self._confdict.keys():
             return self._confdict[key]
