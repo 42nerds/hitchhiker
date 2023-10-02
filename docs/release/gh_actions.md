@@ -1,7 +1,5 @@
 # GitHub Actions example
 
-<!-- FIXME: This example is incorrect as we have not yet figured out how hitchhiker will be installed&updated -->
-
 ## Example workflow
 
 ```yaml
@@ -25,10 +23,7 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: |
-          cd tool
-          python setup.py egg_info
-          pip install `grep -v '^\[' *.egg-info/requires.txt`
-          pip install -e .
+          pip install "hitchhiker[release] @ git+https://github.com/42nerds/hitchhiker.git"
       - name: run hitchhiker
         run: |
           git config --global user.name "actions"
