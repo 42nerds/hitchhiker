@@ -230,4 +230,5 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
                 }
                 project_ctx["version"] = __get_version(ctx, project_ctx)
                 ctx["projects"].append(project_ctx)
+            ctx["projects"] = sorted(ctx["projects"], key=lambda x: x["name"])
     return ctx

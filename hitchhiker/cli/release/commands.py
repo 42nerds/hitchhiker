@@ -1,7 +1,6 @@
 import os
 import git
 import click
-import tomlkit
 import hitchhiker.cli.release.config as conf
 import hitchhiker.cli.release.version as version
 
