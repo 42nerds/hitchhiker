@@ -62,3 +62,13 @@ version_variables = ["someproject/__init__.py:__version__"]
 prerelease = false
 branch_match = "(master|main)"
 ```
+
+## Example setup.cfg configuration
+
+If setup.cfg is used odoo modules will be automatically discovered.
+
+```
+[tool.hitchhiker]
+project_version = 1.2.3
+version_cfg = setup.cfg:tool.hitchhiker:project_version
+```

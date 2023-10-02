@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import glob as pyglob
 import ast
@@ -27,6 +28,7 @@ class Module:
     _valid = False
 
     def __init__(self, manifest_path):
+        self._moduledir = os.path.dirname(manifest_path)
         self._int_name = Path(manifest_path).resolve().parent.name
         with open(manifest_path) as f:
             d = ast.literal_eval(f.read())
@@ -36,6 +38,9 @@ class Module:
 
     def is_valid(self):
         return self._valid
+
+    def get_dir(self):
+        return self._moduledir
 
     def get_int_name(self):
         if not self.is_valid():

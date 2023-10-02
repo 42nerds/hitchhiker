@@ -66,7 +66,6 @@ def test_version_err_invalidconf(repo_empty):
     result = CliRunner().invoke(
         cli, ["release", "--workdir", repo.working_tree_dir, "version"]
     )
-    assert "pyproject.toml" in result.output
     assert result.exit_code != 0
 
 
@@ -208,4 +207,21 @@ def test_version_repo_multi_project_commits_before_prerelease_tag_fix_after2(
             ("2another_project", "0.0.0", "0.0.0"),
         ],
         prerelease=True,
+    )
+
+
+def test_version_repo_multi_project_commits_before_tag_fix_after_odoo(
+    repo_multi_project_commits_before_tag_fix_after_odoo,
+):
+    """test for Version"""
+    repo = repo_multi_project_commits_before_tag_fix_after_odoo
+    invoke_cli_version_cmd(
+        repo,
+        ("1.0.1", "1.0.0"),
+        [
+            ("2another_project", "1.0.0", "1.0.0"),
+            ("1another_project", "0.0.0", "0.0.0"),
+            ("project2", "0.0.1", "0.0.0"),
+            ("project1", "0.0.1", "0.0.0"),
+        ],
     )

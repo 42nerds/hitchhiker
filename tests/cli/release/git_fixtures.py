@@ -26,35 +26,48 @@ def create_git_repo(path):
     return repo
 
 
-def create_configs(repo, projects, main_version, prerelease_token="rc"):
+def create_configs(repo, projects, main_version, prerelease_token="rc", is_odoo=False):
     print(repo.working_tree_dir)
-    with open(f"{repo.working_tree_dir}/pyproject.toml", "w") as f:
-        f.write(
-            f"""[project]
+    if not is_odoo:
+        with open(f"{repo.working_tree_dir}/pyproject.toml", "w") as f:
+            f.write(
+                f"""[project]
 version = "{main_version}"
 
 [tool.hitchhiker]
 projects = {str([n for n, _, _ in projects])}
 version_toml = ["pyproject.toml:project.version"]
 """
-        )
-        for project, version, prerelease in projects:
-            f.write(
-                f"""
+            )
+            for project, version, prerelease in projects:
+                f.write(
+                    f"""
 [tool.hitchhiker.project.{project}]
 path = "{project}/"
 version_variables = ["{project}/__init__.py:__version__"]
 prerelease = {"true" if prerelease else "false"}
 prerelease_token = "{prerelease_token}"
 """
+                )
+        repo.git.add(f"pyproject.toml")
+    else:
+        with open(f"{repo.working_tree_dir}/setup.cfg", "w") as f:
+            f.write(
+                f"""[tool.hitchhiker]
+project_version = {main_version}
+version_cfg = setup.cfg:tool.hitchhiker:project_version
+"""
             )
-    repo.git.add(f"pyproject.toml")
+        repo.git.add(f"setup.cfg")
     for project, version, prerelease in projects:
         if not os.path.isdir(f"{repo.working_tree_dir}/{project}"):
             os.mkdir(f"{repo.working_tree_dir}/{project}")
         with open(f"{repo.working_tree_dir}/{project}/__init__.py", "w") as f:
             f.write(f'__version__ = "{version}"\n')
         repo.git.add(f"{project}/__init__.py")
+        if is_odoo:
+            with open(f"{repo.working_tree_dir}/{project}/__manifest__.py", "w") as f:
+                f.write(f'{{\n    "version": "{version}"\n}}')
 
 
 def create_random_file(repo, path=""):
@@ -278,6 +291,42 @@ def repo_multi_project_commits_before_prerelease_tag_fix_after(tmp_path_factory)
             ["fix: something else", "project2"],
             ["feat: something else", "project1"],
         ],
+    )
+
+    yield repo
+    repo.close()
+
+
+@pytest.fixture
+def repo_multi_project_commits_before_tag_fix_after_odoo(tmp_path_factory):
+    path = tmp_path_factory.mktemp("repo")
+    repo = create_git_repo(path)
+    create_configs(
+        repo,
+        [
+            ("project1", "0.0.0", False),
+            ("project2", "0.0.0", False),
+            ("1another_project", "0.0.0", False),
+            ("2another_project", "1.0.0", False),
+        ],
+        "1.0.0",
+        is_odoo=True,
+    )
+    create_commits(repo, [["Initial commit", ""]])
+    repo.git.tag("v0.0.0", m="v0.0.0")
+    create_commits(
+        repo,
+        [
+            ["fix: something", "project1"],
+            ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"],
+            ["fix: something else", "project2"],
+            ["feat: some feature", "1another_project"],
+            ["feat!: some feature that breaks things", "2another_project"],
+        ],
+    )
+    repo.git.tag("v1.0.0", m="v1.0.0")
+    create_commits(
+        repo, [["fix: something", "project1"], ["fix: something else", "project2"]]
     )
 
     yield repo
