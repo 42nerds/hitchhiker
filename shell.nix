@@ -8,6 +8,8 @@ in stdenv.mkDerivation {
     python311Packages.pip
 
     python311Packages.pytest
+    python311Packages.coverage
+
     python311Packages.click
 
     python311Packages.gitpython
