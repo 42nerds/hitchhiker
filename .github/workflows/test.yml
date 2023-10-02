@@ -14,13 +14,35 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: |
-          pip install pytest coverage
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Test with pytest
+          pip install coverage
+          python setup.py egg_info
+          pip install `grep -v '^\[' *.egg-info/requires.txt`
+      - name: Test with pytest and generate coverage report
         run: |
-          coverage run --source . -m pytest -vv
+          coverage run --source . -m pytest -vv --tb=long
       - name: Upload coverage report to codacy
         run: |
           coverage xml -o cobertura.xml
           export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -Ls https://coverage.codacy.com/get.sh)
+
+  test-no-optional-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install pytest
+      - name: Install
+        run: |
+          pip install -e .
+      - name: Test with pytest
+        run: |
+          pytest -vv --tb=long
+      - name: Run
+        run: |
+          hitchhiker --help

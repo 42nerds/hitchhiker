@@ -25,7 +25,11 @@
             ]
         },
         "codespaces": {
-            "repositories": {}
+            "repositories": {
+                "42nerds/copier_odoo_module": {
+                    "permissions": "read-all"
+                }
+            }
         }
     },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
