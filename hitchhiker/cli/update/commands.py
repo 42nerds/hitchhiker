@@ -5,7 +5,7 @@ import github
 import hitchhiker.release.version.semver as semver
 
 
-def get_latest(ctx) -> semver.Version:
+def _get_latest(ctx) -> semver.Version:
     try:
         if not ctx.obj["CONF"].has_key("GITHUB_TOKEN"):
             raise Exception("GitHub token not found")
@@ -20,7 +20,7 @@ def get_latest(ctx) -> semver.Version:
         raise e
     if len(list(releases)) > 0:
         return semver.Version().parse(releases[0].tag_name)
-    raise Exception("no release found")
+    raise Exception("no releases found")
 
 
 @click.command()
@@ -30,7 +30,7 @@ def update(ctx):
     version = semver.Version().parse(ctx.obj["VERSION"])
     click.echo(f"Current version: {version}")
     try:
-        latest = get_latest(ctx)
+        latest = _get_latest(ctx)
         if latest > version:
             click.echo(f"New version version available: {latest}")
         elif version > latest:
@@ -39,7 +39,7 @@ def update(ctx):
             )
             return
         else:
-            click.echo(f"You are on latest")
+            click.echo(f"No update available (remote version {latest})")
             return
     except Exception as e:
         click.echo(f"error checking for new version: {e}")
