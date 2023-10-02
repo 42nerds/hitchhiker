@@ -2,6 +2,8 @@ import click
 import pkg_resources
 from hitchhiker.config.config import ConfigManager
 from .modules import commands as modules
+from .update import commands as update
+from .auth import commands as auth
 
 
 @click.group()
@@ -16,9 +18,12 @@ def cli(ctx, debug, conf):
 
     ctx.obj["DEBUG"] = debug
     ctx.obj["CONF"] = ConfigManager(conf, {})
+    ctx.obj["VERSION"] = pkg_resources.get_distribution("hitchhiker").version
 
 
 cli.add_command(modules.modules)
+cli.add_command(update.update)
+cli.add_command(auth.auth)
 
 try:
     from .odoo import commands as odoo_cli

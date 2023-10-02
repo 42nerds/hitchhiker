@@ -45,3 +45,6 @@ class ConfigManager:
     def set_key(self, key, value):
         self._confdict[key] = value
         self._write_config()
+
+    def has_key(self, key) -> bool:
+        return key in self._confdict.keys()
