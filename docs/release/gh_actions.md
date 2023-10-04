@@ -8,6 +8,7 @@ name: Version
 on:
   push:
     branches:
+      - "main"
       - "master"
 
 jobs:
