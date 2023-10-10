@@ -115,6 +115,7 @@ def version(
         return
 
     click.echo(f"main version: {ctx.obj['RELEASE_CONF']['version']}")
+    old_project_objs = copy.deepcopy(ctx.obj["RELEASE_CONF"]["projects"])
     mainbump = enums.VersionBump.NONE
     bumped = False
     changedfiles = []
@@ -174,6 +175,8 @@ def version(
         changelog_newtext = changelog.gen_changelog(
             change_commits=change_commits,
             new_version=str(ctx.obj["RELEASE_CONF"]["version"]),
+            projects_old=old_project_objs,
+            projects_new=ctx.obj["RELEASE_CONF"]["projects"],
             repo_owner=repo_owner,
             repo_name=repo_name,
         )

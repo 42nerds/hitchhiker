@@ -28,8 +28,21 @@ def _commit_cmp(a, b):
 
 
 # change_commits: {"projectname": [version, [commitmsgs]]}
-def gen_changelog(change_commits, new_version, repo_owner=None, repo_name=None):
+def gen_changelog(
+    change_commits,
+    new_version,
+    projects_old,
+    projects_new,
+    repo_owner=None,
+    repo_name=None,
+):
     out = f"\n## v{new_version}\n"
+    out += "### Projects\n| module | version |\n| -------- | ----------- |\n"
+    for oldp, newp in zip(projects_old, projects_new):
+        assert oldp["name"] == newp["name"]
+        version_changed = oldp["version"] != newp["version"]
+        out += f"| {newp['name']}{' :boom:' if version_changed else ''} | {newp['version']}{' :new:' if version_changed else ''} |\n"
+
     for project in change_commits.keys():
         out += f"### {project} (v{str(change_commits[project][0])})\n"
         commits_types = {}
