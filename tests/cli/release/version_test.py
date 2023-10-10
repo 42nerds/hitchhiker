@@ -225,3 +225,20 @@ def test_version_repo_multi_project_commits_before_tag_fix_after_odoo(
             ("project2", "0.0.1", "0.0.0"),
         ],
     )
+
+
+def test_version_repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name(
+    repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name,
+):
+    """test for Version"""
+    repo = repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name
+    invoke_cli_version_cmd(
+        repo,
+        ("1.1.0", "1.0.0"),
+        [
+            ("project1", "0.0.1", "0.0.0"),
+            ("project2", "0.0.1", "0.0.0"),
+            ("some_project_name", "0.0.0", "0.0.0"),
+            ("some_project_name_with_extra_feature", "1.1.0", "1.0.0"),
+        ],
+    )

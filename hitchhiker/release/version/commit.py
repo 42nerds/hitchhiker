@@ -54,7 +54,7 @@ def find_next_version(config, project, prerelease):
             item.a_path
             for item in commit.tree.diff(lastsha)
             if str(pathlib.Path(item.a_path)).startswith(
-                str(pathlib.Path(project["path"]))
+                str(pathlib.Path(project["path"])) + "/"
             )
         ]
         if len(changed_files) > 0:
