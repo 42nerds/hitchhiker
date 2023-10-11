@@ -20,11 +20,12 @@ jobs:
       - name: Test with pytest and generate coverage report
         run: |
           coverage run --source . -m pytest -vv --tb=long
-      - name: Upload coverage report to codacy
-        run: |
-          coverage xml -o cobertura.xml
-          export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
-          bash <(curl -Ls https://coverage.codacy.com/get.sh)
+          coverage xml -o coverage.xml
+      - name: Codacy Coverage Reporter
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: coverage.xml
 
   test-no-optional-deps:
     runs-on: ubuntu-latest
