@@ -6,10 +6,10 @@ import hitchhiker.odoo.module as odoo_mod
 @click.command(name="list", short_help="Figure out new version and apply it")
 @click.option("--glob", is_flag=False, default="./**", help="module search path glob")
 @click.pass_context
-def list_cmd(ctx: click.Context, glob):
+def list_cmd(ctx: click.Context, glob: str) -> None:
     """list all odoo modules"""
 
-    def cmp_module(a, b):
+    def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:
         if len(a.get_int_name()) < len(b.get_int_name()):
             return -1
         elif len(a.get_int_name()) > len(b.get_int_name()):

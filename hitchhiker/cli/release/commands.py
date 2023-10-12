@@ -8,10 +8,10 @@ import hitchhiker.cli.release.version as version
 @click.group()
 @click.option("--workdir", default="./", help="working directory")
 @click.pass_context
-def release(ctx: click.Context, workdir):
+def release(ctx: click.Context, workdir: str) -> None:
     ctx.ensure_object(dict)
     try:
-        repo = git.Repo(workdir)
+        repo = git.Repo(workdir)  # type: ignore[attr-defined]
     except (git.InvalidGitRepositoryError, git.NoSuchPathError):
         raise click.ClickException(message="Could not find git repository")
     assert repo.working_tree_dir is not None

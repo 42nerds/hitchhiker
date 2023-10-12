@@ -1,6 +1,6 @@
 import re
 import os
-from typing import Dict
+from typing import Dict, Any
 import configparser
 import git
 from dotty_dict import Dotty  # type: ignore[import]
@@ -16,7 +16,7 @@ _semver_group = (
 )
 
 
-def __get_version(config, ctx):
+def __get_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> semver.Version:
     versions = []
     for var in ctx["version_variables"]:
         with open(
@@ -52,7 +52,7 @@ def __get_version(config, ctx):
     return semver.Version()
 
 
-def set_version(config, ctx):
+def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
     changedfiles = []
     for var in ctx["version_variables"]:
         changedfiles.append(var[0])
@@ -120,7 +120,7 @@ def set_version(config, ctx):
     return changedfiles
 
 
-def __add_version_vars(conf, project_ctx):
+def __add_version_vars(conf: Dict[str, Any] | configparser.SectionProxy, project_ctx: Dict[str, Any]) -> None:
     if "version_variables" in conf:
         for var in conf["version_variables"]:
             project_ctx["version_variables"].append(
@@ -138,9 +138,11 @@ def __add_version_vars(conf, project_ctx):
         project_ctx["version_cfg"].append(conf["version_cfg"].split(":"))
 
 
-def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
+def create_context_from_raw_config(
+    tomlcfg: str, repo: git.repo.base.Repo, is_odoo: bool = False
+) -> Dict[str, Any]:
     assert repo.working_tree_dir is not None
-    ctx: Dict = {
+    ctx: Dict[str, Any] = {
         "projects": [],
         "version": semver.Version(),
         "repo": repo,
@@ -204,7 +206,9 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
                 + len(ctx["version_cfg"])
             ) > 0, "no version store location defined for main project"
             ctx["version"] = __get_version(ctx, ctx)
-            modules = odoo_mod.discover_modules(os.path.abspath(repo.working_tree_dir) + "/**")
+            modules = odoo_mod.discover_modules(
+                os.path.abspath(repo.working_tree_dir) + "/**"
+            )
             for module in modules:
                 project_ctx = {
                     "name": module.get_int_name(),

@@ -6,7 +6,7 @@ import click
 
 @click.command(short_help="Authenticate with GitHub")
 @click.pass_context
-def github(ctx: click.Context):
+def github(ctx: click.Context) -> None:
     """Get token from GitHub and save it in configuration"""
     oauth_client_id = "8fb737ec1cb768ded4c4"  # 42 N.E.R.D.S hitchhiker
     result = json.loads(

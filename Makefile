@@ -11,7 +11,7 @@ coverage:
 
 .PHONY: type-checking
 type-checking:
-	@mypy ./hitchhiker
+	@mypy ./hitchhiker --strict
 
 .PHONY: install
 install:

@@ -3,7 +3,7 @@ import hitchhiker.cli.auth.github as github
 
 
 @click.group()
-def auth():
+def auth() -> None:
     pass
 
 
