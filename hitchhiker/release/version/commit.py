@@ -1,12 +1,19 @@
 import pathlib
+from typing import Optional, Dict, Any
 import subprocess
+import git
 import hitchhiker.release.version.semver as semver
 import hitchhiker.release.enums as enums
 from hitchhiker.release.commitparser.conventional import ConventionalCommitParser
 
 
-def _find_latest_tag_in_commits(tags, commits):
-    def search_commit(commit, commits):
+def _find_latest_tag_in_commits(
+    tags: list[tuple[git.refs.tag.TagReference, semver.Version]],
+    commits: list[git.objects.commit.Commit],
+) -> tuple[Optional[list[git.objects.commit.Commit]], str]:
+    def search_commit(
+        commit: git.objects.commit.Commit, commits: list[git.objects.commit.Commit]
+    ) -> Optional[tuple[list[git.objects.commit.Commit], str]]:
         i = 0
         while i < len(commits):
             if commits[i].binsha == commit.binsha:
@@ -28,14 +35,19 @@ def _find_latest_tag_in_commits(tags, commits):
     return (None, emptysha)
 
 
-def _get_tag_versions(tags):
+def _get_tag_versions(
+    tags: list[git.refs.tag.TagReference],
+) -> list[tuple[git.refs.tag.TagReference, semver.Version]]:
     tag_ver = []
     for tag in tags:
         tag_ver.append((tag, semver.Version().parse(tag.name)))
-    return sorted(tag_ver, reverse=True, key=lambda t: t[1])
+    tag_ver.sort(reverse=True, key=lambda t: t[1])
+    return tag_ver
 
 
-def find_next_version(config, project, prerelease):
+def find_next_version(
+    config: Dict[str, Any], project: Dict[str, Any], prerelease: bool
+) -> tuple[enums.VersionBump, list[tuple[git.objects.commit.Commit, list[str]]]]:
     tags = [
         (t, v)
         for t, v in _get_tag_versions(config["repo"].tags)
@@ -58,7 +70,7 @@ def find_next_version(config, project, prerelease):
             )
         ]
         if len(changed_files) > 0:
-            parsed = ConventionalCommitParser(commit.message)
+            parsed = ConventionalCommitParser(str(commit.message))
             if parsed.is_conventional and bump < parsed.get_version_bump():
                 bump = parsed.get_version_bump()
             commits.append((commit, changed_files))

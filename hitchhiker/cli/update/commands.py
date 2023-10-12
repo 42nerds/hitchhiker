@@ -5,7 +5,7 @@ import github
 import hitchhiker.release.version.semver as semver
 
 
-def _get_latest(ctx) -> semver.Version:
+def _get_latest(ctx: click.Context) -> semver.Version:
     try:
         if not ctx.obj["CONF"].has_key("GITHUB_TOKEN"):
             raise Exception("GitHub token not found")
@@ -25,7 +25,7 @@ def _get_latest(ctx) -> semver.Version:
 
 @click.command()
 @click.pass_context
-def update(ctx):
+def update(ctx: click.Context) -> None:
     """Check for updates"""
     version = semver.Version().parse(ctx.obj["VERSION"])
     click.echo(f"Current version: {version}")

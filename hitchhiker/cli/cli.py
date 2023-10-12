@@ -13,7 +13,7 @@ from .auth import commands as auth
 )
 @click.option("--debug", is_flag=True, help="Show debug information")
 @click.pass_context
-def cli(ctx, debug, conf):
+def cli(ctx: click.Context, debug: bool, conf: str) -> None:
     ctx.ensure_object(dict)
 
     ctx.obj["DEBUG"] = debug

@@ -1,4 +1,5 @@
 import re
+from typing import Optional, Self
 import hitchhiker.release.enums as enums
 
 
@@ -15,22 +16,24 @@ class Version:
     major: int = 0
     minor: int = 0
     patch: int = 0
-    prerelease: str = None
-    buildmeta: str = None
+    prerelease: Optional[str] = None
+    buildmeta: Optional[str] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
             f"{'+' + self.buildmeta if self.buildmeta is not None else ''}"
         )
 
-    def __eq__(self, obj):
+    def __eq__(self, obj: object) -> bool:
+        if not isinstance(obj, Version):
+            return NotImplemented
         return (
             self.major == obj.major
             and self.minor == obj.minor
@@ -38,7 +41,9 @@ class Version:
             and self.prerelease == obj.prerelease
         )
 
-    def __ver_lt(self, obj):
+    def __ver_lt(self, obj: object) -> Optional[bool]:
+        if not isinstance(obj, Version):
+            return NotImplemented
         if self.major < obj.major:
             return True
         elif self.major > obj.major:
@@ -62,7 +67,11 @@ class Version:
 
         return None
 
-    def __prerelease_lt(self, obj):
+    def __prerelease_lt(self, obj: object) -> bool:
+        if not isinstance(obj, Version):
+            return NotImplemented
+        assert self.prerelease is not None
+        assert obj.prerelease is not None
         for selfid, objid in zip(self.prerelease.split("."), obj.prerelease.split(".")):
             if selfid == objid:
                 continue
@@ -86,14 +95,18 @@ class Version:
             return len(self.prerelease.split(".")) < len(obj.prerelease.split("."))
 
         # it should be _impossible_ to get here!
+        raise Exception("unreachable")
 
-    def __lt__(self, obj):
-        if self.__ver_lt(obj) is not None:
-            return self.__ver_lt(obj)
+    def __lt__(self, obj: object) -> bool:
+        if not isinstance(obj, Version):
+            return NotImplemented
+        ver_lt = self.__ver_lt(obj)
+        if ver_lt is not None:
+            return ver_lt
 
         return self.__prerelease_lt(obj)
 
-    def parse(self, version: str):
+    def parse(self, version: str) -> Self:
         """Parses semantic version string"""
         match = re.match(_semver_parse, version)
         if match is None:
@@ -110,7 +123,12 @@ class Version:
         self.buildmeta = match.group(5)
         return self
 
-    def bump(self, bump: enums.VersionBump, prerelease=False, prerelease_token="rc"):
+    def bump(
+        self,
+        bump: enums.VersionBump,
+        prerelease: bool = False,
+        prerelease_token: str = "rc",
+    ) -> Self:
         """Bumps version by amount specified in VersionBump enum"""
         # if last version was not a prerelease bump it before making it one
         if (

@@ -47,3 +47,18 @@ jobs:
       - name: Run
         run: |
           hitchhiker --help
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python setup.py egg_info
+          pip install `grep -v '^\[' *.egg-info/requires.txt`
+      - name: Type check with mypy
+        run: mypy --install-types --non-interactive ./hitchhiker --strict --no-warn-unused-ignores

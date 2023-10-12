@@ -10,6 +10,11 @@ in stdenv.mkDerivation {
     python311Packages.pytest
     python311Packages.coverage
 
+    python311Packages.mypy
+
+    python311Packages.types-requests
+    python311Packages.types-deprecated
+
     python311Packages.click
 
     python311Packages.gitpython
