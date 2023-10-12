@@ -34,7 +34,9 @@ class Module:
     def get_readable_name(self) -> Optional[str]:
         if not self.is_valid() or "name" not in self._manifest_dict:
             return None
-        assert type(self._manifest_dict["name"]) is str, "invalid Odoo module manifest"
+        assert isinstance(
+            self._manifest_dict["name"], str
+        ), "invalid Odoo module manifest"
         return self._manifest_dict["name"]
 
     def get_version(self) -> Optional[semver.Version]:
