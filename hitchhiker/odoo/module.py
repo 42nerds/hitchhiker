@@ -1,29 +1,13 @@
 import os
+from typing import Dict
 from pathlib import Path
 import glob as pyglob
 import ast
 import hitchhiker.release.version.semver as semver
 
 
-def discover_modules(glob: str):
-    modules = []
-    modulefiles = list(
-        filter(
-            lambda n: Path(n).name == "__manifest__.py",
-            pyglob.glob(glob, recursive=True),
-        )
-    )
-    for fname in modulefiles:
-        module = Module(fname)
-        if not module.is_valid():
-            continue
-        modules.append(module)
-
-    return modules
-
-
 class Module:
-    _manifest_dict = {}
+    _manifest_dict: Dict = {}
     _int_name = ""
     _valid = False
 
@@ -56,3 +40,20 @@ class Module:
         if not self.is_valid() or "version" not in self._manifest_dict:
             return None
         return semver.Version().parse(self._manifest_dict["version"])
+
+
+def discover_modules(glob: str) -> list[Module]:
+    modules = []
+    modulefiles = list(
+        filter(
+            lambda n: Path(n).name == "__manifest__.py",
+            pyglob.glob(glob, recursive=True),
+        )
+    )
+    for fname in modulefiles:
+        module = Module(fname)
+        if not module.is_valid():
+            continue
+        modules.append(module)
+
+    return modules

@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 import hitchhiker.release.enums as enums
 
 
@@ -15,8 +16,8 @@ class Version:
     major: int = 0
     minor: int = 0
     patch: int = 0
-    prerelease: str = None
-    buildmeta: str = None
+    prerelease: Optional[str] = None
+    buildmeta: Optional[str] = None
 
     def __init__(self):
         pass

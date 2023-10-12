@@ -1,7 +1,6 @@
 import click
 
-import click_odoo
-from click_odoo import odoo
+import click_odoo  # type: ignore[import]
 
 
 @click.group()

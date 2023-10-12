@@ -1,8 +1,9 @@
 import re
 import os
+from typing import Dict
 import configparser
 import git
-from dotty_dict import Dotty
+from dotty_dict import Dotty  # type: ignore[import]
 import tomlkit
 import hitchhiker.release.version.semver as semver
 import hitchhiker.odoo.module as odoo_mod
@@ -138,7 +139,8 @@ def __add_version_vars(conf, project_ctx):
 
 
 def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
-    ctx = {
+    assert repo.working_tree_dir is not None
+    ctx: Dict = {
         "projects": [],
         "version": semver.Version(),
         "repo": repo,
@@ -202,7 +204,7 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
                 + len(ctx["version_cfg"])
             ) > 0, "no version store location defined for main project"
             ctx["version"] = __get_version(ctx, ctx)
-            modules = odoo_mod.discover_modules(repo.working_tree_dir + "/**")
+            modules = odoo_mod.discover_modules(os.path.abspath(repo.working_tree_dir) + "/**")
             for module in modules:
                 project_ctx = {
                     "name": module.get_int_name(),

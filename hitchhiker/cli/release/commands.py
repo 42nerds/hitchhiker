@@ -14,6 +14,7 @@ def release(ctx: click.Context, workdir):
         repo = git.Repo(workdir)
     except (git.InvalidGitRepositoryError, git.NoSuchPathError):
         raise click.ClickException(message="Could not find git repository")
+    assert repo.working_tree_dir is not None
     cfgpath = os.path.join(repo.working_tree_dir, "pyproject.toml")
     if os.path.isfile(cfgpath):
         ctx.obj["RELEASE_CONF"] = conf.create_context_from_raw_config(

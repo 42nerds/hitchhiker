@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 import hitchhiker.release.enums as enums
 
 
@@ -10,20 +11,20 @@ class ConventionalCommitParser:
     __SUBJECT_REGEX = r"^([a-zA-Z]+)(?:\(([a-zA-Z]+)\))?(!)?: (.+)$"
 
     is_conventional: bool = False
-    type: str = None
-    scope: str = None
-    breaking: bool = None
-    __message: str = None
+    type: Optional[str] = None
+    scope: Optional[str] = None
+    breaking: Optional[bool] = None
+    __message: str = ""
 
     def __init__(self, msg: str):
         self.parse(msg)
 
     def __reset(self):
-        self.is_conventional: bool = False
-        self.type: str = None
-        self.scope: str = None
-        self.breaking: bool = None
-        self.__message: str = None
+        self.is_conventional = False
+        self.type = None
+        self.scope = None
+        self.breaking = None
+        self.__message = ""
 
     def parse(self, msg: str):
         """initializes this class with the commit message passed in msg"""
