@@ -47,3 +47,17 @@ jobs:
       - name: Run
         run: |
           hitchhiker --help
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install mypy
+      - name: Type check with mypy
+        run: make type-checking

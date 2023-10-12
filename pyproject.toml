@@ -26,6 +26,7 @@ odoo = [
 ]
 test = [
     "pytest>=7,<8",
+    "mypy",
 ]
 copier = [
     "copier>=8.3.0,<9",

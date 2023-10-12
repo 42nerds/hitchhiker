@@ -9,6 +9,10 @@ coverage:
 	@coverage html
 	@coverage report -m
 
+.PHONY: type-checking
+type-checking:
+	@mypy ./hitchhiker
+
 .PHONY: install
 install:
 	@pip install -e .
