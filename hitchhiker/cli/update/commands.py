@@ -6,6 +6,26 @@ import hitchhiker.release.version.semver as semver
 
 
 def _get_latest(ctx: click.Context) -> semver.Version:
+    """
+    Retrieves the latest version from a GitHub repository.
+
+    Parameters:
+        ctx (click.Context): The Click context object.
+
+    Returns:
+        semver.Version: The latest version parsed using semver.
+
+    Description:
+    This function retrieves the latest version from a specified GitHub repository.
+    It uses the GitHub API and a provided GitHub token from the configuration to fetch the releases.
+    The latest release version is then parsed using semver.
+
+    Example:
+    ```
+    latest_version = _get_latest(click_ctx)
+    ```
+
+    """
     try:
         if not ctx.obj["CONF"].has_key("GITHUB_TOKEN"):
             raise Exception("GitHub token not found")
@@ -26,7 +46,26 @@ def _get_latest(ctx: click.Context) -> semver.Version:
 @click.command()
 @click.pass_context
 def update(ctx: click.Context) -> None:
-    """Check for updates"""
+    """
+    Checks for updates to the current version and provides update instructions.
+
+    Parameters:
+        ctx (click.Context): The Click context object.
+
+    Returns:
+        None
+
+    Description:
+    This function checks for updates to the current version of the application.
+    It retrieves the latest version from a specified GitHub repository and compares it with the current version.
+    If a newer version is available, it provides instructions on how to update.
+
+    Example:
+    ```
+    update(click_ctx)
+    ```
+
+    """
     version = semver.Version().parse(ctx.obj["VERSION"])
     click.echo(f"Current version: {version}")
     try:

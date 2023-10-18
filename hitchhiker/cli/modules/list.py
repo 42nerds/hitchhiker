@@ -7,8 +7,26 @@ import hitchhiker.odoo.module as odoo_mod
 @click.option("--glob", is_flag=False, default="./**", help="module search path glob")
 @click.pass_context
 def list_cmd(ctx: click.Context, glob: str) -> None:
-    """list all odoo modules"""
+    """
+    Lists all Odoo modules based on the provided glob.
 
+    Parameters:
+        ctx (click.Context): The Click context object.
+        glob (str): The glob pattern to search for Odoo modules.
+
+    Returns:
+        None
+
+    Description:
+    This function lists all Odoo modules based on the provided glob pattern.
+    It prints the module names and versions in a formatted table.
+
+    Example:
+    ```
+    list_cmd(click_ctx, "*.odoo_module")
+    ```
+
+    """
     def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:
         if len(a.get_int_name()) < len(b.get_int_name()):
             return -1

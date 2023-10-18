@@ -5,6 +5,25 @@ import hitchhiker.cli.modules.list as list_mod
 @click.group()
 @click.pass_context
 def modules(ctx: click.Context) -> None:
+    """
+    Ensures the existence of a dictionary object in the Click context.
+
+    Parameters:
+        ctx (click.Context): The Click context object.
+
+    Returns:
+        None
+
+    Description:
+    This function ensures the existence of a dictionary object in the Click context.
+    It can be used to store and access data throughout the execution of the CLI application.
+
+    Example:
+    ```
+    modules(click_ctx)
+    ```
+
+    """
     ctx.ensure_object(dict)
 
 
