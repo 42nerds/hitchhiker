@@ -1,5 +1,7 @@
 import re
 import os
+import glob as pyglob
+from pathlib import Path
 from typing import Dict, Any
 import configparser
 import git
@@ -14,6 +16,8 @@ _semver_group = (
     r"((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-]"
     r"[0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"
 )
+
+# FIXME: Odoo manifest regex should be improved
 
 
 def __get_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> semver.Version:
@@ -120,7 +124,9 @@ def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
     return changedfiles
 
 
-def __add_version_vars(conf: Dict[str, Any] | configparser.SectionProxy, project_ctx: Dict[str, Any]) -> None:
+def __add_version_vars(
+    conf: Dict[str, Any] | configparser.SectionProxy, project_ctx: Dict[str, Any]
+) -> None:
     if "version_variables" in conf:
         for var in conf["version_variables"]:
             project_ctx["version_variables"].append(
@@ -207,7 +213,16 @@ def create_context_from_raw_config(
             ) > 0, "no version store location defined for main project"
             ctx["version"] = __get_version(ctx, ctx)
             modules = odoo_mod.discover_modules(
-                os.path.abspath(repo.working_tree_dir) + "/**"
+                list(
+                    filter(
+                        lambda n: Path(n).name == "__manifest__.py",
+                        pyglob.glob(
+                            os.path.abspath(repo.working_tree_dir)
+                            + "/*/__manifest__.py",
+                            recursive=True,
+                        ),
+                    )
+                )
             )
             for module in modules:
                 project_ctx = {

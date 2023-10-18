@@ -1,10 +1,17 @@
 from functools import cmp_to_key
+import glob as pyglob
+from pathlib import Path
 import click
 import hitchhiker.odoo.module as odoo_mod
 
 
 @click.command(name="list", short_help="Figure out new version and apply it")
-@click.option("--glob", is_flag=False, default="./**", help="module search path glob")
+@click.option(
+    "--glob",
+    is_flag=False,
+    default="./*/__manifest__.py",
+    help="module search path glob",
+)
 @click.pass_context
 def list_cmd(ctx: click.Context, glob: str) -> None:
     """list all odoo modules"""
@@ -17,7 +24,14 @@ def list_cmd(ctx: click.Context, glob: str) -> None:
         else:
             return 0
 
-    modules = odoo_mod.discover_modules(glob)
+    modules = odoo_mod.discover_modules(
+        list(
+            filter(
+                lambda n: Path(n).name == "__manifest__.py",
+                pyglob.glob(glob, recursive=True),
+            )
+        )
+    )
     if len(modules) == 0:
         click.echo("No Odoo modules found")
         return
