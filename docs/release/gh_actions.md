@@ -22,9 +22,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: Install dependencies
+      - name: Install hitchhiker
         run: |
-          pip install "hitchhiker[release] @ git+https://github.com/42nerds/hitchhiker.git"
+          pip install "hitchhiker[release] @ git+https://github.com/42nerds/hitchhiker.git@main"
       - name: run hitchhiker
         run: |
           git config --global user.name "actions"
