@@ -50,7 +50,6 @@ def _commit_cmp(
 
 # change_commits: {"projectname": [version, [commitmsgs]]}
 def gen_changelog(
-    
     change_commits: Dict[str, tuple[semver.Version, list[git.objects.commit.Commit]]],
     new_version: semver.Version,
     projects_old: list[Dict[str, Any]],
