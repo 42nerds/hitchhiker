@@ -20,4 +20,14 @@ install:
 .PHONY: distclean
 distclean:
 	@find . | grep -E "(/__pycache__$$)" | xargs rm -rf
-	@rm -rf .pytest_cache/ build/
+	@rm -rf .pytest_cache/ build/ ./html_docs
+
+.PHONY: setup-devcontainer
+setup-devcontainer:
+	@pip install coverage
+	@python setup.py egg_info
+	@pip install `grep -v '^\[' *.egg-info/requires.txt`
+
+.PHONY: docs
+docs:
+	@pdoc ./hitchhiker -o ./html_docs
