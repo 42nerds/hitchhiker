@@ -2,6 +2,7 @@ import pathlib
 from typing import Optional, Dict, Any
 import subprocess
 import git
+import hitchhiker.cli.release.tagfix as tagfix
 import hitchhiker.release.version.semver as semver
 import hitchhiker.release.enums as enums
 from hitchhiker.release.commitparser.conventional import ConventionalCommitParser
@@ -36,11 +37,19 @@ def _find_latest_tag_in_commits(
 
 
 def _get_tag_versions(
+    config: Dict[str, Any],
     tags: list[git.refs.tag.TagReference],
 ) -> list[tuple[git.refs.tag.TagReference, semver.Version]]:
     tag_ver = []
     for tag in tags:
-        tag_ver.append((tag, semver.Version().parse(tag.name)))
+        tag_ver.append(
+            (
+                tag,
+                semver.Version().parse(
+                    tagfix.get_tag_without_branch(config, str(tag.name))
+                ),
+            )
+        )
     tag_ver.sort(reverse=True, key=lambda t: t[1])
     return tag_ver
 
@@ -50,7 +59,7 @@ def find_next_version(
 ) -> tuple[enums.VersionBump, list[tuple[git.objects.commit.Commit, list[str]]]]:
     tags = [
         (t, v)
-        for t, v in _get_tag_versions(config["repo"].tags)
+        for t, v in _get_tag_versions(config, config["repo"].tags)
         if (True if prerelease else v.prerelease is None)
     ]
     commit_list, lastsha = _find_latest_tag_in_commits(

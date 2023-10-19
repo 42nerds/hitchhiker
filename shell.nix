@@ -7,6 +7,8 @@ in stdenv.mkDerivation {
     python311Packages.setuptools
     python311Packages.pip
 
+    python311Packages.pdoc
+
     python311Packages.pytest
     python311Packages.coverage
 
