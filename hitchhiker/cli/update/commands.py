@@ -4,7 +4,7 @@ import click
 import github
 import hitchhiker.release.version.semver as semver
 
-
+# FIXME: this is probably broken ever since we added branches in tag names
 def _get_latest(ctx: click.Context) -> semver.Version:
     try:
         if not ctx.obj["CONF"].has_key("GITHUB_TOKEN"):
@@ -23,6 +23,7 @@ def _get_latest(ctx: click.Context) -> semver.Version:
     raise Exception("no releases found")
 
 
+# TODO: figure out if we even need this?
 @click.command()
 @click.pass_context
 def update(ctx: click.Context) -> None:

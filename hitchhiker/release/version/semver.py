@@ -25,6 +25,7 @@ class Version:
     def __str__(self) -> str:
         return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
 
+    # TODO: check if this function is tested
     def __repr__(self) -> str:
         return (
             f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
@@ -110,6 +111,7 @@ class Version:
         """Parses semantic version string"""
         match = re.match(_semver_parse, version)
         if match is None:
+            # FIXME: should we really reset the internal state on a parse error?
             self.major = 0
             self.minor = 0
             self.patch = 0
