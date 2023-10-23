@@ -1,7 +1,6 @@
 import os
 from typing import Dict, Any, Optional
 from pathlib import Path
-import glob as pyglob
 import ast
 import hitchhiker.release.version.semver as semver
 
@@ -143,34 +142,28 @@ class Module:
         return semver.Version().parse(self._manifest_dict["version"])
 
 
-def discover_modules(glob: str) -> list[Module]:
+def discover_modules(files: list[str]) -> list[Module]:
     """
-    Discovers Odoo modules from the specified glob pattern.
+    Discovers Odoo modules from the specified list of file paths.
 
     Args:
-        glob (str): The glob pattern to search for module manifest files.
+        files (list[str]): A list of file paths to search for module manifest files.
 
     Returns:
         list[Module]: List of discovered Odoo modules.
 
     Description:
-    This function searches for module manifest files in the specified glob pattern and creates a list of Odoo modules.
+    This function searches for module manifest files in the specified list of file paths and creates a list of Odoo modules.
     It returns a list of valid Odoo module instances.
 
     Example:
     ```
-    modules = discover_modules("path/to/modules/**/__manifest__.py")
+    modules = discover_modules(["path/to/modules/module1/__manifest__.py", "path/to/modules/module2/__manifest__.py"])
     ```
 
     """
     modules = []
-    modulefiles = list(
-        filter(
-            lambda n: Path(n).name == "__manifest__.py",
-            pyglob.glob(glob, recursive=True),
-        )
-    )
-    for fname in modulefiles:
+    for fname in files:
         module = Module(fname)
         if not module.is_valid():
             continue

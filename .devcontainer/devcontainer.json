@@ -1,38 +1,34 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/postgres
 {
-    "name": "Python 3",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "odoo",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    // Features to add to the dev container. More info: https://containers.dev/features
-    "features": {
-        "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/devcontainers-contrib/features/copier:7": {},
-        "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
-    },
-    // Configure tool-specific properties.
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "vivaxy.vscode-conventional-commits",
-                "ms-vscode-remote.remote-containers",
-                "ms-python.python",
-                "ms-vscode.makefile-tools",
-                "GitHub.copilot",
-                "GitHub.copilot-chat",
-                "DotJoshJohnson.xml"
-            ]
-        },
-        "codespaces": {
-            "repositories": {
-                "42nerds/copier_odoo_module": {
-                    "permissions": "read-all"
-                }
-            }
-        }
-    },
-    // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    "forwardPorts": [],
-    "portsAttributes": {}
+  "name": "Python 3",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "odoo",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  // Features to add to the dev container. More info: https://containers.dev/features
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers-contrib/features/copier:7": {},
+    "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
+  },
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "make setup-devcontainer",
+
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vivaxy.vscode-conventional-commits",
+        "ms-vscode-remote.remote-containers",
+        "ms-python.python",
+        "ms-vscode.makefile-tools",
+        "DotJoshJohnson.xml",
+        "ritwickdey.liveserver"
+      ]
+    }
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [],
+  "portsAttributes": {}
 }
