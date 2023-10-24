@@ -5,6 +5,9 @@ import hitchhiker.cli.modules.list as list_mod
 @click.group()
 @click.pass_context
 def modules(ctx: click.Context) -> None:
+    """
+    Commands related to Odoo modules
+    """
     ctx.ensure_object(dict)
 
 

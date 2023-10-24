@@ -9,6 +9,19 @@ import hitchhiker.cli.release.version as version
 @click.option("--workdir", default="./", help="working directory")
 @click.pass_context
 def release(ctx: click.Context, workdir: str) -> None:
+    """
+    Prepares the release context for a git repository.
+
+    Parameters:
+        workdir (str): The path to the working directory.
+
+    Description:
+    This command group prepares the release context for a git repository based on the provided working directory.
+    It first checks if the working directory is a valid git repository.
+    It then attempts to read the configuration from "pyproject.toml" or "setup.cfg" in the repository.
+    The configuration is used to create the release context.
+
+    """
     ctx.ensure_object(dict)
     try:
         repo = git.Repo(workdir)  # type: ignore[attr-defined]

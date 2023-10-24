@@ -5,11 +5,25 @@ import hitchhiker.release.enums as enums
 import hitchhiker.release.commitparser.conventional as conventional
 import hitchhiker.release.version.semver as semver
 
-
+# TODO: this could potentioally be moved to conventional.py??
 def _commit_cmp(
     _a: tuple[conventional.ConventionalCommitParser, git.objects.commit.Commit],
     _b: tuple[conventional.ConventionalCommitParser, git.objects.commit.Commit],
 ) -> int:
+    """
+    Comparison function for sorting commits based on version bump and conventional commit properties.
+
+    Parameters:
+        _a (tuple): A tuple containing a ConventionalCommitParser instance and a Git commit.
+        _b (tuple): A tuple containing a ConventionalCommitParser instance and a Git commit.
+
+    Returns:
+        int: -1 if _a should come before _b, 1 if _a should come after _b, 0 if they are equal.
+
+    Description:
+    This function compares two commits based on their version bump type and conventional commit properties.
+    It is intended to be used as a comparison function for sorting commits.
+    """
     a, _ = _a
     b, _ = _b
     if a.is_conventional and b.is_conventional:
@@ -43,6 +57,30 @@ def gen_changelog(
     repo_owner: Optional[str] = None,
     repo_name: Optional[str] = None,
 ) -> str:
+    """
+    Generates a changelog based on commit messages and project versions.
+
+    Parameters:
+        change_commits (dict): A dictionary mapping project names to a tuple containing the new version and a list of commits.
+        new_version (semver.Version): The new version for the changelog.
+        projects_old (list): A list of dictionaries representing the old project versions.
+        projects_new (list): A list of dictionaries representing the new project versions.
+        repo_owner (str, optional): The owner of the repository (for commit links). Default is None.
+        repo_name (str, optional): The name of the repository (for commit links). Default is None.
+
+    Returns:
+        str: The generated changelog.
+
+    Description:
+    This function generates a changelog based on the provided commit messages, new version, and project versions.
+    It organizes commits by project and types, creating a structured changelog with commit messages and links.
+
+    Example:
+    ```
+    changelog = gen_changelog(change_commits, new_version, projects_old, projects_new)
+    print(changelog)
+    ```
+    """
     out = f"\n## v{new_version}\n"
     out += "### Projects\n| module | version |\n| -------- | ----------- |\n"
     for oldp, newp in zip(projects_old, projects_new):

@@ -7,7 +7,15 @@ import click
 @click.command(short_help="Authenticate with GitHub")
 @click.pass_context
 def github(ctx: click.Context) -> None:
-    """Get token from GitHub and save it in configuration"""
+    """
+    Gets a token from GitHub and saves it in the configuration.
+
+    Description:
+    This command retrieves a token from GitHub using the OAuth device flow.
+    It prompts the user to open a URL and enter a code to complete the authentication process.
+    The obtained token is then saved in the configuration as `GITHUB_TOKEN` for later use.
+
+    """
     oauth_client_id = "8fb737ec1cb768ded4c4"  # 42 N.E.R.D.S hitchhiker
     result = json.loads(
         requests.post(
