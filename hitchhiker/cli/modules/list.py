@@ -18,20 +18,11 @@ def list_cmd(ctx: click.Context, glob: str) -> None:
     Lists all Odoo modules based on the provided glob.
 
     Parameters:
-        ctx (click.Context): The Click context object.
-        glob (str): The glob pattern to search for Odoo modules.
-
-    Returns:
-        None
+        --glob (str): The glob pattern to search for Odoo modules (default: `./*/__manifest__.py`). 
 
     Description:
-    This function lists all Odoo modules based on the provided glob pattern.
+    This command lists all Odoo modules based on the provided glob pattern.
     It prints the module names and versions in a formatted table.
-
-    Example:
-    ```
-    list_cmd(click_ctx, "*.odoo_module")
-    ```
 
     """
     def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:

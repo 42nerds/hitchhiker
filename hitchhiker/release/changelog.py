@@ -75,12 +75,6 @@ def gen_changelog(
     This function generates a changelog based on the provided commit messages, new version, and project versions.
     It organizes commits by project and types, creating a structured changelog with commit messages and links.
 
-    Note:
-    This function assumes the existence of several supporting functions and types:
-    - conventional.ConventionalCommitParser
-    - _commit_cmp
-    - enums.VersionBump
-
     Example:
     ```
     changelog = gen_changelog(change_commits, new_version, projects_old, projects_new)

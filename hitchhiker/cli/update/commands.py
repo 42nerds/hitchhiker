@@ -47,23 +47,12 @@ def _get_latest(ctx: click.Context) -> semver.Version:
 @click.pass_context
 def update(ctx: click.Context) -> None:
     """
-    Checks for updates to the current version and provides update instructions.
-
-    Parameters:
-        ctx (click.Context): The Click context object.
-
-    Returns:
-        None
+    Checks for updates to the current hitchhiker version and provides update instructions.
 
     Description:
-    This function checks for updates to the current version of the application.
+    This command checks for updates to the current version of the application.
     It retrieves the latest version from a specified GitHub repository and compares it with the current version.
     If a newer version is available, it provides instructions on how to update.
-
-    Example:
-    ```
-    update(click_ctx)
-    ```
 
     """
     version = semver.Version().parse(ctx.obj["VERSION"])

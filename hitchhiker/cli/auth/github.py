@@ -10,21 +10,10 @@ def github(ctx: click.Context) -> None:
     """
     Gets a token from GitHub and saves it in the configuration.
 
-    Parameters:
-        ctx (click.Context): The Click context object.
-
-    Returns:
-        None
-
     Description:
-    This function retrieves a token from GitHub using the OAuth device flow.
+    This command retrieves a token from GitHub using the OAuth device flow.
     It prompts the user to open a URL and enter a code to complete the authentication process.
-    The obtained token is then saved in the configuration for later use.
-
-    Example:
-    ```
-    github(click_ctx)
-    ```
+    The obtained token is then saved in the configuration as `GITHUB_TOKEN` for later use.
 
     """
     oauth_client_id = "8fb737ec1cb768ded4c4"  # 42 N.E.R.D.S hitchhiker
