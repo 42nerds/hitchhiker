@@ -4,7 +4,7 @@ import click
 import github
 import hitchhiker.release.version.semver as semver
 
-# FIXME: this is probably broken ever since we added branches in tag names
+
 def _get_latest(ctx: click.Context) -> semver.Version:
     """
     Retrieves the latest version from a GitHub repository.
