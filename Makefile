@@ -2,16 +2,19 @@
 test:
 	@python3 devrun.py --help
 	@pytest -vv --tb=long
+	@echo "pytest OK"
 
 .PHONY: coverage
 coverage:
 	@coverage run --source . -m pytest -vv --tb=long
 	@coverage html
 	@coverage report -m
+	@echo "coverage OK"
 
 .PHONY: type-checking
 type-checking:
-	@mypy ./hitchhiker --strict
+	@mypy ./hitchhiker --strict --no-warn-unused-ignores
+	@echo "mypy OK"
 
 .PHONY: install
 install:
@@ -31,3 +34,14 @@ setup-devcontainer:
 .PHONY: docs
 docs:
 	@pdoc ./hitchhiker -o ./html_docs
+
+.PHONY: lint
+lint:
+	@pylint ./**/*.py
+	@echo "pylint OK"
+	@flake8 --ignore=E501
+	@echo "flake8 OK"
+
+.PHONY: precommit
+precommit: coverage type-checking lint
+	@echo "precommit OK"
