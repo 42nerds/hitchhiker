@@ -39,4 +39,7 @@ def generate_addons_path_cmd(ctx: click.Context, glob: str) -> None:
         if moddir not in moduledirs:
             moduledirs.append(moddir)
 
-    print(",".join(moduledirs))
+    if len(moduledirs) != 0:
+        print(",".join(moduledirs))
+    else:
+        print("./")
