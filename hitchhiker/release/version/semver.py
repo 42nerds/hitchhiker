@@ -1,5 +1,6 @@
 import re
-from typing import Optional, Self
+from typing import Optional
+from typing_extensions import Self
 import hitchhiker.release.enums as enums
 
 

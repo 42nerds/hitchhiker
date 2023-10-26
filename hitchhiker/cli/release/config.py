@@ -2,7 +2,7 @@ import re
 import os
 import glob as pyglob
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Union
 import configparser
 import git
 from dotty_dict import Dotty  # type: ignore[import]
@@ -125,7 +125,7 @@ def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
 
 
 def __add_version_vars(
-    conf: Dict[str, Any] | configparser.SectionProxy, project_ctx: Dict[str, Any]
+    conf: Union[Dict[str, Any], configparser.SectionProxy], project_ctx: Dict[str, Any]
 ) -> None:
     if "version_variables" in conf:
         for var in conf["version_variables"]:
