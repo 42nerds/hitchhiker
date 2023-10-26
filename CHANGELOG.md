@@ -2,6 +2,29 @@
 
 
 
+## v0.2.1 (2023-10-26)
+
+### Ci
+
+* ci: test with multiple python versions ([`c99881d`](https://github.com/42nerds/hitchhiker/commit/c99881d216abfe9a960e542f1face13a95a39886))
+
+* ci: test with multiple python versions ([`b5abb0b`](https://github.com/42nerds/hitchhiker/commit/b5abb0bb1faef17c516e467697c1bf13a3cacd6b))
+
+* ci: test with multiple python versions ([`2bb4157`](https://github.com/42nerds/hitchhiker/commit/2bb4157064bf9d3a2e7dc7f1b18938d0341ed2bd))
+
+* ci: test with multiple python versions ([`a10e1b5`](https://github.com/42nerds/hitchhiker/commit/a10e1b5b254628f7fa899268a41f7487475b5818))
+
+### Fix
+
+* fix: allow hitchhiker to run in Python 3.9 ([`ec5fa88`](https://github.com/42nerds/hitchhiker/commit/ec5fa88c7d8bd52ac6981b51a0c7db5e02872ed8))
+
+### Unknown
+
+* Merge pull request #15 from 42nerds/develop
+
+hitchhiker 0.2.1 ([`42defb7`](https://github.com/42nerds/hitchhiker/commit/42defb7abc7aa91769b36d8fbf664e8c21cf8b7e))
+
+
 ## v0.2.0 (2023-10-26)
 
 ### Chore
