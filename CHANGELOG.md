@@ -2,6 +2,19 @@
 
 
 
+## v0.2.2 (2023-10-26)
+
+### Fix
+
+* fix: exclude vendor directory in discover_modules ([`ed0298c`](https://github.com/42nerds/hitchhiker/commit/ed0298c7a4df6b1bd34b7d7a60b58bc5fd892c86))
+
+### Unknown
+
+* Merge pull request #16 from 42nerds/develop
+
+fix: exclude vendor directory in discover_modules ([`900e1a4`](https://github.com/42nerds/hitchhiker/commit/900e1a4d26a003dab2daec1f066646884de0d24a))
+
+
 ## v0.2.1 (2023-10-26)
 
 ### Ci
