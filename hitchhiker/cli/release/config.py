@@ -230,7 +230,7 @@ def create_context_from_raw_config(
                         lambda n: Path(n).name == "__manifest__.py",
                         pyglob.glob(
                             os.path.abspath(repo.working_tree_dir)
-                            + "/*/__manifest__.py",
+                            + "/**/__manifest__.py",
                             recursive=True,
                         ),
                     )
