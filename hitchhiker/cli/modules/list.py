@@ -9,7 +9,7 @@ import hitchhiker.odoo.module as odoo_mod
 @click.option(
     "--glob",
     is_flag=False,
-    default="./*/__manifest__.py",
+    default="./**/__manifest__.py",
     help="module search path glob",
 )
 @click.pass_context
@@ -18,7 +18,7 @@ def list_cmd(ctx: click.Context, glob: str) -> None:
     Lists all Odoo modules based on the provided glob.
 
     Parameters:
-        --glob (str): The glob pattern to search for Odoo modules (default: `./*/__manifest__.py`). 
+        --glob (str): The glob pattern to search for Odoo modules (default: `./**/__manifest__.py`). 
 
     Description:
     This command lists all Odoo modules based on the provided glob pattern.
