@@ -1,5 +1,5 @@
 import click
-import pkg_resources
+import importlib.metadata
 from hitchhiker.config.config import ConfigManager
 from .modules import commands as modules
 from .update import commands as update
@@ -7,18 +7,18 @@ from .auth import commands as auth
 
 
 @click.group()
-@click.version_option(version=pkg_resources.get_distribution("hitchhiker").version)
+@click.version_option(version=importlib.metadata.version("hitchhiker"))
 @click.option(
     "--conf", default="~/.config/hitchhiker/config.json", help="Configuration file path"
 )
 @click.option("--debug", is_flag=True, help="Show debug information")
 @click.pass_context
-def cli(ctx, debug, conf):
+def cli(ctx: click.Context, debug: bool, conf: str) -> None:
     ctx.ensure_object(dict)
 
     ctx.obj["DEBUG"] = debug
     ctx.obj["CONF"] = ConfigManager(conf, {})
-    ctx.obj["VERSION"] = pkg_resources.get_distribution("hitchhiker").version
+    ctx.obj["VERSION"] = importlib.metadata.version("hitchhiker")
 
 
 cli.add_command(modules.modules)

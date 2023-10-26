@@ -331,3 +331,49 @@ def repo_multi_project_commits_before_tag_fix_after_odoo(tmp_path_factory):
 
     yield repo
     repo.close()
+
+
+@pytest.fixture
+def repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name(
+    tmp_path_factory,
+):
+    path = tmp_path_factory.mktemp("repo")
+    repo = create_git_repo(path)
+    create_configs(
+        repo,
+        [
+            ("project1", "0.0.0", False),
+            ("project2", "0.0.0", False),
+            ("some_project_name", "0.0.0", False),
+            ("some_project_name_with_extra_feature", "1.0.0", False),
+        ],
+        "1.0.0",
+        is_odoo=True,
+    )
+    create_commits(repo, [["Initial commit", ""]])
+    repo.git.tag("v0.0.0", m="v0.0.0")
+    create_commits(
+        repo,
+        [
+            ["fix: something", "project1"],
+            ["feat: abcd\n\nBREAKING CHANGE: some change", "project2"],
+            ["fix: something else", "project2"],
+            ["feat: some feature", "some_project_name"],
+            [
+                "feat!: some feature that breaks things",
+                "some_project_name_with_extra_feature",
+            ],
+        ],
+    )
+    repo.git.tag("v1.0.0", m="v1.0.0")
+    create_commits(
+        repo,
+        [
+            ["fix: something", "project1"],
+            ["fix: something else", "project2"],
+            ["feat: another feature", "some_project_name_with_extra_feature"],
+        ],
+    )
+
+    yield repo
+    repo.close()

@@ -32,19 +32,33 @@ Each subproject has the same version variable options as the main project - `ver
 
 #### `path (str)`
 
+**Required**
+
 Path to subproject (used for determining which commits belong to the subproject)
 
 #### `prerelease (bool)`
+
+Default: `false`
 
 `true` if the subproject should be versioned as prerelease
 
 #### `prerelease_token (str)`
 
+Default: `rc`
+
 Prerelease token like "rc", "alpha" etc.
 
 #### `branch_match (str)`
 
+Default: `(.+)`
+
 Regex to match active branch name, if it doesn't match this subproject will be ignored.
+
+#### `prepend_branch_to_tag (bool)`
+
+Default: `false`
+
+`true` if the branch should be prepended to the tag like master-v1.2.3
 
 ## Example TOML configuration
 
@@ -55,12 +69,13 @@ version = "0.0.1"
 [tool.hitchhiker]
 projects = ["someproject"]
 version_toml = ["pyproject.toml:project.version"]
+prepend_branch_to_tag = true
 
 [tool.hitchhiker.project.someproject]
 path = "someproject/"
 version_variables = ["someproject/__init__.py:__version__"]
 prerelease = false
-branch_match = "(master|main)"
+branch_match = "(main|master)"
 ```
 
 ## Example setup.cfg configuration
@@ -71,4 +86,6 @@ If setup.cfg is used odoo modules will be automatically discovered.
 [tool.hitchhiker]
 project_version = 1.2.3
 version_cfg = setup.cfg:tool.hitchhiker:project_version
+prepend_branch_to_tag = true
+branch_match = (main|master)
 ```

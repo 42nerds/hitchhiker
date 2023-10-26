@@ -1,8 +1,11 @@
 import re
 import os
+import glob as pyglob
+from pathlib import Path
+from typing import Dict, Any
 import configparser
 import git
-from dotty_dict import Dotty
+from dotty_dict import Dotty  # type: ignore[import]
 import tomlkit
 import hitchhiker.release.version.semver as semver
 import hitchhiker.odoo.module as odoo_mod
@@ -14,8 +17,10 @@ _semver_group = (
     r"[0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"
 )
 
+# FIXME: Odoo manifest regex should be improved
 
-def __get_version(config, ctx):
+
+def __get_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> semver.Version:
     versions = []
     for var in ctx["version_variables"]:
         with open(
@@ -51,7 +56,7 @@ def __get_version(config, ctx):
     return semver.Version()
 
 
-def set_version(config, ctx):
+def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
     changedfiles = []
     for var in ctx["version_variables"]:
         changedfiles.append(var[0])
@@ -119,7 +124,9 @@ def set_version(config, ctx):
     return changedfiles
 
 
-def __add_version_vars(conf, project_ctx):
+def __add_version_vars(
+    conf: Dict[str, Any] | configparser.SectionProxy, project_ctx: Dict[str, Any]
+) -> None:
     if "version_variables" in conf:
         for var in conf["version_variables"]:
             project_ctx["version_variables"].append(
@@ -137,8 +144,15 @@ def __add_version_vars(conf, project_ctx):
         project_ctx["version_cfg"].append(conf["version_cfg"].split(":"))
 
 
-def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
-    ctx = {
+# TODO: this must be improved. Maybe have a dict with config options and their types and loop through setting them and checking if the types match up?
+# Also for the TOML config there should be no projects array. It should automatically detect subprojects
+
+
+def create_context_from_raw_config(
+    tomlcfg: str, repo: git.repo.base.Repo, is_odoo: bool = False
+) -> Dict[str, Any]:
+    assert repo.working_tree_dir is not None
+    ctx: Dict[str, Any] = {
         "projects": [],
         "version": semver.Version(),
         "repo": repo,
@@ -158,6 +172,11 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
             + len(ctx["version_cfg"])
         ) > 0, "no version store location defined for main project"
         ctx["version"] = __get_version(ctx, ctx)
+        ctx["prepend_branch_to_tag"] = (
+            tomlconf["tool.hitchhiker"]["prepend_branch_to_tag"]
+            if "prepend_branch_to_tag" in tomlconf["tool.hitchhiker"]
+            else False
+        )
         if "tool.hitchhiker.projects" in tomlconf:
             for project in tomlconf["tool.hitchhiker.projects"]:
                 conf = tomlconf[f"tool.hitchhiker.project.{project}"]
@@ -172,9 +191,7 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
                         conf["prerelease_token"] if "prerelease_token" in conf else "rc"
                     ),
                     "branch_match": (
-                        conf["branch_match"]
-                        if "branch_match" in conf
-                        else "(main|master)"
+                        conf["branch_match"] if "branch_match" in conf else "(.+)"
                     ),
                     "version_variables": [],
                     "version_toml": [],
@@ -202,7 +219,23 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
                 + len(ctx["version_cfg"])
             ) > 0, "no version store location defined for main project"
             ctx["version"] = __get_version(ctx, ctx)
-            modules = odoo_mod.discover_modules(repo.working_tree_dir + "/**")
+            ctx["prepend_branch_to_tag"] = (
+                cfg["tool.hitchhiker"].getboolean("prepend_branch_to_tag")
+                if "prepend_branch_to_tag" in cfg["tool.hitchhiker"]
+                else False
+            )
+            modules = odoo_mod.discover_modules(
+                list(
+                    filter(
+                        lambda n: Path(n).name == "__manifest__.py",
+                        pyglob.glob(
+                            os.path.abspath(repo.working_tree_dir)
+                            + "/*/__manifest__.py",
+                            recursive=True,
+                        ),
+                    )
+                )
+            )
             for module in modules:
                 project_ctx = {
                     "name": module.get_int_name(),
@@ -212,7 +245,11 @@ def create_context_from_raw_config(tomlcfg: str, repo: git.Repo, is_odoo=False):
                     "version": semver.Version(),
                     "prerelease": False,
                     "prerelease_token": "rc",
-                    "branch_match": "(main|master)",
+                    "branch_match": (
+                        cfg["tool.hitchhiker"]["branch_match"]
+                        if "branch_match" in cfg["tool.hitchhiker"]
+                        else "(.+)"
+                    ),
                     "version_variables": [],
                     "version_toml": [],
                     "version_odoo_manifest": [

@@ -1,23 +1,28 @@
 import copy
 import os
 import re
+from typing import Optional, Dict
 import git
 import github
 import click
+import hitchhiker.release.version.semver as semver
 import hitchhiker.release.version.commit as commit
 import hitchhiker.cli.release.config as config
+import hitchhiker.cli.release.tagfix as tagfix
 import hitchhiker.release.enums as enums
 import hitchhiker.release.changelog as changelog
 
 
-def get_repo_owner_name(ctx):
+def get_repo_owner_name(ctx: click.Context) -> tuple[Optional[str], Optional[str]]:
     """Uses regex to figure out github repo owner and name from remote URL"""
     # regex from: https://stackoverflow.com/a/25102190
     try:
         _match = re.match(
             r"^(?:(?:git@|https:\/\/)(?:[\w\.@]+)(?:\/|:))([\w,\-,\_]+)\/([\w,\-,\_]+)(?:.git){0,1}(?:(?:\/){0,1})$",
-            git.cmd.Git(ctx.obj["RELEASE_CONF"]["repo"].working_tree_dir).execute(
-                ["git", "config", "--get", "remote.origin.url"]
+            str(
+                git.cmd.Git(ctx.obj["RELEASE_CONF"]["repo"].working_tree_dir).execute(
+                    ["git", "config", "--get", "remote.origin.url"]
+                )
             ),
         )
         repo_owner = _match.group(1) if _match is not None else None
@@ -28,7 +33,9 @@ def get_repo_owner_name(ctx):
     return (repo_owner, repo_name)
 
 
-def write_changelog(ctx, changelog_newtext, changedfiles):
+def write_changelog(
+    ctx: click.Context, changelog_newtext: str, changedfiles: list[str]
+) -> None:
     """Appends changes to changelog"""
     changelog_path = os.path.join(
         ctx.obj["RELEASE_CONF"]["repo"].working_tree_dir, "CHANGELOG.md"
@@ -42,7 +49,9 @@ def write_changelog(ctx, changelog_newtext, changedfiles):
     changedfiles.append("CHANGELOG.md")
 
 
-def commit_and_tag(ctx, changedfiles, commitmsg, newtag):
+def commit_and_tag(
+    ctx: click.Context, changedfiles: list[str], commitmsg: str, newtag: str
+) -> None:
     """Creates commit and tags it"""
     ctx.obj["RELEASE_CONF"]["repo"].git.add(changedfiles)
     ctx.obj["RELEASE_CONF"]["repo"].git.commit(m=commitmsg)
@@ -50,9 +59,12 @@ def commit_and_tag(ctx, changedfiles, commitmsg, newtag):
         ctx.obj["RELEASE_CONF"]["repo"].git.tag("-a", newtag, m=newtag)
     else:
         click.secho(f'tag "{newtag}" already exists', fg="red", err=True)
+        raise RuntimeError(f'tag "{newtag}" already exists')
 
 
-def do_gh_release(ctx, newtag, message, prerelease, ghtoken):
+def do_gh_release(
+    ctx: click.Context, newtag: str, message: str, prerelease: bool, ghtoken: str
+) -> None:
     """Creates a github release"""
     repo_owner, repo_name = get_repo_owner_name(ctx)
     if repo_owner is None or repo_name is None:
@@ -101,8 +113,14 @@ def do_gh_release(ctx, newtag, message, prerelease, ghtoken):
 )
 @click.pass_context
 def version(
-    ctx: click.Context, show, prerelease, prerelease_token, push, ghrelease, ghtoken
-):
+    ctx: click.Context,
+    show: bool,
+    prerelease: bool,
+    prerelease_token: str,
+    push: bool,
+    ghrelease: bool,
+    ghtoken: str,
+) -> None:
     """Figure out new version and apply it"""
     if ghrelease and not push:
         raise click.BadOptionUsage(
@@ -115,10 +133,13 @@ def version(
         return
 
     click.echo(f"main version: {ctx.obj['RELEASE_CONF']['version']}")
+    old_project_objs = copy.deepcopy(ctx.obj["RELEASE_CONF"]["projects"])
     mainbump = enums.VersionBump.NONE
     bumped = False
     changedfiles = []
-    change_commits = {}
+    change_commits: Dict[
+        str, tuple[semver.Version, list[git.objects.commit.Commit]]
+    ] = {}
     for project in ctx.obj["RELEASE_CONF"]["projects"]:
         click.echo(f"{project['name']}: {project['version']}")
         if (
@@ -147,10 +168,10 @@ def version(
                 bumped = True
 
             if project["name"] not in change_commits:
-                change_commits[project["name"]] = [project["version"], []]
-            change_commits[project["name"]][1] += [
-                commitmsg for commitmsg, _ in commits
-            ]
+                change_commits[project["name"]] = (
+                    project["version"],
+                    [commitmsg for commitmsg, _ in commits],
+                )
 
             changedfiles += config.set_version(ctx.obj["RELEASE_CONF"], project)
             click.secho(f"    -> new version: {project['version']}", fg="green")
@@ -173,13 +194,18 @@ def version(
 
         changelog_newtext = changelog.gen_changelog(
             change_commits=change_commits,
-            new_version=str(ctx.obj["RELEASE_CONF"]["version"]),
+            new_version=ctx.obj["RELEASE_CONF"]["version"],
+            projects_old=old_project_objs,
+            projects_new=ctx.obj["RELEASE_CONF"]["projects"],
             repo_owner=repo_owner,
             repo_name=repo_name,
         )
         write_changelog(ctx, changelog_newtext, changedfiles)
 
-        newtag = f"v{str(ctx.obj['RELEASE_CONF']['version'])}"
+        newtag = tagfix.add_branch_to_tag(
+            ctx.obj["RELEASE_CONF"], f"v{str(ctx.obj['RELEASE_CONF']['version'])}"
+        )
+
         commitmsg = (
             f"{str(ctx.obj['RELEASE_CONF']['version'])}\n\nAutogenerated by hitchhiker"
         )

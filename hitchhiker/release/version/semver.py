@@ -1,4 +1,5 @@
 import re
+from typing import Optional, Self
 import hitchhiker.release.enums as enums
 
 
@@ -15,22 +16,90 @@ class Version:
     major: int = 0
     minor: int = 0
     patch: int = 0
-    prerelease: str = None
-    buildmeta: str = None
+    prerelease: Optional[str] = None
+    buildmeta: Optional[str] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Initializes a new instance of the class.
+
+        Description:
+        This method initializes a new instance of the class. In this specific implementation,
+        the method does not perform any actions and simply passes without any further operations.
+
+        Example:
+        ```
+        instance = ClassName()
+        ```
+
+        """
         pass
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the version.
+
+        Returns:
+            str: The string representation of the version.
+
+        Description:
+        This method returns a string representation of the version in the format "major.minor.patch-prerelease"
+        if there's a prerelease, or "major.minor.patch" if there's no prerelease.
+
+        Example:
+        ```
+        version_str = str(version)
+        ```
+
+        """
         return f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
 
-    def __repr__(self):
+    # TODO: check if this function is tested
+    def __repr__(self) -> str:
+        """
+        Returns a string representation of the version.
+
+        Returns:
+            str: The string representation of the version.
+
+        Description:
+        This method returns a string representation of the version in the format "major.minor.patch-prerelease+buildmeta"
+        if both prerelease and buildmeta are present, "major.minor.patch-prerelease" if there's a prerelease only,
+        "major.minor.patch+buildmeta" if there's a buildmeta only, or "major.minor.patch" if there are none.
+
+        Example:
+        ```
+        version_repr = repr(version)
+        ```
+
+        """
         return (
             f"{self.major}.{self.minor}.{self.patch}{'-' + self.prerelease if self.prerelease is not None else ''}"
             f"{'+' + self.buildmeta if self.buildmeta is not None else ''}"
         )
 
-    def __eq__(self, obj):
+    def __eq__(self, obj: object) -> bool:
+        """
+        Checks if this version is equal to another version.
+
+        Parameters:
+            obj (object): The object to compare with.
+
+        Returns:
+            bool: True if this version is equal to the specified version, False otherwise.
+
+        Description:
+        This method compares this version with another version to check if they are equal.
+        Two versions are considered equal if their major, minor, patch, and prerelease components match.
+
+        Example:
+        ```
+        is_equal = version1 == version2
+        ```
+
+        """
+        if not isinstance(obj, Version):
+            return NotImplemented
         return (
             self.major == obj.major
             and self.minor == obj.minor
@@ -38,7 +107,30 @@ class Version:
             and self.prerelease == obj.prerelease
         )
 
-    def __ver_lt(self, obj):
+    def __ver_lt(self, obj: object) -> Optional[bool]:
+        """
+        Compares this version to another version to determine if it's less than.
+
+        Parameters:
+            obj (object): The object to compare with.
+
+        Returns:
+            bool: True if this version is less than the specified version, False if greater, None if equal.
+
+        Description:
+        This method compares this version with another version to determine if it's less than the specified version.
+        A version is considered less than another if its major, minor, or patch components are lower.
+        If the prerelease components are equal, a version with prerelease is considered less than one without.
+        Returns None if the versions are equal.
+
+        Example:
+        ```
+        is_less_than = version1.__ver_lt(version2)
+        ```
+
+        """
+        if not isinstance(obj, Version):
+            return NotImplemented
         if self.major < obj.major:
             return True
         elif self.major > obj.major:
@@ -62,7 +154,30 @@ class Version:
 
         return None
 
-    def __prerelease_lt(self, obj):
+    def __prerelease_lt(self, obj: object) -> bool:
+        """
+        Compares the prerelease component of this version to another version's prerelease component.
+
+        Parameters:
+            obj (object): The object to compare with.
+
+        Returns:
+            bool: True if this version's prerelease is less than the specified version's prerelease.
+
+        Description:
+        This method compares the prerelease component of this version to the prerelease component of another version.
+        It follows the Semantic Versioning specification for comparing prerelease identifiers.
+
+        Example:
+        ```
+        is_less_than_prerelease = version1.__prerelease_lt(version2)
+        ```
+
+        """
+        if not isinstance(obj, Version):
+            return NotImplemented
+        assert self.prerelease is not None
+        assert obj.prerelease is not None
         for selfid, objid in zip(self.prerelease.split("."), obj.prerelease.split(".")):
             if selfid == objid:
                 continue
@@ -86,17 +201,61 @@ class Version:
             return len(self.prerelease.split(".")) < len(obj.prerelease.split("."))
 
         # it should be _impossible_ to get here!
+        raise Exception("unreachable")
 
-    def __lt__(self, obj):
-        if self.__ver_lt(obj) is not None:
-            return self.__ver_lt(obj)
+    def __lt__(self, obj: object) -> bool:
+        """
+        Checks if this version is less than another version.
+
+        Parameters:
+            obj (object): The object to compare with.
+
+        Returns:
+            bool: True if this version is less than the specified version, False otherwise.
+
+        Description:
+        This method checks if this version is less than another version.
+        It first compares the major, minor, and patch components, and then the prerelease component if necessary.
+
+        Example:
+        ```
+        is_less_than = version1.__lt__(version2)
+        ```
+
+        """
+        if not isinstance(obj, Version):
+            return NotImplemented
+        ver_lt = self.__ver_lt(obj)
+        if ver_lt is not None:
+            return ver_lt
 
         return self.__prerelease_lt(obj)
 
-    def parse(self, version: str):
-        """Parses semantic version string"""
+    def parse(self, version: str) -> Self:
+        """
+        Parses a semantic version string and updates the Version object.
+
+        Parameters:
+            version (str): The semantic version string to parse.
+
+        Returns:
+            Self: The updated Version object after parsing.
+
+        Description:
+        This method parses a semantic version string in the format "major.minor.patch-prerelease+buildmeta"
+        and updates the Version object with the parsed components.
+        If the version string is invalid, it raises a RuntimeError and sets all components to 0 and None.
+
+        Example:
+        ```
+        version = Version()
+        version.parse("1.2.3-alpha+001")
+        ```
+
+        """
         match = re.match(_semver_parse, version)
         if match is None:
+            # FIXME: should we really reset the internal state on a parse error?
             self.major = 0
             self.minor = 0
             self.patch = 0
@@ -110,8 +269,37 @@ class Version:
         self.buildmeta = match.group(5)
         return self
 
-    def bump(self, bump: enums.VersionBump, prerelease=False, prerelease_token="rc"):
-        """Bumps version by amount specified in VersionBump enum"""
+    def bump(
+        self,
+        bump: enums.VersionBump,
+        prerelease: bool = False,
+        prerelease_token: str = "rc",
+    ) -> Self:
+        """
+        Bumps the version by the specified amount.
+
+        Parameters:
+            bump (enums.VersionBump): The type of bump to perform.
+            prerelease (bool): Whether to perform a prerelease bump (default: False).
+            prerelease_token (str): The prerelease token to use (default: "rc").
+
+        Returns:
+            Self: The updated Version object after the bump.
+
+        Description:
+        This method bumps the version by the specified amount according to the VersionBump enum.
+        It can perform major, minor, or patch bumps. It can also perform prerelease bumps.
+        If prerelease is True and the last version was not a prerelease, it bumps before making it a prerelease.
+        If prerelease is False and the last version was a prerelease, it makes the next one a full release (unless bump is major).
+        The prerelease_token is used for prerelease bumps.
+
+        Example:
+        ```
+        version = Version()
+        version.bump(enums.VersionBump.MINOR)
+        ```
+
+        """
         # if last version was not a prerelease bump it before making it one
         if (
             prerelease
