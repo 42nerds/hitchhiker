@@ -2,6 +2,31 @@
 
 
 
+## v0.3.0 (2023-10-26)
+
+### Feature
+
+* feat: hitchhiker modules generate_addons_path ([`e94711b`](https://github.com/42nerds/hitchhiker/commit/e94711b12b9bb8470a3be472a6b7aeb8cb0ecfe1))
+
+* feat: hitchhiker modules generate_addons_path ([`f1e907d`](https://github.com/42nerds/hitchhiker/commit/f1e907d6b0f7e014ea676da2420c3fac322036b9))
+
+### Fix
+
+* fix: requests dependency in pyproject.toml ([`7031b6e`](https://github.com/42nerds/hitchhiker/commit/7031b6efb31498545e9b29bc981a4f111af44126))
+
+* fix: _create_file_if_nonexistant ([`7aef835`](https://github.com/42nerds/hitchhiker/commit/7aef835a18b6ff39bdc243580dc38c8b9f982d2a))
+
+* fix: allow running of hitchhiker with python -m ([`305cee4`](https://github.com/42nerds/hitchhiker/commit/305cee4ff96b4d51f96028b0b42c8f913ba5dd4a))
+
+* fix: hitchhiker should not depend on PyGithub ([`e51cdba`](https://github.com/42nerds/hitchhiker/commit/e51cdba9431c62cddf9f7a75aa06799a960b85cf))
+
+### Unknown
+
+* Merge pull request #17 from 42nerds/develop
+
+hitchhiker 0.3.0 ([`38704d8`](https://github.com/42nerds/hitchhiker/commit/38704d853a3b3a413656a48a7189502f10d60c04))
+
+
 ## v0.2.2 (2023-10-26)
 
 ### Fix
