@@ -2,6 +2,91 @@
 
 
 
+## v0.2.0 (2023-10-26)
+
+### Chore
+
+* chore: removed inaccurate FIXME comment ([`ae4921c`](https://github.com/42nerds/hitchhiker/commit/ae4921c5e7fe3208c395f80274e991915ea242f3))
+
+* chore: added lint and precommit target to Makefile ([`ae8f458`](https://github.com/42nerds/hitchhiker/commit/ae8f4581b3a2b3b9ba50c9c6d8ed5d8c0a09a606))
+
+* chore: improve devcontainer ([`befd06d`](https://github.com/42nerds/hitchhiker/commit/befd06d86a6dcef2234af6c361ec4d72d5760f29))
+
+* chore: pdoc setup ([`9978836`](https://github.com/42nerds/hitchhiker/commit/997883695b64c2ba7dac7596d9706ae8eb875eff))
+
+* chore: typing ([`0bd1fa8`](https://github.com/42nerds/hitchhiker/commit/0bd1fa8b353a7d383bcc3df9565d468a4b414e27))
+
+* chore: typing ([`21d3ae0`](https://github.com/42nerds/hitchhiker/commit/21d3ae0828d74102e8a4f51f5576f57e545fe616))
+
+* chore: add mypy type checking ([`cf138f5`](https://github.com/42nerds/hitchhiker/commit/cf138f5448cd4140783f7cb2226f672a85060cbf))
+
+### Ci
+
+* ci: fix codacy ([`4b47a21`](https://github.com/42nerds/hitchhiker/commit/4b47a2103559fa91ed4dfb83f4cff7513b7804f7))
+
+* ci: mypy do not error on unused ignore comments ([`271eab0`](https://github.com/42nerds/hitchhiker/commit/271eab080ac075408450eb34abf3d487f0f78fd9))
+
+* ci: check if typed version is available with mypy ([`a349626`](https://github.com/42nerds/hitchhiker/commit/a34962693252253876738a72b14d9290c3333b30))
+
+* ci: fix missing dependencies ([`f55da6a`](https://github.com/42nerds/hitchhiker/commit/f55da6a717261ae25a7aacd8fbca946c39d54f6d))
+
+* ci: use codacy/codacy-coverage-reporter-action ([`91fa558`](https://github.com/42nerds/hitchhiker/commit/91fa5582210973ae54a3391b62abc0ef8242ebef))
+
+### Documentation
+
+* docs(7889): documentation of the hitchhiker code ([`72948e7`](https://github.com/42nerds/hitchhiker/commit/72948e7418ac76f9251f84f723d3b1798b45e533))
+
+* docs: added some comments ([`8b84b0e`](https://github.com/42nerds/hitchhiker/commit/8b84b0e5e290144f76f270e3c8ddbc7859e4addb))
+
+* docs(7889): :memo: documentation of the hitchhiker code ([`8e6406a`](https://github.com/42nerds/hitchhiker/commit/8e6406ae4b1a3e30c4fffbbc8ac59bfa4ca38f79))
+
+* docs: gh actions example ([`43666ea`](https://github.com/42nerds/hitchhiker/commit/43666ea4e7f7dc5ff4a35f57208b0c894c87cf55))
+
+* docs: add main branch in GitHub actions example ([`b88cfcc`](https://github.com/42nerds/hitchhiker/commit/b88cfcc9b9ce3c3afbfa90492e2edb8d0dcda9b5))
+
+### Feature
+
+* feat(release): option to add branch name in tag ([`6729637`](https://github.com/42nerds/hitchhiker/commit/672963727e6530dde84ff9c50722d12356a9c56e))
+
+* feat(release): table of modules in changelog ([`3a73762`](https://github.com/42nerds/hitchhiker/commit/3a73762d8db16ee61c919a55acea9e432858148c))
+
+### Fix
+
+* fix: fix Odoo module discovery error ([`5cbc30e`](https://github.com/42nerds/hitchhiker/commit/5cbc30e077c9dc7e2f8264307734e82d8ae75ae6))
+
+* fix(release): fix conflicting project name bug ([`1611a1f`](https://github.com/42nerds/hitchhiker/commit/1611a1f6c0623b3a1ea59603aa5a575bb6ff791a))
+
+* fix: importlib.metadata instead of pkg_resources ([`53483ae`](https://github.com/42nerds/hitchhiker/commit/53483ae64827008ed3d982de3aa7b3baba01fced))
+
+### Style
+
+* style(7889): fix whitespace ([`53e07e1`](https://github.com/42nerds/hitchhiker/commit/53e07e1f8d0c2526509c6b1d836fb21c75a39083))
+
+* style: use isinstance instead of type ([`fbafd2b`](https://github.com/42nerds/hitchhiker/commit/fbafd2be3751b8d7a64de169cd6313da5284ab81))
+
+### Unknown
+
+* Merge pull request #14 from 42nerds/develop
+
+hitchhiker 0.2.0 ([`e083fa1`](https://github.com/42nerds/hitchhiker/commit/e083fa191511401cdbad4e619c683a29258d9465))
+
+* Merge pull request #13 from 42nerds/feature/7889-Documentation-of-the-code-2
+
+Feature/7889 documentation of the code 2 ([`637d6f8`](https://github.com/42nerds/hitchhiker/commit/637d6f83e0386986e543713bd8d9f23275f9a753))
+
+* Merge branch &#39;develop&#39; into feature/7889-Documentation-of-the-code ([`6e1887e`](https://github.com/42nerds/hitchhiker/commit/6e1887ec991c999c6150aeb204423a8f52a534c5))
+
+* Merge pull request #12 from 42nerds/feature/7901-odoo-version-branch-support
+
+Option to add branch name in tag ([`182e352`](https://github.com/42nerds/hitchhiker/commit/182e3529c43bdaa77c05a962637312e074c9b401))
+
+* Merge branch &#39;feature/gh-actions-deploy-key&#39; into develop ([`e79400d`](https://github.com/42nerds/hitchhiker/commit/e79400d0c52c86a0731033c305b3af08d9bd1fe3))
+
+* Merge pull request #10 from 42nerds/feature/type-hints
+
+type hints ([`8b7fa1c`](https://github.com/42nerds/hitchhiker/commit/8b7fa1cee837cbd4d0578438b6ddbb13773267eb))
+
+
 ## v0.1.0 (2023-10-02)
 
 ### Chore
