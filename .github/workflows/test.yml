@@ -6,6 +6,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.10", "3.9"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install coverage
+          pip install -e ".[release, odoo, test, docs, copier]"
+      - name: Test with pytest and generate coverage report
+        run: |
+          coverage run --source . -m pytest -vv --tb=long
+          coverage xml -o coverage.xml
+
+  coverage:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.11
@@ -15,8 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install coverage
-          python setup.py egg_info
-          pip install `grep -v '^\[' *.egg-info/requires.txt`
+          pip install -e ".[release, odoo, test, docs, copier]"
       - name: Test with pytest and generate coverage report
         run: |
           coverage run --source . -m pytest -vv --tb=long
@@ -29,12 +48,15 @@ jobs:
 
   test-no-optional-deps:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.10", "3.9"]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.11
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           pip install pytest
@@ -50,15 +72,17 @@ jobs:
 
   type-check:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.10", "3.9"]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.11
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python setup.py egg_info
-          pip install `grep -v '^\[' *.egg-info/requires.txt`
+          pip install -e ".[release, odoo, test, docs, copier]"
       - name: Type check with mypy
         run: mypy --install-types --non-interactive ./hitchhiker --strict --no-warn-unused-ignores
