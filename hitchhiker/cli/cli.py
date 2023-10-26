@@ -2,7 +2,6 @@ import click
 import importlib.metadata
 from hitchhiker.config.config import ConfigManager
 from .modules import commands as modules
-from .update import commands as update
 from .auth import commands as auth
 
 
@@ -22,7 +21,6 @@ def cli(ctx: click.Context, debug: bool, conf: str) -> None:
 
 
 cli.add_command(modules.modules)
-cli.add_command(update.update)
 cli.add_command(auth.auth)
 
 try:
@@ -36,5 +34,12 @@ try:
     from .release import commands as release
 
     cli.add_command(release.release)
+except ImportError as e:
+    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+
+try:
+    from .update import commands as update
+
+    cli.add_command(update.update)
 except ImportError as e:
     click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
