@@ -8,6 +8,7 @@ class ConfigManager:
     def _create_file_if_nonexistant(self, filepath: str) -> None:
         """
         Create a file if it doesn't already exist at the specified filepath.
+        Also create all directories in the path.
 
         Parameters:
             filepath (str): The path to the file to be created.
@@ -17,10 +18,7 @@ class ConfigManager:
         """
         if not os.path.isfile(filepath):
             dirpath = Path(filepath).resolve().parent
-            # TODO: improve this
-            assert not os.path.isfile(dirpath)
-            if not os.path.isdir(dirpath):
-                os.mkdir(dirpath)
+            Path(dirpath).mkdir(parents=True, exist_ok=True)
             open(filepath, "a").close()
 
     def _read_config(self) -> Dict[str, Any]:

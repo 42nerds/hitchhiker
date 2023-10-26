@@ -5,7 +5,7 @@ import click
 import hitchhiker.odoo.module as odoo_mod
 
 
-@click.command(name="list", short_help="Figure out new version and apply it")
+@click.command(name="list", short_help="list Odoo modules and their versions")
 @click.option(
     "--glob",
     is_flag=False,
@@ -18,13 +18,14 @@ def list_cmd(ctx: click.Context, glob: str) -> None:
     Lists all Odoo modules based on the provided glob.
 
     Parameters:
-        --glob (str): The glob pattern to search for Odoo modules (default: `./**/__manifest__.py`). 
+        --glob (str): The glob pattern to search for Odoo modules (default: `./**/__manifest__.py`).
 
     Description:
     This command lists all Odoo modules based on the provided glob pattern.
     It prints the module names and versions in a formatted table.
 
     """
+
     def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:
         if len(a.get_int_name()) < len(b.get_int_name()):
             return -1
