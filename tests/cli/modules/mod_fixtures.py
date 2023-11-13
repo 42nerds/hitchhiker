@@ -1,5 +1,4 @@
 import os
-import random
 import pytest
 
 
@@ -9,10 +8,10 @@ def get_human_name(name: str):
     return name
 
 
-def dict2str(dict):
+def dict2str(dictionary):
     st = "{"
-    for key in dict:
-        value = dict[key]
+    for key in dictionary:
+        value = dictionary[key]
         st += "    "
         st += f'"{key}": '
         st += f'"{value}",'
