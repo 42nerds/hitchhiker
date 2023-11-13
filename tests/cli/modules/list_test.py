@@ -16,7 +16,7 @@ def test_list_no_mods(no_mods):
 def test_list_one_mod(one_mod):
     os.chdir(one_mod)
     expected_output = "MODULE                VERSION\nsome_cool_odoo_module 1.5.3\n"
-    result = CliRunner().invoke(cli, ["modules", "list"])
+    result = CliRunner().invoke(cli, ["modules", "list", "--format", "text"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
@@ -36,6 +36,26 @@ interesting_odoo_module      256.128.64
 something                    8.2.7
 """
     result = CliRunner().invoke(cli, ["modules", "list"])
+    print(f'got: """{result.output}""" expected: """{expected_output}"""')
+    assert result.exit_code == 0
+    assert result.output == expected_output
+
+
+def test_list_ten_mods_markdown(ten_mods):
+    os.chdir(ten_mods)
+    expected_output = """| module | version |
+|---|---|
+| a_another_cool_odoo_module | 19.8.1 |
+| a_b_c | 64.128.256 |
+| b_very_cool_odoo_module | 0.0.1 |
+| boring_odoo_module | 1.2.3 |
+| c_some_cool_odoo_module | 0.5.3 |
+| d_extremely_cool_odoo_module | 5.3.1 |
+| epic_odoo_module | 0.0.0 |
+| interesting_odoo_module | 256.128.64 |
+| something | 8.2.7 |
+"""
+    result = CliRunner().invoke(cli, ["modules", "list", "--format", "markdown"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
