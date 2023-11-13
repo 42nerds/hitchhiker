@@ -13,19 +13,19 @@ import hitchhiker.odoo.module as odoo_mod
     help="module search path glob",
 )
 @click.option(
-    "--format",
+    "--output-format",
     is_flag=False,
     default="text",
     help='output format, "text" (default) or "markdown"',
 )
 @click.pass_context
-def list_cmd(ctx: click.Context, glob: str, format: str) -> None:
+def list_cmd(ctx: click.Context, glob: str, output_format: str) -> None:
     """
     Lists all Odoo modules based on the provided glob.
 
     Parameters:
         --glob (str): The glob pattern to search for Odoo modules (default: `./**/__manifest__.py`).
-        --format (str): "text" (default) or "markdown"
+        --output-format (str): "text" (default) or "markdown"
 
     Description:
     This command lists all Odoo modules based on the provided glob pattern.
@@ -53,7 +53,7 @@ def list_cmd(ctx: click.Context, glob: str, format: str) -> None:
     if len(modules) == 0:
         click.echo("No Odoo modules found")
         return
-    if format == "text":
+    if output_format == "text":
         spaces = len(
             sorted(modules, key=cmp_to_key(cmp_module), reverse=True)[0].get_int_name()
         )
@@ -62,7 +62,7 @@ def list_cmd(ctx: click.Context, glob: str, format: str) -> None:
             print(
                 f"{module.get_int_name()} {(spaces - len(module.get_int_name())) * ' '}{str(module.get_version())}"
             )
-    elif format == "markdown":
+    elif output_format == "markdown":
         print("| module | version |\n|---|---|")
         for module in modules:
             print(f"| {module.get_int_name()} | {str(module.get_version())} |")

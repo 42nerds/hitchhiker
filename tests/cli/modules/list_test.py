@@ -16,7 +16,7 @@ def test_list_no_mods(no_mods):
 def test_list_one_mod(one_mod):
     os.chdir(one_mod)
     expected_output = "MODULE                VERSION\nsome_cool_odoo_module 1.5.3\n"
-    result = CliRunner().invoke(cli, ["modules", "list", "--format", "text"])
+    result = CliRunner().invoke(cli, ["modules", "list", "--output-format", "text"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
@@ -57,7 +57,7 @@ def test_list_ten_mods_markdown(ten_mods):
 | something | 8.2.7 |
 | z_some_mod | 15.0.0 |
 """
-    result = CliRunner().invoke(cli, ["modules", "list", "--format", "markdown"])
+    result = CliRunner().invoke(cli, ["modules", "list", "--output-format", "markdown"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
