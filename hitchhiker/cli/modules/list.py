@@ -62,6 +62,10 @@ def list_cmd(ctx: click.Context, glob: str, output_format: str) -> None:
             print(
                 f"{module.get_int_name()} {(spaces - len(module.get_int_name())) * ' '}{str(module.get_version())}"
             )
+            for mod in modules:
+                if mod.get_int_name() == module.get_int_name() and mod.get_dir() != module.get_dir():
+                    print(f"    !!! duplicate: {mod.get_int_name()}")
+
     elif output_format == "markdown":
         print("| module | version |\n|---|---|")
         for module in modules:

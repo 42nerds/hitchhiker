@@ -61,3 +61,22 @@ def test_list_ten_mods_markdown(ten_mods):
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
+
+def test_list_dupe_mods(dupe_mods):
+    os.chdir(dupe_mods)
+    expected_output = """MODULE                       VERSION
+a_another_cool_odoo_module   19.8.1
+b_very_cool_odoo_module      1.2.3
+    !!! duplicate: b_very_cool_odoo_module
+b_very_cool_odoo_module      1.2.3
+    !!! duplicate: b_very_cool_odoo_module
+c_some_cool_odoo_module      0.5.3
+d_extremely_cool_odoo_module 0.0.0
+    !!! duplicate: d_extremely_cool_odoo_module
+d_extremely_cool_odoo_module 0.0.0
+    !!! duplicate: d_extremely_cool_odoo_module
+"""
+    result = CliRunner().invoke(cli, ["modules", "list", "--output-format", "text"])
+    print(f'got: """{result.output}""" expected: """{expected_output}"""')
+    assert result.exit_code == 0
+    assert result.output == expected_output

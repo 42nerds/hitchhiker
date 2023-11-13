@@ -52,3 +52,15 @@ def ten_mods(tmp_path_factory):
     create_odoo_mod(path, "something", "16.0.8.2.7")
     create_odoo_mod(path, "z_some_mod", "15.0.15.0.0")
     return path
+
+@pytest.fixture
+def dupe_mods(tmp_path_factory):
+    path = tmp_path_factory.mktemp("moddir")
+    create_odoo_mod(path, "c_some_cool_odoo_module", "0.5.3")
+    create_odoo_mod(path, "a_another_cool_odoo_module", "16.0.19.8.1")
+    create_odoo_mod(path, "b_very_cool_odoo_module", "1.2.3")
+    create_odoo_mod(path, "d_extremely_cool_odoo_module", "0.0.0")
+    os.mkdir(f"{path}/somedir")
+    create_odoo_mod(f"{path}/somedir", "d_extremely_cool_odoo_module", "1.0.0.0.0")
+    create_odoo_mod(f"{path}/somedir", "b_very_cool_odoo_module", "1.2.3")
+    return path
