@@ -42,6 +42,7 @@ def list_cmd(ctx: click.Context, glob: str) -> None:
             )
         )
     )
+    modules.sort(key=lambda x: x.get_int_name())
     if len(modules) == 0:
         click.echo("No Odoo modules found")
         return
