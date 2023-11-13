@@ -34,6 +34,7 @@ d_extremely_cool_odoo_module 5.3.1
 epic_odoo_module             0.0.0
 interesting_odoo_module      256.128.64
 something                    8.2.7
+z_some_mod                   15.0.0
 """
     result = CliRunner().invoke(cli, ["modules", "list"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
@@ -54,6 +55,7 @@ def test_list_ten_mods_markdown(ten_mods):
 | epic_odoo_module | 0.0.0 |
 | interesting_odoo_module | 256.128.64 |
 | something | 8.2.7 |
+| z_some_mod | 15.0.0 |
 """
     result = CliRunner().invoke(cli, ["modules", "list", "--format", "markdown"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')

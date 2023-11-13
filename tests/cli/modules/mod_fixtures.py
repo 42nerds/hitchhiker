@@ -50,4 +50,5 @@ def ten_mods(tmp_path_factory):
     create_odoo_mod(path, "interesting_odoo_module", "256.128.64")
     create_odoo_mod(path, "a_b_c", "17.0.64.128.256")
     create_odoo_mod(path, "something", "16.0.8.2.7")
+    create_odoo_mod(path, "z_some_mod", "15.0.15.0.0")
     return path
