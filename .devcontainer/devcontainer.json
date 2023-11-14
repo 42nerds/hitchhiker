@@ -13,7 +13,7 @@
   },
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "make setup-devcontainer",
+  "postCreateCommand": "make setup-devcontainer && pre-commit install",
 
   // Configure tool-specific properties.
   "customizations": {

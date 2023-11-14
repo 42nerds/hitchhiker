@@ -39,7 +39,7 @@ docs:
 lint:
 	@pylint ./**/*.py
 	@echo "pylint OK"
-	@flake8 --ignore=E501
+	@flake8 --ignore=E501,W503
 	@echo "flake8 OK"
 
 .PHONY: precommit

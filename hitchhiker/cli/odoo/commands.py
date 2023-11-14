@@ -1,7 +1,7 @@
 import click
 
 # FIXME: this causes issues when generating docs as click_odoo depends on odoo which we do not have in the devcontainer
-#import click_odoo  # type: ignore[import]
+# import click_odoo  # type: ignore[import]
 
 
 @click.group()

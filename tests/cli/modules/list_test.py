@@ -1,7 +1,9 @@
 import os
+
 from click.testing import CliRunner
+
 from hitchhiker.cli.cli import cli
-from tests.cli.modules.mod_fixtures import *
+from tests.cli.modules.mod_fixtures import *  # noqa: F403, F401
 
 
 def test_list_no_mods(no_mods):
@@ -61,6 +63,7 @@ def test_list_ten_mods_markdown(ten_mods):
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
     assert result.exit_code == 0
     assert result.output == expected_output
+
 
 def test_list_dupe_mods(dupe_mods):
     os.chdir(dupe_mods)

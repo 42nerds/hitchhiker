@@ -1,5 +1,6 @@
 import os
 import random
+
 import pytest
 
 git = pytest.importorskip("git")
@@ -49,7 +50,7 @@ prerelease = {"true" if prerelease else "false"}
 prerelease_token = "{prerelease_token}"
 """
                 )
-        repo.git.add(f"pyproject.toml")
+        repo.git.add("pyproject.toml")
     else:
         with open(f"{repo.working_tree_dir}/setup.cfg", "w") as f:
             f.write(
@@ -58,7 +59,7 @@ project_version = {main_version}
 version_cfg = setup.cfg:tool.hitchhiker:project_version
 """
             )
-        repo.git.add(f"setup.cfg")
+        repo.git.add("setup.cfg")
     for project, version, prerelease in projects:
         if not os.path.isdir(f"{repo.working_tree_dir}/{project}"):
             os.mkdir(f"{repo.working_tree_dir}/{project}")
