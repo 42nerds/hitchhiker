@@ -1,4 +1,5 @@
 import sys
+import os
 import subprocess
 import click
 import github
@@ -27,9 +28,19 @@ def _get_latest(ctx: click.Context) -> semver.Version:
 
     """
     try:
-        if not ctx.obj["CONF"].has_key("GITHUB_TOKEN"):
+        if (
+            not ctx.obj["CONF"].has_key("GITHUB_TOKEN")
+            and "GITHUB_TOKEN" not in os.environ
+        ):
             raise Exception("GitHub token not found")
-        gh = github.Github(ctx.obj["CONF"].get_key("GITHUB_TOKEN"))
+        gh = github.Github(
+            os.environ.get(
+                "GITHUB_TOKEN",
+                ctx.obj["CONF"].get_key("GITHUB_TOKEN")
+                if ctx.obj["CONF"].has_key("GITHUB_TOKEN")
+                else None,
+            )
+        )
         releases = gh.get_repo("42nerds/hitchhiker").get_releases()
     except Exception as e:
         click.secho(
@@ -43,7 +54,6 @@ def _get_latest(ctx: click.Context) -> semver.Version:
     raise Exception("no releases found")
 
 
-# TODO: figure out if we even need this?
 @click.command()
 @click.pass_context
 def update(ctx: click.Context) -> None:
@@ -61,7 +71,7 @@ def update(ctx: click.Context) -> None:
     try:
         latest = _get_latest(ctx)
         if latest > version:
-            click.echo(f"New version version available: {latest}")
+            click.echo(f"New version available: {latest}")
         elif version > latest:
             click.echo(
                 f"Your version is newer than the remote version. Remote is {version}!"
