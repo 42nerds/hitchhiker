@@ -34,7 +34,12 @@ def _get_latest(ctx: click.Context) -> semver.Version:
         ):
             raise Exception("GitHub token not found")
         gh = github.Github(
-            os.environ.get("GITHUB_TOKEN", ctx.obj["CONF"].get_key("GITHUB_TOKEN"))
+            os.environ.get(
+                "GITHUB_TOKEN",
+                ctx.obj["CONF"].get_key("GITHUB_TOKEN")
+                if ctx.obj["CONF"].has_key("GITHUB_TOKEN")
+                else None,
+            )
         )
         releases = gh.get_repo("42nerds/hitchhiker").get_releases()
     except Exception as e:
