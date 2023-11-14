@@ -1,15 +1,16 @@
-import re
-import os
-import glob as pyglob
-from pathlib import Path
-from typing import Dict, Any, Union
 import configparser
-import git
-from dotty_dict import Dotty  # type: ignore[import]
-import tomlkit
-import hitchhiker.release.version.semver as semver
-import hitchhiker.odoo.module as odoo_mod
+import glob as pyglob
+import os
+import re
+from pathlib import Path
+from typing import Any, Dict, Union
 
+import git
+import tomlkit
+from dotty_dict import Dotty  # type: ignore[import]
+
+import hitchhiker.odoo.module as odoo_mod
+import hitchhiker.release.version.semver as semver
 
 # regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start) and modified to only have a single capture group
 _semver_group = (
@@ -73,7 +74,7 @@ def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
             contents = (
                 contents[: match.span(1)[0]]
                 + f"\"{str(ctx['version'])}\""
-                + contents[match.span(1)[1] :]
+                + contents[match.span(1)[1]:]
             )
             f.seek(0)
             f.write(contents)
@@ -105,7 +106,7 @@ def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
             contents = (
                 contents[: match.span(1)[0]]
                 + f"\"{str(ctx['version'])}\""
-                + contents[match.span(1)[1] :]
+                + contents[match.span(1)[1]:]
             )
             f.seek(0)
             f.write(contents)

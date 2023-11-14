@@ -1,8 +1,11 @@
 import os
+
+import pytest
 from click.testing import CliRunner
-from tests.cli.release.git_fixtures import *
+
 import hitchhiker.release.version.semver as semver
 from hitchhiker.cli.cli import cli
+from tests.cli.release.git_fixtures import *  # noqa: F403, F401
 
 release = pytest.importorskip("hitchhiker.cli.release.commands").release
 

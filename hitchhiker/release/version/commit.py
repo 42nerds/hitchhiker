@@ -1,13 +1,16 @@
 import pathlib
-from typing import Optional, Dict, Any
 import subprocess
+from typing import Any, Dict, Optional
+
 import git
+
 import hitchhiker.cli.release.tagfix as tagfix
-import hitchhiker.release.version.semver as semver
 import hitchhiker.release.enums as enums
+import hitchhiker.release.version.semver as semver
 from hitchhiker.release.commitparser.conventional import ConventionalCommitParser
 
 # FIXME: this file needs a lot of cleanup
+
 
 def _find_latest_tag_in_commits(
     tags: list[tuple[git.refs.tag.TagReference, semver.Version]],

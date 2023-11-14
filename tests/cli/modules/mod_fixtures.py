@@ -1,4 +1,5 @@
 import os
+
 import pytest
 
 
@@ -52,6 +53,7 @@ def ten_mods(tmp_path_factory):
     create_odoo_mod(path, "something", "16.0.8.2.7")
     create_odoo_mod(path, "z_some_mod", "15.0.15.0.0")
     return path
+
 
 @pytest.fixture
 def dupe_mods(tmp_path_factory):
