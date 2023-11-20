@@ -1,9 +1,12 @@
 from functools import cmp_to_key
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 import git
-import hitchhiker.release.enums as enums
+
 import hitchhiker.release.commitparser.conventional as conventional
+import hitchhiker.release.enums as enums
 import hitchhiker.release.version.semver as semver
+
 
 # TODO: this could potentioally be moved to conventional.py??
 def _commit_cmp(

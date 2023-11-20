@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Dict, Any, Optional
 from pathlib import Path
 import ast
@@ -139,7 +140,12 @@ class Module:
         """
         if not self.is_valid() or "version" not in self._manifest_dict:
             return None
-        return semver.Version().parse(self._manifest_dict["version"])
+        match = re.match(
+            r"^(?:\d+\.\d+\.)?(\d+\.\d+\.\d+)$", self._manifest_dict["version"]
+        )
+        if match is None:
+            return None
+        return semver.Version().parse(match.group(1))
 
 
 def discover_modules(files: list[str]) -> list[Module]:
