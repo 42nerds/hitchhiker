@@ -1,7 +1,10 @@
-from functools import cmp_to_key
 import glob as pyglob
+from functools import cmp_to_key
 from pathlib import Path
+from typing import Union
+
 import click
+
 import hitchhiker.odoo.module as odoo_mod
 
 
@@ -13,19 +16,28 @@ import hitchhiker.odoo.module as odoo_mod
     help="module search path glob",
 )
 @click.option(
+    "--save",
+    is_flag=False,
+    default=None,
+    help="file to update modules list in",
+)
+@click.option(
     "--output-format",
     is_flag=False,
     default="text",
     help='output format, "text" (default) or "markdown"',
 )
 @click.pass_context
-def list_cmd(ctx: click.Context, glob: str, output_format: str) -> None:
+def list_cmd(
+    ctx: click.Context, glob: str, save: Union[str, None], output_format: str
+) -> None:
     """
     Lists all Odoo modules based on the provided glob.
 
     Parameters:
         --glob (str): The glob pattern to search for Odoo modules (default: `./**/__manifest__.py`).
         --output-format (str): "text" (default) or "markdown"
+        --save (str): File to update modules list in
 
     Description:
     This command lists all Odoo modules based on the provided glob pattern.
@@ -50,9 +62,39 @@ def list_cmd(ctx: click.Context, glob: str, output_format: str) -> None:
         )
     )
     modules.sort(key=lambda x: x.get_int_name())
+
+    if save is not None:
+        with open(save, "r+") as f:
+            start_marker = "<!-- BEGIN HITCHHIKER MODULES LIST -->"
+            end_marker = "<!-- END HITCHHIKER MODULES LIST -->"
+            content = f.read()
+            start_pos = content.find(start_marker)
+            end_pos = content.find(end_marker)
+            ncontent = content
+            if start_pos >= 0 and end_pos >= 0:
+                ncontent = f"{content[: start_pos + len(start_marker)]}\n"
+                ncontent += "| module | version |\n|---|---|\n"
+                for module in modules:
+                    ncontent += (
+                        f"| {module.get_int_name()} | {str(module.get_version())} |\n"
+                    )
+                ncontent += "\n\n"
+                for module in modules:
+                    for mod in modules:
+                        if (
+                            mod.get_int_name() == module.get_int_name()
+                            and mod.get_dir() != module.get_dir()
+                        ):
+                            ncontent += f'<span style="color:red">duplicate module: {mod.get_int_name()}</span><br>\n'
+                ncontent += f"\n{content[end_pos:]}"
+            f.seek(0)
+            f.write(ncontent)
+            f.truncate()
+
     if len(modules) == 0:
         click.echo("No Odoo modules found")
         return
+
     if output_format == "text":
         spaces = len(
             sorted(modules, key=cmp_to_key(cmp_module), reverse=True)[0].get_int_name()
@@ -63,9 +105,11 @@ def list_cmd(ctx: click.Context, glob: str, output_format: str) -> None:
                 f"{module.get_int_name()} {(spaces - len(module.get_int_name())) * ' '}{str(module.get_version())}"
             )
             for mod in modules:
-                if mod.get_int_name() == module.get_int_name() and mod.get_dir() != module.get_dir():
+                if (
+                    mod.get_int_name() == module.get_int_name()
+                    and mod.get_dir() != module.get_dir()
+                ):
                     print(f"    !!! duplicate: {mod.get_int_name()}")
-
     elif output_format == "markdown":
         print("| module | version |\n|---|---|")
         for module in modules:
