@@ -2,6 +2,19 @@
 
 
 
+## v0.5.0 (2023-11-20)
+
+### Feature
+
+* feat: modules list --save ([`293b4a5`](https://github.com/42nerds/hitchhiker/commit/293b4a51c4037fe23508f5a2866fe88a1fa816c1))
+
+### Unknown
+
+* Merge pull request #24 from 42nerds/develop
+
+hitchhiker 0.5.0 ([`0b9e001`](https://github.com/42nerds/hitchhiker/commit/0b9e001a1cab04391a854661e26bec06b70df384))
+
+
 ## v0.4.0 (2023-11-20)
 
 ### Chore
