@@ -2,6 +2,59 @@
 
 
 
+## v0.4.0 (2023-11-20)
+
+### Chore
+
+* chore: pre-commit hooks ([`cb3178d`](https://github.com/42nerds/hitchhiker/commit/cb3178da9e6181baefb07ba5fba843e375dbd036))
+
+* chore: add license ([`da3b353`](https://github.com/42nerds/hitchhiker/commit/da3b35315df6b880a7078c10b832596faf778d45))
+
+### Feature
+
+* feat: use GITHUB_TOKEN from env for update ([`c786066`](https://github.com/42nerds/hitchhiker/commit/c786066d82812ed8a5e221abbd44bd0b7eed1f04))
+
+* feat: use GITHUB_TOKEN from env for update ([`f0aa611`](https://github.com/42nerds/hitchhiker/commit/f0aa6117f74d4d01ea1d12de2c154bc462947121))
+
+* feat: modules list warn duplicate ([`d139c20`](https://github.com/42nerds/hitchhiker/commit/d139c200bd22798a6852800343eeb3d16ac75ed3))
+
+* feat: modules list markdown ([`41ff9cf`](https://github.com/42nerds/hitchhiker/commit/41ff9cfe87525187aaabd132c20276d23d36fd70))
+
+* feat: modules list markdown ([`d66e7f1`](https://github.com/42nerds/hitchhiker/commit/d66e7f17d58bf0d2ab7c65e90e34bae201e27955))
+
+* feat: modules list markdown ([`cb73757`](https://github.com/42nerds/hitchhiker/commit/cb737578c86f825f576c89c02acbd2f75a75eb4d))
+
+* feat: modules list sort ([`58f721a`](https://github.com/42nerds/hitchhiker/commit/58f721a081c1a2f4cb3abb4c7f31f8c201f84594))
+
+* feat: modules list sort ([`28d7d83`](https://github.com/42nerds/hitchhiker/commit/28d7d83f8a4eb434ba11c0d6e5570a027baf7db8))
+
+### Unknown
+
+* Merge pull request #23 from 42nerds/develop
+
+hitchhiker 0.4.0 ([`2cc69fe`](https://github.com/42nerds/hitchhiker/commit/2cc69fe00972268e5bc916ed04633f54475687c1))
+
+* Merge pull request #22 from 42nerds/feature/7937-pre-commit-hooks
+
+chore: pre-commit hooks ([`3dd20a9`](https://github.com/42nerds/hitchhiker/commit/3dd20a901fa4ef1b656cb73a838fa7bbee571462))
+
+* Merge pull request #21 from 42nerds/feature/7962-env-gh-token
+
+Feature/7962 env github token ([`a70a3fa`](https://github.com/42nerds/hitchhiker/commit/a70a3fa3ec7e4aaa6dfa2362d8d784e9c4b22f1e))
+
+* Merge pull request #20 from 42nerds/feature/7966-warn-dupe-module-name
+
+feat: modules list warn duplicate ([`744318c`](https://github.com/42nerds/hitchhiker/commit/744318c102fdc97906600b7503f94ea8ced71df9))
+
+* Merge pull request #19 from 42nerds/feature/7951-modules-list-markdown
+
+feat: modules list markdown ([`7067cde`](https://github.com/42nerds/hitchhiker/commit/7067cde7aa3870470e72ae43276bc6dfb7df1304))
+
+* Merge pull request #18 from 42nerds/7965-sort-modules-list
+
+sort modules list ([`ccfe995`](https://github.com/42nerds/hitchhiker/commit/ccfe995d41868b032131eaf3220096c5a95e1604))
+
+
 ## v0.3.0 (2023-10-26)
 
 ### Feature
