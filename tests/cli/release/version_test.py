@@ -239,8 +239,10 @@ def test_version_repo_multi_project_commits_before_tag_fix_after_odoo_diff_proje
         repo,
         ("1.1.0", "1.0.0"),
         [
+            ("another_project_name_with_feat", "1.2.3", "1.2.3"),
             ("project1", "0.0.1", "0.0.0"),
             ("project2", "0.0.1", "0.0.0"),
+            ("project_name_with_feat", "2.3.5", "2.3.4"),
             ("some_project_name", "0.0.0", "0.0.0"),
             ("some_project_name_with_extra_feature", "1.1.0", "1.0.0"),
         ],

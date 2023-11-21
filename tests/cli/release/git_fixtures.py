@@ -347,6 +347,8 @@ def repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name(
             ("project2", "0.0.0", False),
             ("some_project_name", "0.0.0", False),
             ("some_project_name_with_extra_feature", "1.0.0", False),
+            ("another_project_name_with_feat", "1.2.3", False),
+            ("project_name_with_feat", "2.3.4", False),
         ],
         "1.0.0",
         is_odoo=True,
@@ -364,6 +366,8 @@ def repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name(
                 "feat!: some feature that breaks things",
                 "some_project_name_with_extra_feature",
             ],
+            ["fix: something else 2", "another_project_name_with_feat"],
+            ["feat: something else 3", "project_name_with_feat"],
         ],
     )
     repo.git.tag("v1.0.0", m="v1.0.0")
@@ -373,6 +377,7 @@ def repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name(
             ["fix: something", "project1"],
             ["fix: something else", "project2"],
             ["feat: another feature", "some_project_name_with_extra_feature"],
+            ["fix: another fix", "project_name_with_feat"],
         ],
     )
 
