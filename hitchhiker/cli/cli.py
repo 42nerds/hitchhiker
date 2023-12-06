@@ -1,8 +1,11 @@
-import click
 import importlib.metadata
+
+import click
+
 from hitchhiker.config.config import ConfigManager
-from .modules import commands as modules
+
 from .auth import commands as auth
+from .modules import commands as modules
 
 
 @click.group()
@@ -13,6 +16,7 @@ from .auth import commands as auth
 @click.option("--debug", is_flag=True, help="Show debug information")
 @click.pass_context
 def cli(ctx: click.Context, debug: bool, conf: str) -> None:
+    """hitchhiker CLI entry point"""
     ctx.ensure_object(dict)
 
     ctx.obj["DEBUG"] = debug
@@ -27,19 +31,25 @@ try:
     from .odoo import commands as odoo_cli
 
     cli.add_command(odoo_cli.odoo)
-except ImportError as e:
-    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+except ImportError:
+    pass
+    # FIXME: do these errors differently
+    # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
 
 try:
     from .release import commands as release
 
     cli.add_command(release.release)
-except ImportError as e:
-    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+except ImportError:
+    pass
+    # FIXME: do these errors differently
+    # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
 
 try:
     from .update import commands as update
 
     cli.add_command(update.update)
-except ImportError as e:
-    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+except ImportError:
+    pass
+    # FIXME: do these errors differently
+    # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")

@@ -11,7 +11,7 @@ import copier  # type: ignore[import]
     help="Copier template URL",
 )
 @click.pass_context
-def new_cmd(ctx: click.Context, name: str, template: str) -> None:
+def new_cmd(_ctx: click.Context, name: str, template: str) -> None:
     """
     Creates a new Odoo module from a copier template.
 

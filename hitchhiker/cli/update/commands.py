@@ -1,9 +1,11 @@
-import sys
 import os
 import subprocess
+import sys
+
 import click
 import github
-import hitchhiker.release.version.semver as semver
+
+from hitchhiker.release.version import semver
 
 
 def _get_latest(ctx: click.Context) -> semver.Version:
@@ -32,7 +34,7 @@ def _get_latest(ctx: click.Context) -> semver.Version:
             not ctx.obj["CONF"].has_key("GITHUB_TOKEN")
             and "GITHUB_TOKEN" not in os.environ
         ):
-            raise Exception("GitHub token not found")
+            raise click.UsageError("GitHub token not found")
         gh = github.Github(
             os.environ.get(
                 "GITHUB_TOKEN",
@@ -51,7 +53,7 @@ def _get_latest(ctx: click.Context) -> semver.Version:
         raise e
     if len(list(releases)) > 0:
         return semver.Version().parse(releases[0].tag_name)
-    raise Exception("no releases found")
+    raise click.UsageError("no releases found")
 
 
 @click.command()
@@ -80,7 +82,7 @@ def update(ctx: click.Context) -> None:
         else:
             click.echo(f"No update available (remote version {latest})")
             return
-    except Exception as e:
+    except click.UsageError as e:
         click.echo(f"error checking for new version: {e}")
         return
 
@@ -96,5 +98,6 @@ def update(ctx: click.Context) -> None:
                 "pip",
                 "install",
                 f"hitchhiker @ git+{git_url}",
-            ]
+            ],
+            check=False,
         )

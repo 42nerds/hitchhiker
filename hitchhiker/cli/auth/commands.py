@@ -1,5 +1,6 @@
 import click
-import hitchhiker.cli.auth.github as github
+
+from hitchhiker.cli.auth import github
 
 
 @click.group()

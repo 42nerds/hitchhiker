@@ -10,10 +10,10 @@ import tomlkit
 from dotty_dict import Dotty  # type: ignore[import]
 
 import hitchhiker.odoo.module as odoo_mod
-import hitchhiker.release.version.semver as semver
+from hitchhiker.release.version import semver
 
 # regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start) and modified to only have a single capture group
-_semver_group = (
+_SEMVER_GROUP = (
     r"((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-]"
     r"[0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"
 )
@@ -28,7 +28,7 @@ def __get_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> semver.Version
             os.path.join(config["repo"].working_tree_dir, var[0]), "r", encoding="utf-8"
         ) as f:
             match = re.search(
-                rf'^{var[1]} ?= ?("{_semver_group}")$', f.read(), re.MULTILINE
+                rf'^{var[1]} ?= ?("{_SEMVER_GROUP}")$', f.read(), re.MULTILINE
             )
             assert match is not None, f'could not parse file "{var[0]}"'
             versions.append(semver.Version().parse(match.group(2)))
@@ -43,7 +43,7 @@ def __get_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> semver.Version
             os.path.join(config["repo"].working_tree_dir, var[0]), "r", encoding="utf-8"
         ) as f:
             match = re.search(
-                rf'^ *"{var[1]}": ("{_semver_group}"),?$', f.read(), re.MULTILINE
+                rf'^ *"{var[1]}": ("{_SEMVER_GROUP}"),?$', f.read(), re.MULTILINE
             )
             assert match is not None, f'could not parse file "{var[0]}"'
             versions.append(semver.Version().parse(match.group(2)))
@@ -68,7 +68,7 @@ def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
         ) as f:
             contents = f.read()
             match = re.search(
-                rf'^{var[1]} ?= ?("{_semver_group}")$', contents, re.MULTILINE
+                rf'^{var[1]} ?= ?("{_SEMVER_GROUP}")$', contents, re.MULTILINE
             )
             assert match is not None, f'could not parse file "{var[0]}"'
             contents = (
@@ -100,7 +100,7 @@ def set_version(config: Dict[str, Any], ctx: Dict[str, Any]) -> list[str]:
         ) as f:
             contents = f.read()
             match = re.search(
-                rf'^ *"{var[1]}": ("{_semver_group}"),?$', contents, re.MULTILINE
+                rf'^ *"{var[1]}": ("{_SEMVER_GROUP}"),?$', contents, re.MULTILINE
             )
             assert match is not None, f'could not parse file "{var[0]}"'
             contents = (

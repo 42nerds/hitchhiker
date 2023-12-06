@@ -1,16 +1,15 @@
 import copy
 import os
 import re
-from typing import Optional, Dict
+from typing import Dict, Optional
+
+import click
 import git
 import github
-import click
-import hitchhiker.release.version.semver as semver
-import hitchhiker.release.version.commit as commit
-import hitchhiker.cli.release.config as config
-import hitchhiker.cli.release.tagfix as tagfix
-import hitchhiker.release.enums as enums
-import hitchhiker.release.changelog as changelog
+
+from hitchhiker.cli.release import config, tagfix
+from hitchhiker.release import changelog, enums
+from hitchhiker.release.version import commit, semver
 
 
 def get_repo_owner_name(ctx: click.Context) -> tuple[Optional[str], Optional[str]]:
@@ -41,10 +40,10 @@ def write_changelog(
         ctx.obj["RELEASE_CONF"]["repo"].working_tree_dir, "CHANGELOG.md"
     )
     if not os.path.isfile(changelog_path):
-        with open(changelog_path, "w") as f:
+        with open(changelog_path, "w", encoding="utf-8") as f:
             f.write("# CHANGELOG\n" + changelog_newtext)
     else:
-        with open(changelog_path, "a") as f:
+        with open(changelog_path, "a", encoding="utf-8") as f:
             f.write(changelog_newtext)
     changedfiles.append("CHANGELOG.md")
 
@@ -74,15 +73,15 @@ def do_gh_release(
     try:
         auth = github.Auth.Token(ghtoken)
         gh = github.Github(auth=auth)
-    except Exception:  # TODO: figure out which exceptions could be thrown here
+    except Exception as e:  # TODO: figure out which exceptions could be thrown here
         raise click.ClickException(
             message="Failed to authenticate at GitHub with token"
-        )
+        ) from e
 
     try:
         repo = gh.get_repo(f"{repo_owner}/{repo_name}")
-    except Exception:  # TODO: figure out which exceptions could be thrown here
-        raise click.ClickException(message="Failed to get repository from github")
+    except Exception as e:  # TODO: figure out which exceptions could be thrown here
+        raise click.ClickException(message="Failed to get repository from github") from e
 
     try:
         repo.create_git_release(
@@ -94,8 +93,8 @@ def do_gh_release(
             .commit(ctx.obj["RELEASE_CONF"]["repo"].active_branch)
             .hexsha,
         )
-    except Exception:  # TODO: figure out which exceptions could be thrown here
-        raise click.ClickException(message="Failed to create release on GitHub")
+    except Exception as e:  # TODO: figure out which exceptions could be thrown here
+        raise click.ClickException(message="Failed to create release on GitHub") from e
 
 
 @click.command(short_help="Figure out new version and apply it")
@@ -122,6 +121,7 @@ def version(
     ghtoken: str,
 ) -> None:
     """Figure out new version and apply it"""
+    # pylint: disable=too-many-arguments,too-many-branches,too-many-locals # TODO: split this function up further
     if ghrelease and not push:
         raise click.BadOptionUsage(
             "ghrelease", "--ghrelease must be used together with --push"
@@ -216,8 +216,8 @@ def version(
                 ctx.obj["RELEASE_CONF"]["repo"].remote(
                     name="origin"
                 ).push().raise_if_error()
-            except Exception:  # TODO: figure out which exceptions could be thrown here
-                raise click.ClickException(message="Failed to push")
+            except Exception as e:  # TODO: figure out which exceptions could be thrown here
+                raise click.ClickException(message="Failed to push") from e
         if ghrelease:
             if ghtoken is None:
                 raise click.ClickException(message='Failed to get "GITHUB_TOKEN"')

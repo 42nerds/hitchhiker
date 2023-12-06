@@ -1,6 +1,7 @@
 import re
 from typing import Optional
-import hitchhiker.release.enums as enums
+
+from hitchhiker.release import enums
 
 
 class ConventionalCommitParser:
@@ -176,8 +177,8 @@ class ConventionalCommitParser:
         """
         if self.breaking:
             return enums.VersionBump.MAJOR
-        elif self.type in ["feat", "feature"]:
+        if self.type in ["feat", "feature"]:
             return enums.VersionBump.MINOR
-        elif self.type in ["fix"]:
+        if self.type in ["fix"]:
             return enums.VersionBump.PATCH
         return enums.VersionBump.NONE

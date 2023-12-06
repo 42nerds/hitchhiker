@@ -1,7 +1,8 @@
-import time
-import requests
 import json
+import time
+
 import click
+import requests
 
 
 @click.command(short_help="Authenticate with GitHub")
@@ -22,6 +23,7 @@ def github(ctx: click.Context) -> None:
             "https://github.com/login/device/code",
             headers={"Accept": "application/json"},
             data={"client_id": oauth_client_id, "scope": "repo"},
+            timeout=5,
         ).text
     )
     click.echo(
@@ -38,6 +40,7 @@ def github(ctx: click.Context) -> None:
                     "device_code": result["device_code"],
                     "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                 },
+                timeout=5,
             ).text
         )
         if (
@@ -55,4 +58,4 @@ def github(ctx: click.Context) -> None:
             ctx.obj["CONF"].set_key("GITHUB_TOKEN", second_result["access_token"])
             click.secho("Success!", err=False, fg="green")
             return
-        raise Exception("unexpected response")
+        raise click.UsageError("unexpected response")

@@ -8,6 +8,46 @@ import click
 import hitchhiker.odoo.module as odoo_mod
 
 
+def discover_modules(glob: str) -> list[odoo_mod.Module]:
+    return odoo_mod.discover_modules(
+        list(
+            filter(
+                lambda n: Path(n).name == "__manifest__.py",
+                pyglob.glob(glob, recursive=True),
+            )
+        )
+    )
+
+
+def _gen_list_output(output_format: str, modules: list[odoo_mod.Module]) -> None:
+    def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:
+        if len(a.get_int_name()) < len(b.get_int_name()):
+            return -1
+        if len(a.get_int_name()) > len(b.get_int_name()):
+            return 1
+        return 0
+
+    if output_format == "text":
+        spaces = len(
+            sorted(modules, key=cmp_to_key(cmp_module), reverse=True)[0].get_int_name()
+        )
+        print(f"MODULE {(spaces - 6) * ' '}VERSION")
+        for module in modules:
+            print(
+                f"{module.get_int_name()} {(spaces - len(module.get_int_name())) * ' '}{str(module.get_version())}"
+            )
+            for mod in modules:
+                if (
+                    mod.get_int_name() == module.get_int_name()
+                    and mod.get_dir() != module.get_dir()
+                ):
+                    print(f"    !!! duplicate: {mod.get_int_name()}")
+    elif output_format == "markdown":
+        print("| module | version |\n|---|---|")
+        for module in modules:
+            print(f"| {module.get_int_name()} | {str(module.get_version())} |")
+
+
 @click.command(name="list", short_help="list Odoo modules and their versions")
 @click.option(
     "--glob",
@@ -29,7 +69,7 @@ import hitchhiker.odoo.module as odoo_mod
 )
 @click.pass_context
 def list_cmd(
-    ctx: click.Context, glob: str, save: Union[str, None], output_format: str
+    _ctx: click.Context, glob: str, save: Union[str, None], output_format: str
 ) -> None:
     """
     Lists all Odoo modules based on the provided glob.
@@ -45,26 +85,11 @@ def list_cmd(
 
     """
 
-    def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:
-        if len(a.get_int_name()) < len(b.get_int_name()):
-            return -1
-        elif len(a.get_int_name()) > len(b.get_int_name()):
-            return 1
-        else:
-            return 0
-
-    modules = odoo_mod.discover_modules(
-        list(
-            filter(
-                lambda n: Path(n).name == "__manifest__.py",
-                pyglob.glob(glob, recursive=True),
-            )
-        )
-    )
+    modules = discover_modules(glob)
     modules.sort(key=lambda x: x.get_int_name())
 
     if save is not None:
-        with open(save, "r+") as f:
+        with open(save, "r+", encoding="utf-8") as f:
             start_marker = "<!-- BEGIN HITCHHIKER MODULES LIST -->"
             end_marker = "<!-- END HITCHHIKER MODULES LIST -->"
             content = f.read()
@@ -95,22 +120,4 @@ def list_cmd(
         click.echo("No Odoo modules found")
         return
 
-    if output_format == "text":
-        spaces = len(
-            sorted(modules, key=cmp_to_key(cmp_module), reverse=True)[0].get_int_name()
-        )
-        print(f"MODULE {(spaces - 6) * ' '}VERSION")
-        for module in modules:
-            print(
-                f"{module.get_int_name()} {(spaces - len(module.get_int_name())) * ' '}{str(module.get_version())}"
-            )
-            for mod in modules:
-                if (
-                    mod.get_int_name() == module.get_int_name()
-                    and mod.get_dir() != module.get_dir()
-                ):
-                    print(f"    !!! duplicate: {mod.get_int_name()}")
-    elif output_format == "markdown":
-        print("| module | version |\n|---|---|")
-        for module in modules:
-            print(f"| {module.get_int_name()} | {str(module.get_version())} |")
+    _gen_list_output(output_format, modules)

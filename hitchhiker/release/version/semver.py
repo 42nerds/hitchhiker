@@ -1,11 +1,12 @@
 import re
 from typing import Optional
-from typing_extensions import Self
-import hitchhiker.release.enums as enums
 
+from typing_extensions import Self
+
+from hitchhiker.release import enums
 
 # regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start)
-_semver_parse = (
+_SEMVER_PARSE = (
     r"^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
     r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 )
@@ -34,7 +35,6 @@ class Version:
         ```
 
         """
-        pass
 
     def __str__(self) -> str:
         """
@@ -130,19 +130,20 @@ class Version:
         ```
 
         """
+        # pylint: disable=too-many-return-statements
         if not isinstance(obj, Version):
             return NotImplemented
         if self.major < obj.major:
             return True
-        elif self.major > obj.major:
+        if self.major > obj.major:
             return False
-        elif self.minor < obj.minor:
+        if self.minor < obj.minor:
             return True
-        elif self.minor > obj.minor:
+        if self.minor > obj.minor:
             return False
-        elif self.patch < obj.patch:
+        if self.patch < obj.patch:
             return True
-        elif self.patch > obj.patch:
+        if self.patch > obj.patch:
             return False
 
         # if both prerelease strings are equal (or both none) the version is equal
@@ -202,7 +203,7 @@ class Version:
             return len(self.prerelease.split(".")) < len(obj.prerelease.split("."))
 
         # it should be _impossible_ to get here!
-        raise Exception("unreachable")
+        raise Exception("unreachable")  # pylint: disable=broad-exception-raised # FIXME: we need hitchhiker exceptions!!
 
     def __lt__(self, obj: object) -> bool:
         """
@@ -254,7 +255,7 @@ class Version:
         ```
 
         """
-        match = re.match(_semver_parse, version)
+        match = re.match(_SEMVER_PARSE, version)
         if match is None:
             # FIXME: should we really reset the internal state on a parse error?
             self.major = 0

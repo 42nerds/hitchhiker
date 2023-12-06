@@ -1,7 +1,7 @@
-import os
-from typing import Dict, Any
-from pathlib import Path
 import json
+import os
+from pathlib import Path
+from typing import Any, Dict
 
 
 class ConfigManager:
@@ -19,7 +19,7 @@ class ConfigManager:
         if not os.path.isfile(filepath):
             dirpath = Path(filepath).resolve().parent
             Path(dirpath).mkdir(parents=True, exist_ok=True)
-            open(filepath, "a").close()
+            Path(filepath).touch()
 
     def _read_config(self) -> Dict[str, Any]:
         """
@@ -31,12 +31,12 @@ class ConfigManager:
         """
         self._create_file_if_nonexistant(self._fpath)
         try:
-            with open(self._fpath, "r") as f:
+            with open(self._fpath, "r", encoding="utf-8") as f:
                 read = json.loads(f.read())
                 assert isinstance(read, Dict)
                 return read
         except json.JSONDecodeError:
-            with open(self._fpath, "w") as f:
+            with open(self._fpath, "w", encoding="utf-8") as f:
                 f.write(json.dumps(self._default_conf))
             return self._read_config()
 
@@ -48,7 +48,7 @@ class ConfigManager:
             None
         """
         self._create_file_if_nonexistant(self._fpath)
-        with open(self._fpath, "w") as f:
+        with open(self._fpath, "w", encoding="utf-8") as f:
             f.write(json.dumps(self._confdict))
 
     def __init__(self, path: str, defaultconf: Dict[str, Any]):
