@@ -1,6 +1,7 @@
 import click
-import hitchhiker.cli.modules.list as list_mod
+
 import hitchhiker.cli.modules.generate_addons_path as generate_addons_path_mod
+import hitchhiker.cli.modules.list as list_mod
 
 # FIXME: all these commands need tests
 
@@ -21,7 +22,7 @@ try:
     import hitchhiker.cli.modules.new as new_mod
 
     modules.add_command(new_mod.new_cmd)
-except ImportError as e:
+except ImportError:
     pass
     # FIXME: do these errors differently
     # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")

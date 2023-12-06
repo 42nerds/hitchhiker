@@ -31,7 +31,7 @@ try:
     from .odoo import commands as odoo_cli
 
     cli.add_command(odoo_cli.odoo)
-except ImportError as e:
+except ImportError:
     pass
     # FIXME: do these errors differently
     # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
@@ -40,7 +40,7 @@ try:
     from .release import commands as release
 
     cli.add_command(release.release)
-except ImportError as e:
+except ImportError:
     pass
     # FIXME: do these errors differently
     # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
@@ -49,7 +49,7 @@ try:
     from .update import commands as update
 
     cli.add_command(update.update)
-except ImportError as e:
+except ImportError:
     pass
     # FIXME: do these errors differently
     # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
