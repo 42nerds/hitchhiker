@@ -247,3 +247,22 @@ def test_version_repo_multi_project_commits_before_tag_fix_after_odoo_diff_proje
             ("some_project_name_with_extra_feature", "1.1.0", "1.0.0"),
         ],
     )
+
+
+def test_version_repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name_multibranch(
+    repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name_multibranch,
+):
+    """test for Version"""
+    repo = repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name_multibranch
+    invoke_cli_version_cmd(
+        repo,
+        ("0.0.2", "0.0.1"),
+        [
+            ("configurator", "0.0.2", "0.0.1"),
+            ("configurator_delivery", "0.0.1", "0.0.1"),
+            ("configurator_pim", "0.0.2", "0.0.1"),
+            ("configurator_sale", "0.0.1", "0.0.1"),
+            ("configurator_website_sale", "0.0.1", "0.0.1"),
+            ("website_sale_improved_cart", "0.0.1", "0.0.1"),
+        ],
+    )

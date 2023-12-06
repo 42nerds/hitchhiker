@@ -1,5 +1,6 @@
 import os
 import random
+import re
 
 import pytest
 
@@ -16,6 +17,32 @@ def randomid(chars=10, ranges=None):
     for _ in range(chars):
         rid += chr(random.choice(allowed))
     return rid
+
+
+# regex from https://semver.org/spec/v2.0.0.html (modified to allow versions with a v at the start) and modified to only have a single capture group
+_semver_group = (
+    r"((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-]"
+    r"[0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"
+)
+
+
+def set_odoo_manifest_version(manifest_path, version):
+    with open(
+        manifest_path,
+        "r+",
+        encoding="utf-8",
+    ) as f:
+        contents = f.read()
+        match = re.search(
+            rf'^ *"version": ("{_semver_group}"),?$', contents, re.MULTILINE
+        )
+        assert match is not None, f'could not parse file "{manifest_path}"'
+        contents = (
+            contents[: match.span(1)[0]] + f'"{version}"' + contents[match.span(1)[1]:]
+        )
+        f.seek(0)
+        f.write(contents)
+        f.truncate(f.tell())
 
 
 def create_git_repo(path):
@@ -80,9 +107,26 @@ def create_random_file(repo, path=""):
 
 def create_commits(repo, commits):
     for commit in commits:
+        msg = commit[0]
+        projects = commit[1:]
         for _ in range(10):
-            create_random_file(repo, commit[1])
-        repo.git.commit(m=commit[0])
+            for project in projects:
+                create_random_file(repo, project)
+        repo.git.commit(m=msg)
+
+
+def create_commits_fname(repo, commits):
+    for commit in commits:
+        msg = commit[0]
+        fname = commit[1]
+        projects = commit[2:]
+        for project in projects:
+            ffname = f"{repo.working_tree_dir}/{project}/{fname}"
+            with open(ffname, "w") as f:
+                f.write(f"test file\n{fname}\n")
+            repo.git.add(ffname)
+            create_random_file(repo, project)
+        repo.git.commit(m=msg)
 
 
 @pytest.fixture
@@ -380,6 +424,92 @@ def repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name(
             ["fix: another fix", "project_name_with_feat"],
         ],
     )
+
+    yield repo
+    repo.close()
+
+
+@pytest.fixture
+def repo_multi_project_commits_before_tag_fix_after_odoo_diff_project_name_multibranch(
+    tmp_path_factory,
+):
+    path = tmp_path_factory.mktemp("repo")
+    repo = create_git_repo(path)
+    create_configs(
+        repo,
+        [
+            ("configurator", "0.1.1", False),
+            ("configurator_delivery", "0.1.1", False),
+            ("configurator_pim", "0.1.1", False),
+            ("configurator_sale", "0.1.1", False),
+            ("configurator_website_sale", "0.1.1", False),
+            ("website_sale_improved_cart", "0.1.1", False),
+        ],
+        "0.0.1",
+        is_odoo=True,
+    )
+    create_commits(repo, [["Initial commit", ""]])
+    repo.git.tag("v0.0.1", m="v0.0.1")
+
+    defaultbranch = repo.active_branch
+    newbranch = repo.create_head("somebranch")
+    newbranch.checkout()
+
+    set_odoo_manifest_version(path / "configurator" / "__manifest__.py", "0.0.1")
+    repo.git.add(path / "configurator" / "__manifest__.py")
+    set_odoo_manifest_version(
+        path / "configurator_delivery" / "__manifest__.py", "0.0.1"
+    )
+    repo.git.add(path / "configurator_delivery" / "__manifest__.py")
+    set_odoo_manifest_version(path / "configurator_pim" / "__manifest__.py", "0.0.1")
+    repo.git.add(path / "configurator_pim" / "__manifest__.py")
+    set_odoo_manifest_version(path / "configurator_sale" / "__manifest__.py", "0.0.1")
+    repo.git.add(path / "configurator_sale" / "__manifest__.py")
+    set_odoo_manifest_version(
+        path / "configurator_website_sale" / "__manifest__.py", "0.0.1"
+    )
+    repo.git.add(path / "configurator_website_sale" / "__manifest__.py")
+    set_odoo_manifest_version(
+        path / "website_sale_improved_cart" / "__manifest__.py", "0.0.1"
+    )
+    repo.git.add(path / "website_sale_improved_cart" / "__manifest__.py")
+
+    repo.git.commit(m="version v0.2.0")
+    repo.git.tag("v0.2.0", m="v0.2.0")
+
+    defaultbranch.checkout()
+
+    os.mkdir(repo.working_tree_dir + "/" + "configurator" + "/" + "models")
+    os.mkdir(repo.working_tree_dir + "/" + "configurator_pim" + "/" + "models")
+    create_commits_fname(
+        repo,
+        [
+            [
+                "fix: only sync standard odoo-products",
+                "models/product_template.py",
+                "configurator",
+                "configurator_pim",
+            ],
+        ],
+    )
+    newbranch.checkout()
+    repo.git.merge(defaultbranch.name, no_ff=True)
+
+    defaultbranch.checkout()
+
+    create_commits_fname(
+        repo,
+        [
+            [
+                "fix: another fix",
+                "models/product_template.py",
+                "configurator",
+                "configurator_pim",
+            ],
+        ],
+    )
+    newbranch.checkout()
+    repo.git.merge(defaultbranch.name, no_ff=True)
 
     yield repo
     repo.close()

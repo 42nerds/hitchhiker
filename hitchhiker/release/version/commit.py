@@ -1,6 +1,6 @@
 import pathlib
 import subprocess
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import git
 
@@ -15,7 +15,7 @@ from hitchhiker.release.commitparser.conventional import ConventionalCommitParse
 def _find_latest_tag_in_commits(
     tags: list[tuple[git.refs.tag.TagReference, semver.Version]],
     commits: list[git.objects.commit.Commit],
-) -> tuple[Optional[list[git.objects.commit.Commit]], str]:
+) -> tuple[Optional[list[git.objects.commit.Commit]], Union[str, None]]:
     """
     Finds the latest tag in a list of commits.
 
@@ -27,33 +27,25 @@ def _find_latest_tag_in_commits(
         tuple: A tuple containing the list of commits up to the latest tag and the hash of the latest tag.
 
     Description:
-    This function searches for the latest tag in a list of commits. It returns the list of commits up to the latest tag
-    and the hash of the latest tag.
-
-    Note:
-    This function assumes the availability of the `git` command-line utility.
-
-    Example:
-    ```
-    commits, latest_tag_sha = _find_latest_tag_in_commits(tags, commits_list)
-    print(f"The latest tag was at commit: {latest_tag_sha}")
-    ```
+    This function searches for the latest tag in a list of commits. It returns the list of commits up to the latest tag.
+    If there are no commits prior to the tag the function will return an empty tree sha in the second part of the tuple. Else it's None.
 
     """
+
     def search_commit(
         commit: git.objects.commit.Commit, commits: list[git.objects.commit.Commit]
-    ) -> Optional[tuple[list[git.objects.commit.Commit], str]]:
+    ) -> Optional[list[git.objects.commit.Commit]]:
         i = 0
         while i < len(commits):
             if commits[i].binsha == commit.binsha:
-                return (commits[:i], commits[i].hexsha)
+                return commits[:i]
             i += 1
         return None
 
     for tag in tags:
         r = search_commit(tag[0].commit, commits)
         if r is not None:
-            return r
+            return (r, None)
     # get empty tree SHA
     emptysha = subprocess.run(
         ["git", "hash-object", "-t", "tree", "/dev/null"],
@@ -146,9 +138,15 @@ def find_next_version(
 
     for commit in reversed(commit_list):
         changed_files = [
-            item.a_path
-            for item in commit.tree.diff(lastsha)
-            if str(pathlib.Path(item.a_path)).startswith(
+            item
+            for item in config["repo"]
+            .git.diff(
+                "--name-only",
+                f"{commit.hexsha}~" if lastsha is None else lastsha,
+                commit.hexsha,
+            )
+            .splitlines()
+            if str(pathlib.Path(item)).startswith(
                 str(pathlib.Path(project["path"])) + "/"
             )
         ]
@@ -157,5 +155,5 @@ def find_next_version(
             if parsed.is_conventional and bump < parsed.get_version_bump():
                 bump = parsed.get_version_bump()
             commits.append((commit, changed_files))
-        lastsha = commit.hexsha
+        lastsha = None
     return (bump, commits)
