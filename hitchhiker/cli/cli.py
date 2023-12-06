@@ -1,8 +1,11 @@
-import click
 import importlib.metadata
+
+import click
+
 from hitchhiker.config.config import ConfigManager
-from .modules import commands as modules
+
 from .auth import commands as auth
+from .modules import commands as modules
 
 
 @click.group()
@@ -13,6 +16,7 @@ from .auth import commands as auth
 @click.option("--debug", is_flag=True, help="Show debug information")
 @click.pass_context
 def cli(ctx: click.Context, debug: bool, conf: str) -> None:
+    """hitchhiker CLI entry point"""
     ctx.ensure_object(dict)
 
     ctx.obj["DEBUG"] = debug

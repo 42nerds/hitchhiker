@@ -1,7 +1,8 @@
-import glob as pyglob
 from pathlib import Path
+
 import click
-import hitchhiker.odoo.module as odoo_mod
+
+from hitchhiker.cli.modules.list import discover_modules
 
 
 @click.command(name="generate_addons_path", short_help="Generate an Odoo addons path")
@@ -12,7 +13,7 @@ import hitchhiker.odoo.module as odoo_mod
     help="module search path glob",
 )
 @click.pass_context
-def generate_addons_path_cmd(ctx: click.Context, glob: str) -> None:
+def generate_addons_path_cmd(_ctx: click.Context, glob: str) -> None:
     """
     Generates Odoo addons path based on the provided glob.
 
@@ -25,14 +26,7 @@ def generate_addons_path_cmd(ctx: click.Context, glob: str) -> None:
 
     """
 
-    modules = odoo_mod.discover_modules(
-        list(
-            filter(
-                lambda n: Path(n).name == "__manifest__.py",
-                pyglob.glob(glob, recursive=True),
-            )
-        )
-    )
+    modules = discover_modules(glob)
     moduledirs: list[str] = []
     for module in modules:
         moddir = str(Path(module.get_dir()).parent.absolute())

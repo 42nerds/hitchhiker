@@ -3,9 +3,9 @@ from typing import Any, Dict, Optional
 
 import git
 
-import hitchhiker.release.commitparser.conventional as conventional
-import hitchhiker.release.enums as enums
-import hitchhiker.release.version.semver as semver
+from hitchhiker.release import enums
+from hitchhiker.release.commitparser import conventional
+from hitchhiker.release.version import semver
 
 
 # TODO: this could potentioally be moved to conventional.py??
@@ -27,30 +27,32 @@ def _commit_cmp(
     This function compares two commits based on their version bump type and conventional commit properties.
     It is intended to be used as a comparison function for sorting commits.
     """
+    # pylint: disable=too-many-return-statements,too-many-arguments,too-many-locals
     a, _ = _a
     b, _ = _b
     if a.is_conventional and b.is_conventional:
         if a.get_version_bump() < b.get_version_bump():
             return -1
-        elif a.get_version_bump() < b.get_version_bump():
+        if a.get_version_bump() < b.get_version_bump():
             return 1
-        elif (
+        if (
             a.get_version_bump() == b.get_version_bump()
             and a.get_version_bump() == enums.VersionBump.NONE
         ):
             assert a.type is not None and b.type is not None
             return -1 if a.type < b.type else 1
-        elif a.get_version_bump() == b.get_version_bump():
+        if a.get_version_bump() == b.get_version_bump():
             return 0
     elif not a.is_conventional and not b.is_conventional:
         return -1
-    elif not a.is_conventional:
+    if not a.is_conventional:
         return -1
-    elif not b.is_conventional:
+    if not b.is_conventional:
         return 1
     return 0
 
 
+# FIXME: tests needed
 # change_commits: {"projectname": [version, [commitmsgs]]}
 def gen_changelog(
     change_commits: Dict[str, tuple[semver.Version, list[git.objects.commit.Commit]]],
@@ -84,6 +86,7 @@ def gen_changelog(
     print(changelog)
     ```
     """
+    # pylint: disable=too-many-arguments,too-many-locals
     out = f"\n## v{new_version}\n"
     out += "### Projects\n| module | version |\n| -------- | ----------- |\n"
     for oldp, newp in zip(projects_old, projects_new):
@@ -105,17 +108,17 @@ def gen_changelog(
         ]
         commits.sort(key=cmp_to_key(_commit_cmp), reverse=True)
         for commit, gitcommit in commits:
-            type = commit.type if commit.is_conventional else "unknown"
-            type = (
-                "breaking" if commit.breaking is not None and commit.breaking else type
+            ctype = commit.type if commit.is_conventional else "unknown"
+            ctype = (
+                "breaking" if commit.breaking is not None and commit.breaking else ctype
             )
-            assert type is not None
-            if type not in commits_types:
-                commits_types[type] = []
-            commits_types[type].append((commit, gitcommit))
-        for type in commits_types.keys():
-            out += f"#### {type}\n"
-            for commit, gitcommit in commits_types[type]:
+            assert ctype is not None
+            if ctype not in commits_types:
+                commits_types[ctype] = []
+            commits_types[ctype].append((commit, gitcommit))
+        for key, value in commits_types.items():
+            out += f"#### {key}\n"
+            for commit, gitcommit in value:
                 link = ""
                 if repo_owner is not None and repo_name is not None:
                     link = f" ([`{gitcommit.hexsha}`](https://github.com/{repo_owner}/{repo_name}/commit/{gitcommit.hexsha}))"
