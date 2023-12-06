@@ -2,6 +2,23 @@
 
 
 
+## v0.5.1 (2023-12-06)
+
+### Fix
+
+* fix: commit diff bug ([`8beb13d`](https://github.com/42nerds/hitchhiker/commit/8beb13d0b76056747f9b33196dce42ffbd5f707f))
+
+### Test
+
+* test: add test case for release ([`39737c0`](https://github.com/42nerds/hitchhiker/commit/39737c03e1f8031bd2e8923bf6b8242a3cc7a09b))
+
+### Unknown
+
+* Merge pull request #27 from 42nerds/develop
+
+hitchhiker 0.5.1 ([`0446151`](https://github.com/42nerds/hitchhiker/commit/04461514b36ee361fdff57f70618e7a5ebe55267))
+
+
 ## v0.5.0 (2023-11-20)
 
 ### Feature
