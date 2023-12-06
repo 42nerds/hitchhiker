@@ -20,12 +20,11 @@ def odoo(ctx: click.Context, config: str) -> None:
 
 @odoo.command()
 @click.pass_context
-def backup(ctx: click.Context) -> None:
+def backup(_ctx: click.Context) -> None:
     """Backup Odoo"""
-    pass
 
 
 @odoo.command()
 @click.pass_context
-def staging(ctx: click.Context) -> None:
+def staging(_ctx: click.Context) -> None:
     """Backup Odoo"""

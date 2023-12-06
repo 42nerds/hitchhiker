@@ -4,10 +4,10 @@ from typing import Any, Dict, Optional, Union
 
 import git
 
-import hitchhiker.cli.release.tagfix as tagfix
-import hitchhiker.release.enums as enums
-import hitchhiker.release.version.semver as semver
+from hitchhiker.cli.release import tagfix
+from hitchhiker.release import enums
 from hitchhiker.release.commitparser.conventional import ConventionalCommitParser
+from hitchhiker.release.version import semver
 
 # FIXME: this file needs a lot of cleanup
 

@@ -1,8 +1,10 @@
 import os
-import git
+
 import click
+import git
+
 import hitchhiker.cli.release.config as conf
-import hitchhiker.cli.release.version as version
+from hitchhiker.cli.release import version
 
 
 @click.group()
@@ -25,8 +27,8 @@ def release(ctx: click.Context, workdir: str) -> None:
     ctx.ensure_object(dict)
     try:
         repo = git.Repo(workdir)  # type: ignore[attr-defined]
-    except (git.InvalidGitRepositoryError, git.NoSuchPathError):
-        raise click.ClickException(message="Could not find git repository")
+    except (git.InvalidGitRepositoryError, git.NoSuchPathError) as e:
+        raise click.ClickException(message="Could not find git repository") from e
     assert repo.working_tree_dir is not None
     cfgpath = os.path.join(repo.working_tree_dir, "pyproject.toml")
     if os.path.isfile(cfgpath):

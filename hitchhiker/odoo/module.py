@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-import hitchhiker.release.version.semver as semver
+from hitchhiker.release.version import semver
 
 
 class Module:
@@ -34,7 +34,7 @@ class Module:
         """
         self._moduledir = os.path.dirname(manifest_path)
         self._int_name = Path(manifest_path).resolve().parent.name
-        with open(manifest_path) as f:
+        with open(manifest_path, encoding="utf-8") as f:
             d = ast.literal_eval(f.read())
             if isinstance(d, dict):
                 self._valid = True  # TODO: check types of objects in dict
