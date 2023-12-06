@@ -1,8 +1,9 @@
+import ast
 import os
 import re
-from typing import Dict, Any, Optional
 from pathlib import Path
-import ast
+from typing import Any, Dict, Optional
+
 import hitchhiker.release.version.semver as semver
 
 
@@ -141,7 +142,7 @@ class Module:
         if not self.is_valid() or "version" not in self._manifest_dict:
             return None
         match = re.match(
-            r"^(?:\d+\.\d+\.)?(\d+\.\d+\.\d+)$", self._manifest_dict["version"]
+            r"^v?(?:\d+\.\d+\.)?v?(\d+\.\d+\.\d+)$", self._manifest_dict["version"]
         )
         if match is None:
             return None
