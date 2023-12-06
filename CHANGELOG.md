@@ -2,7 +2,44 @@
 
 
 
+## v0.6.0 (2023-12-06)
+
+### Ci
+
+* ci: linting ([`f50fc59`](https://github.com/42nerds/hitchhiker/commit/f50fc5942547c59e65de442137eb3e4f01d65e42))
+
+### Style
+
+* style: please flake8 ([`8bd74e3`](https://github.com/42nerds/hitchhiker/commit/8bd74e3305ebf54bb5f9276733c32cf724013704))
+
+* style: please pylint ([`5fe1767`](https://github.com/42nerds/hitchhiker/commit/5fe17674949e8743a2645c87c94cda4b8349a834))
+
+### Unknown
+
+* Merge pull request #29 from 42nerds/develop
+
+hitchhiker 0.6.0 ([`59c08f8`](https://github.com/42nerds/hitchhiker/commit/59c08f8d2ead4a6a8390f70d3f0f9551dc78829d))
+
+* Merge pull request #25 from Timizzda/feature/8221-shell-completion
+
+feat: :sparkles: created shell-completion ([`3d9cba2`](https://github.com/42nerds/hitchhiker/commit/3d9cba24a5dedd156b4c41dc52bb3e29204601b3))
+
+* Merge pull request #28 from 42nerds/feature/7942-lint-ci
+
+ci: linting ([`69e07a0`](https://github.com/42nerds/hitchhiker/commit/69e07a00857fe53bdd619f84191af26877917b71))
+
+* Merge pull request #26 from TheRealRoyalTS/feature/8052-better-parsing
+
+feat: better parsing for modules ([`4177d4e`](https://github.com/42nerds/hitchhiker/commit/4177d4e78e2b0b5dc8d74cdd45066db32d64ddd0))
+
+
 ## v0.5.1 (2023-12-06)
+
+### Feature
+
+* feat: better parsing for modules ([`e4430f1`](https://github.com/42nerds/hitchhiker/commit/e4430f1b1182432fcea8ca5db95ebb5061a1c772))
+
+* feat: :sparkles: created shell-completion ([`194ede8`](https://github.com/42nerds/hitchhiker/commit/194ede89c3f1470deacf3804270e3b66f76e15ae))
 
 ### Fix
 
