@@ -22,4 +22,6 @@ try:
 
     modules.add_command(new_mod.new_cmd)
 except ImportError as e:
-    click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+    pass
+    # FIXME: do these errors differently
+    # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
