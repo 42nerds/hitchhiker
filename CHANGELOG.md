@@ -2,6 +2,15 @@
 
 
 
+## v0.6.1 (2023-12-19)
+
+### Fix
+
+* fix: typed marker in package data ([`425a624`](https://github.com/42nerds/hitchhiker/commit/425a62423d4b49045ebacbeea9f6a90d7b7aed94))
+
+* fix: typed marker in package data ([`8d88668`](https://github.com/42nerds/hitchhiker/commit/8d8866888c64a26679ce5b9c54273dbe5d961ff2))
+
+
 ## v0.6.0 (2023-12-06)
 
 ### Ci
