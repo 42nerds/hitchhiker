@@ -19,13 +19,14 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "vivaxy.vscode-conventional-commits",
-        "ms-vscode-remote.remote-containers",
-        "ms-python.python",
-        "ms-vscode.makefile-tools",
-        "DotJoshJohnson.xml",
-        "ritwickdey.liveserver"
-      ]
+		"vivaxy.vscode-conventional-commits",
+		"ms-vscode-remote.remote-containers",
+		"ms-python.python",
+		"ms-vscode.makefile-tools",
+		"DotJoshJohnson.xml",
+		"ritwickdey.liveserver",
+		"Gruntfuggly.todo-tree"
+	]
     }
   },
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
