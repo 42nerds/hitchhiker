@@ -2,6 +2,29 @@
 
 
 
+## v0.6.2 (2024-01-10)
+
+### Chore
+
+* chore: add todo tree extension to devcontainer ([`4205f68`](https://github.com/42nerds/hitchhiker/commit/4205f6868a139d16ea484e81817a3b9852e0eb65))
+
+* chore: added bash completion to devcontainer ([`aa6ba93`](https://github.com/42nerds/hitchhiker/commit/aa6ba9380c654e6e77e6da3c8f60fc593b3340b2))
+
+### Fix
+
+* fix: upgrade dependencies ([`df85c2e`](https://github.com/42nerds/hitchhiker/commit/df85c2ec40818f2588373d4e4a4f706115347123))
+
+### Unknown
+
+* Merge pull request #31 from 42nerds/develop
+
+hitchhiker 0.6.2 ([`12815a2`](https://github.com/42nerds/hitchhiker/commit/12815a2ecc5c68d87bc1b880fa1c976ebe7ce6ee))
+
+* Merge pull request #30 from 42nerds/feature/8361-upgrade-deps
+
+fix: upgrade dependencies ([`bcc4614`](https://github.com/42nerds/hitchhiker/commit/bcc4614d6d8a032fefc1d27e5d86aa7245268771))
+
+
 ## v0.6.1 (2023-12-19)
 
 ### Fix
