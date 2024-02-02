@@ -1,7 +1,6 @@
 import click
 
-# FIXME: this causes issues when generating docs as click_odoo depends on odoo which we do not have in the devcontainer
-# import click_odoo  # type: ignore[import]
+from hitchhiker.cli.odoo.dependency_graph import dependency_graph
 
 
 @click.group()
@@ -28,3 +27,6 @@ def backup(_ctx: click.Context) -> None:
 @click.pass_context
 def staging(_ctx: click.Context) -> None:
     """Backup Odoo"""
+
+
+odoo.add_command(dependency_graph)
