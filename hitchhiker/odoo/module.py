@@ -155,12 +155,12 @@ class Module:
         Returns:
             list[str]: List of modules this module depends on
         """
-        if not self.is_valid() or "dependencies" not in self._manifest_dict:
+        if not self.is_valid() or "depends" not in self._manifest_dict:
             return []
         assert isinstance(
-            self._manifest_dict["dependencies"], list
+            self._manifest_dict["depends"], list
         ), "invalid Odoo module manifest"
-        return self._manifest_dict["dependencies"]
+        return self._manifest_dict["depends"]
 
 
 def discover_modules(files: list[str]) -> list[Module]:
