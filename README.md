@@ -4,10 +4,11 @@
 
 ## Installation
 
-To install hitchhiker simply run
+Hitchhiker has many different usecases and there are various different dependency groups.
 
+For developing Odoo modules:
 ```
-pip install "hitchhiker[release,copier] @ git+https://github.com/42nerds/hitchhiker.git"
+pip install "hitchhiker[copier,odoo] @ git+https://github.com/42nerds/hitchhiker.git"
 ```
 
 To update an existing hitchhiker installation run
