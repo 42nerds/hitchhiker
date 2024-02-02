@@ -2,6 +2,19 @@
 
 
 
+## v0.7.0 (2024-02-02)
+
+### Feature
+
+* feat: Odoo module dependency network graph ([`5559bfb`](https://github.com/42nerds/hitchhiker/commit/5559bfb8b8a6ccb7deeb6b71b15602cc7588e2d0))
+
+### Unknown
+
+* Merge pull request #33 from 42nerds/develop
+
+hitchhiker 0.7.0 ([`5ec3e21`](https://github.com/42nerds/hitchhiker/commit/5ec3e21a6018a5c15b2d78c072c239b362e759e5))
+
+
 ## v0.6.2 (2024-01-10)
 
 ### Chore
