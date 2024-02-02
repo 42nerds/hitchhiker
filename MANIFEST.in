@@ -1,0 +1,2 @@
+recursive-include *.j2
+graft hitchhiker/data

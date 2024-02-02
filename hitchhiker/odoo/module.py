@@ -148,6 +148,20 @@ class Module:
             return None
         return semver.Version().parse(match.group(1))
 
+    def get_dependencies(self) -> list[str]:
+        """
+        Gets the depedencies of the Odoo mdoules
+
+        Returns:
+            list[str]: List of modules this module depends on
+        """
+        if not self.is_valid() or "dependencies" not in self._manifest_dict:
+            return []
+        assert isinstance(
+            self._manifest_dict["dependencies"], list
+        ), "invalid Odoo module manifest"
+        return self._manifest_dict["dependencies"]
+
 
 def discover_modules(files: list[str]) -> list[Module]:
     """
@@ -169,6 +183,7 @@ def discover_modules(files: list[str]) -> list[Module]:
     ```
 
     """
+
     modules = []
     for fname in files:
         if "vendor/" in fname:

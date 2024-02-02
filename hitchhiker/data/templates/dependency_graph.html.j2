@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #cy {
+            height: 100vh;
+            display: block;
+            background-color: #eee;
+        }
+    </style>
+    <script>
+        const data = JSON.parse(`
+            {{ json_data|tojson }}
+        `);
+    </script>
+</head>
+
+<body>
+    <label for="searchBox">Search Nodes: </label>
+    <input type="text" id="searchBox" placeholder="web or &quot;web&quot;"></input>
+    <div id="cy"></div>
+    <script>
+        const cy_conf = {
+            container: document.getElementById('cy'),
+
+            elements: [],
+
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'label': 'data(label)',
+                        'width': 'mapData(weight, 0, {{ max_loc }}, 50, 200)',
+                        'height': 'mapData(weight, 0, {{ max_loc }}, 50, 200)',
+                    }
+                },
+                {
+                    selector: 'node[color]',
+                    style: {
+                        'background-color': 'data(color)',
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'curve-style': "bezier",
+                        'width': 4,
+                        'line-color': '#ccc',
+                        'target-arrow-color': '#ccc',
+                        'target-arrow-shape': 'triangle'
+                    }
+                }
+            ],
+
+            layout: {
+                name: 'breadthfirst',
+            }
+        };
+        let cy = cytoscape({ ...cy_conf, ...data });
+
+        cy.on("tapstart tapend", "node", (evt) => {
+            evt.target.outgoers().animate({
+                style: { lineColor: (evt.type === "tapstart") ? "red" : "#ccc" }
+            })
+        });
+
+        let last_searched_nodes = undefined;
+
+        document.getElementById("searchBox").addEventListener("input", () => {
+            if (last_searched_nodes !== undefined) {
+                last_searched_nodes.data("color", "red"); // removeData does not work without this for whatever reason
+                last_searched_nodes.removeData("color");
+                last_searched_nodes = undefined;
+            }
+            let search = document.getElementById("searchBox").value;
+            const quoted = (search[0] == '"') && (search.slice(-1) == '"');
+            if (search !== "") {
+                const nodes = cy.nodes(`node[id ${quoted ? "" : "^"}= ${quoted ? search : ('"' + search + '"')}]`);
+                nodes.data("color", "green");
+                last_searched_nodes = nodes;
+            }
+        });
+    </script>
+</body>
+
+</html>
