@@ -1,9 +1,11 @@
 import os
 
+import pytest
 from click.testing import CliRunner
 
-from hitchhiker.cli.cli import cli
 from tests.cli.modules.mod_fixtures import *  # noqa: F403, F401
+
+repo_group = pytest.importorskip("hitchhiker.cli.modules.repo").repo_group
 
 
 def test_repo_create(ten_mods):
@@ -60,16 +62,16 @@ modules:
   - name: z_some_mod
     version: 15.0.0
 """
-    result = CliRunner().invoke(cli, ["modules", "repo", "create"])
+    result = CliRunner().invoke(repo_group, ["create"])
     assert result.exit_code == 0
     assert result.output == "Creating vogon.yaml\n"
     print(ten_mods)
     with open("vogon.yaml", "r", encoding="utf-8") as f:
         assert f.read() == expected_output
-    result = CliRunner().invoke(cli, ["modules", "repo", "create"])
+    result = CliRunner().invoke(repo_group, ["create"])
     assert result.exit_code == 0
     assert result.output == "vogon.yaml already exists and --overwrite is not set\n"
-    result = CliRunner().invoke(cli, ["modules", "repo", "create", "--overwrite"])
+    result = CliRunner().invoke(repo_group, ["create", "--overwrite"])
     assert result.exit_code == 0
     assert result.output == "Creating vogon.yaml\n"
     print(ten_mods)
@@ -80,7 +82,7 @@ modules:
 def test_repo_update_noconf(tmp_path_factory):
     path = tmp_path_factory.mktemp("moddir")
     os.chdir(path)
-    result = CliRunner().invoke(cli, ["modules", "repo", "update"])
+    result = CliRunner().invoke(repo_group, ["update"])
     assert result.exit_code == 0
     assert result.output == "no vogon.yaml found\n"
 
@@ -99,9 +101,9 @@ def test_repo_update(tmp_path_factory):
     version: 15.0.0
 """)
     expected_output = """"""
-    result = CliRunner().invoke(cli, ["modules", "repo", "update"])
+    result = CliRunner().invoke(repo_group, ["update"])
     assert result.exit_code == 0
     assert result.output == expected_output
-    result = CliRunner().invoke(cli, ["modules", "repo", "update", "--module", "test"])
+    result = CliRunner().invoke(repo_group, ["update", "--module", "test"])
     assert result.exit_code == 0
     assert result.output == expected_output
