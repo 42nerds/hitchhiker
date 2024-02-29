@@ -167,6 +167,7 @@ def create_cmd(_ctx: click.Context, glob: str, overwrite: bool) -> None:
 repo_group.add_command(create_cmd)
 
 
+# prospector: disable=MC0001
 # pylint: disable=R0901,R0914
 @click.command(name="update", short_help="Update modules")
 @click.option(
