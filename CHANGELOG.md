@@ -2,6 +2,25 @@
 
 
 
+## v0.8.0 (2024-03-01)
+
+### Feature
+
+* feat: odoo backup command ([`778a158`](https://github.com/42nerds/hitchhiker/commit/778a1585f274ab3bfe84f02fb26bcfce6fc0b51f))
+
+* feat: odoo backup command ([`c498a90`](https://github.com/42nerds/hitchhiker/commit/c498a90d3573e6d968c3846e787e5d8d1384cf15))
+
+### Unknown
+
+* Merge pull request #36 from 42nerds/develop
+
+hitchhiker 0.8.0 ([`81ab671`](https://github.com/42nerds/hitchhiker/commit/81ab671c95577efda727d8d4267bf18d6b9fceca))
+
+* Merge pull request #35 from 42nerds/feature/8969-click-odoo-backup
+
+Feature/8969 click odoo backup ([`f655a9a`](https://github.com/42nerds/hitchhiker/commit/f655a9aae235498d43b34f746ce66dc7a7476ad5))
+
+
 ## v0.7.0 (2024-02-02)
 
 ### Feature
