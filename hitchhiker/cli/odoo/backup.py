@@ -6,6 +6,7 @@ from typing import Any
 
 import click
 import click_odoo  # type: ignore[import, import-untyped]
+from click.decorators import _param_memo
 from click_odoo import odoo
 
 from hitchhiker.tools import backup
@@ -42,6 +43,65 @@ def __dump_manifest(b: backup.GenericBackup, dbname: str) -> None:
         f.flush()
         os.fsync(f.fileno())
         b.add_file(f.name, "manifest.json")
+
+
+# monkeypatch click_odoo to accept more arguments
+def __call_deco(fn: Any) -> Any:
+    def wrap(self: Any, f: Any) -> Any:
+        ret = fn(self, f)
+        _param_memo(
+            f,
+            click.Option(("--db_password",), help="database password", required=True),
+        )
+        _param_memo(
+            f,
+            click.Option(("--db_user",), help="database user", required=True),
+        )
+        _param_memo(
+            f,
+            click.Option(("--db_port",), help="database port", required=True, type=int),
+        )
+        _param_memo(
+            f,
+            click.Option(("--db_host",), help="database host", required=True),
+        )
+        return ret
+
+    return wrap
+
+
+def __pop_params_deco(fn: Any) -> Any:
+    def wrap(self: Any, ctx: Any) -> Any:
+        fn(self, ctx)
+        ctx.params.pop("db_host", None)
+        ctx.params.pop("db_port", None)
+        ctx.params.pop("db_user", None)
+        ctx.params.pop("db_password", None)
+
+    return wrap
+
+
+def __get_odoo_args_deco(fn: Any) -> Any:
+    def wrap(self: Any, ctx: Any) -> Any:
+        ret = fn(self, ctx)
+        ret.extend(["--db_host", ctx.params.get("db_host")])
+        ret.extend(["--db_port", str(ctx.params.get("db_port"))])
+        ret.extend(["--db_user", ctx.params.get("db_user")])
+        ret.extend(["--db_password", ctx.params.get("db_password")])
+        return ret
+
+    return wrap
+
+
+# pylint: disable=protected-access
+click_odoo.env_options.__call__ = __call_deco(click_odoo.env_options.__call__)
+# pylint: disable=protected-access
+click_odoo.env_options._pop_params = __pop_params_deco(
+    click_odoo.env_options._pop_params
+)
+click_odoo.env_options.get_odoo_args = __get_odoo_args_deco(
+    click_odoo.env_options.get_odoo_args
+)
 
 
 @click.command("backup")
