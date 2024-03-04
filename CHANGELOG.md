@@ -2,6 +2,33 @@
 
 
 
+## v0.9.0 (2024-03-04)
+
+### Feature
+
+* feat: python 3.7 compat ([`06d1241`](https://github.com/42nerds/hitchhiker/commit/06d124175c0364445c9a6cd2b62712247e178eb0))
+
+* feat: python 3.7 compat ([`8a8f3f2`](https://github.com/42nerds/hitchhiker/commit/8a8f3f2d77ed02f34452d4352f6bf20eab14babb))
+
+* feat: python 3.7 compat ([`c26d020`](https://github.com/42nerds/hitchhiker/commit/c26d020717b7d4b7adbcaec0ef3a6caba1c9157c))
+
+* feat: python 3.7 compat ([`7d8ac93`](https://github.com/42nerds/hitchhiker/commit/7d8ac933a6a61440c80dccb8415d83ab981f60ec))
+
+* feat: python 3.7 compat ([`6af3788`](https://github.com/42nerds/hitchhiker/commit/6af378891b56063bb918f3fe27fde97ba09e4f08))
+
+* feat: python 3.7 compat ([`125cc2d`](https://github.com/42nerds/hitchhiker/commit/125cc2dab826249e26f51a0af0e229d608f485d1))
+
+### Unknown
+
+* Merge pull request #38 from 42nerds/develop
+
+hitchhiker 0.9.0 ([`fe5d59e`](https://github.com/42nerds/hitchhiker/commit/fe5d59e4c942a0c3fbb5b19e88aad98c75ce40fe))
+
+* Merge pull request #37 from 42nerds/feature/8972-hitchhiker-python-37
+
+Feature/8972 hitchhiker python 3.7 ([`39e1c5a`](https://github.com/42nerds/hitchhiker/commit/39e1c5a2cb4f898b3f638969ff7ccd6d23168560))
+
+
 ## v0.8.0 (2024-03-01)
 
 ### Feature
