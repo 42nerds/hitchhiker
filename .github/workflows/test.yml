@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -69,12 +69,13 @@ jobs:
       - name: Run
         run: |
           hitchhiker --help
+          hitchhiker --version
 
   type-check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -91,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}

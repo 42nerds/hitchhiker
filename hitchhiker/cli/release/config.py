@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import configparser
 import glob as pyglob
 import os
