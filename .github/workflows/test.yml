@@ -70,6 +70,7 @@ jobs:
         run: |
           hitchhiker --help
           hitchhiker --version
+          hitchhiker modules list
 
   type-check:
     runs-on: ubuntu-latest
