@@ -1,6 +1,6 @@
-from setuptools import setup
+from setuptools import find_namespace_packages, setup
 
-_hitchhiker_version = "0.0.0"
+_hitchhiker_version = "0.7.0"
 
 # this is for backwards compatibility
 # NOTE: if you edit dependencies here edit them in pyproject.toml too!
@@ -36,10 +36,10 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "hitchhiker = hitchhiker.cli:cli.cli",
+            "hitchhiker = hitchhiker.cli.cli:cli",
         ]
     },
-    packages=["hitchhiker"],
+    packages=find_namespace_packages(where=".", include=["hitchhiker*"]),
     package_data={
         "hitchhiker": ["py.typed"],
     },
