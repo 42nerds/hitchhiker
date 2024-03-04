@@ -2,6 +2,31 @@
 
 
 
+## v0.9.1 (2024-03-04)
+
+### Fix
+
+* fix: added a comment on why we use setup.py ([`b885177`](https://github.com/42nerds/hitchhiker/commit/b88517731ede26266a4715d336ef523dd6ec8fa1))
+
+* fix: now using just setup.py ([`b1af78f`](https://github.com/42nerds/hitchhiker/commit/b1af78f4b3e507b4c8520fdd84947c205b987255))
+
+* fix: added setup.py for backwards compat with old pip ([`f8915d5`](https://github.com/42nerds/hitchhiker/commit/f8915d5e23ff2a6b5a09496e61a9e04de17c7886))
+
+* fix: added setup.py for backwards compat with old pip ([`4675b37`](https://github.com/42nerds/hitchhiker/commit/4675b372e84e496c108b957403576151856fc3f0))
+
+* fix: added setup.py for backwards compat with old pip ([`c7d84c0`](https://github.com/42nerds/hitchhiker/commit/c7d84c0aa5b7fd4e2973fb5216420c3ae16d0a16))
+
+* fix: remove setup.py ([`37516a2`](https://github.com/42nerds/hitchhiker/commit/37516a27951f60912da9fa5242bc5bc9cca4f79c))
+
+### Unknown
+
+* Merge pull request #39 from 42nerds/develop
+
+hitchhiker 0.9.1 ([`6499155`](https://github.com/42nerds/hitchhiker/commit/6499155b0d6f530b1f350cc53a682452b18e22a9))
+
+* Merge branch &#39;main&#39; into develop ([`0cf9e83`](https://github.com/42nerds/hitchhiker/commit/0cf9e837af64749253a705cbc9ae839177ac175b))
+
+
 ## v0.9.0 (2024-03-04)
 
 ### Feature
