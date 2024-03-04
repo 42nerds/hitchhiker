@@ -2,6 +2,7 @@
 requires = ["setuptools>=40.9.0"]
 build-backend = "setuptools.build_meta"
 
+# NOTE: if you edit dependencies here edit them in setup.py too!
 [project]
 name = "hitchhiker"
 version = "0.7.0"
