@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0"]
+requires = ["setuptools>=40.9.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -40,6 +40,11 @@ docs = [
 copier = [
     "copier>=8.0.0,<10", # between copier 8 and 9 there is a breaking change that does not affect us. (Changes the return code for unsafe template error)
 ]
+
+[tool.setuptools]
+include-package-data = true
+package-data = {"hitchhiker" = ["py.typed"]}
+packages = ["hitchhiker"]
 
 [tool.pytest.ini_options]
 python_files = ["tests/*.py", "tests/**/*.py"]
