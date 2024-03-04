@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import glob as pyglob
 from functools import cmp_to_key
 from pathlib import Path
