@@ -53,6 +53,7 @@ python_files = ["tests/*.py", "tests/**/*.py"]
 disable = "C0114, C0301"
 
 [tool.semantic_release]
+version_variables = ["setup.py:_hitchhiker_version"]
 version_toml = ["pyproject.toml:project.version"]
 major_on_zero = false
 
