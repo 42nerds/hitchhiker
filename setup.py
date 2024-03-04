@@ -2,8 +2,6 @@ from setuptools import find_namespace_packages, setup
 
 _hitchhiker_version = "0.7.0"
 
-# this is for backwards compatibility
-# NOTE: if you edit dependencies here edit them in pyproject.toml too!
 setup(
     name="hitchhiker",
     version=_hitchhiker_version,
@@ -31,7 +29,7 @@ setup(
             "pdoc",
         ],
         "copier": [
-            "copier>=8.0.0,<10",
+            "copier>=8.0.0,<10",  # between copier 8 and 9 there is a breaking change that does not affect us. (Changes the return code for unsafe template error)
         ],
     },
     entry_points={

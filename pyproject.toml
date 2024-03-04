@@ -2,51 +2,6 @@
 requires = ["setuptools>=40.9.0"]
 build-backend = "setuptools.build_meta"
 
-# NOTE: if you edit dependencies here edit them in setup.py too!
-[project]
-name = "hitchhiker"
-version = "0.7.0"
-description = ""
-requires-python = ">=3.7"
-dependencies = [
-    "click>=8,<9",
-    "tomlkit>=0.12.3,<1",
-    "dotty-dict>=1.3.1,<2",
-    "typing-extensions",
-    "requests",
-    "jinja2",
-]
-
-[project.scripts]
-hitchhiker = "hitchhiker.cli:cli.cli"
-
-[project.optional-dependencies]
-release = [
-    "gitpython>=3.1.40,<4",
-    "PyGithub>=2.1.1,<3",
-]
-odoo = [
-    "click-odoo>=1.6,<2",
-]
-test = [
-    "pytest>=7,<8",
-    "mypy",
-    "types-requests",
-    "pylint",
-    "flake8",
-]
-docs = [
-    "pdoc",
-]
-copier = [
-    "copier>=8.0.0,<10", # between copier 8 and 9 there is a breaking change that does not affect us. (Changes the return code for unsafe template error)
-]
-
-[tool.setuptools]
-include-package-data = true
-package-data = {"hitchhiker" = ["py.typed"]}
-packages = ["hitchhiker"]
-
 [tool.pytest.ini_options]
 python_files = ["tests/*.py", "tests/**/*.py"]
 
@@ -55,7 +10,6 @@ disable = "C0114, C0301"
 
 [tool.semantic_release]
 version_variables = ["setup.py:_hitchhiker_version"]
-version_toml = ["pyproject.toml:project.version"]
 major_on_zero = false
 
 [tool.semantic_release.remote]
