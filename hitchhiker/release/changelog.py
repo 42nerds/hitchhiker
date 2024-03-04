@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import cmp_to_key
 from typing import Any, Dict, Optional
 
