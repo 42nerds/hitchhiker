@@ -6,13 +6,18 @@ from click.testing import CliRunner
 from tests.cli.modules.mod_fixtures import *  # noqa: F403, F401
 
 repo_group = pytest.importorskip("hitchhiker.cli.modules.repo").repo_group
+# from hitchhiker.cli.cli import cli
 
 
 def test_repo_create(ten_mods):
     os.chdir(ten_mods)
     os.mkdir(ten_mods / "subdir")
     os.mkdir(ten_mods / "subdir" / "some_goofy_module")
-    with open(ten_mods / "subdir" / "some_goofy_module" / "__manifest__.py", "w", encoding="utf-8") as f:
+    with open(
+        ten_mods / "subdir" / "some_goofy_module" / "__manifest__.py",
+        "w",
+        encoding="utf-8",
+    ) as f:
         f.write(
             """{
     "version": "1.23.123"
@@ -28,6 +33,7 @@ def test_repo_create(ten_mods):
 #    git_path: . # by default git path will be the same as the module name
 #  - name: test_abcd
 #    path: ./test_modules
+#    use_latest: true # if true will always clone the latest version. False by default
 #    version: 0.3.0
 #    git: 42nerds/module_test
 #  - name: another_module
@@ -87,19 +93,20 @@ def test_repo_update_noconf(tmp_path_factory):
     assert result.output == "no vogon.yaml found\n"
 
 
-# TODO: this test is not nearly finished yet. But testing this command throughly is quite something
-def test_repo_update(tmp_path_factory):
+def test_repo_update_nogit(tmp_path_factory):
     path = tmp_path_factory.mktemp("moddir")
     os.chdir(path)
     with open("vogon.yaml", "w", encoding="utf-8") as f:
-        f.write("""modules:
+        f.write(
+            """modules:
   - name: some_test_module
     path: ./subfolder
     version: 0.0.5
   - name: test
   - name: x_some_mod
     version: 15.0.0
-""")
+"""
+        )
     expected_output = """"""
     result = CliRunner().invoke(repo_group, ["update"])
     assert result.exit_code == 0
@@ -107,3 +114,35 @@ def test_repo_update(tmp_path_factory):
     result = CliRunner().invoke(repo_group, ["update", "--module", "test"])
     assert result.exit_code == 0
     assert result.output == expected_output
+    result = CliRunner().invoke(repo_group, ["update", "--module", "doesnotexist"])
+    assert result.exit_code == 0
+    assert result.output == "module doesnotexist not found\n"
+
+
+# TODO: this test is not nearly finished yet. But testing this command throughly is quite something (mock.. mock.. mock)
+def test_repo_update_git(tmp_path_factory):
+    path = tmp_path_factory.mktemp("moddir")
+    os.chdir(path)
+    with open("vogon.yaml", "w", encoding="utf-8") as f:
+        f.write(
+            """odoo_version: 15
+modules:
+  - name: some_test_module
+    path: ./subfolder
+    version: 0.0.5
+  - name: test
+  - name: x_some_mod
+    git: someorg/module_x
+    version: 15.0.0
+  - name: x_another_mod
+    git: someorg/module_inroot
+    git_path: .
+    version: 15.0.0
+"""
+        )
+    # expected_output = """"""
+    # result = CliRunner(env={"GITHUB_TOKEN": "somegithubtoken"}).invoke(
+    #    cli, ["modules", "repo", "update"]
+    # )
+    # assert result.exit_code == 0
+    # assert result.output == expected_output
