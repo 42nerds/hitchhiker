@@ -24,6 +24,7 @@ setup(
             "pytest>=7,<8",
             "mypy",
             "types-requests",
+            "types-psycopg2",
             "pylint",
             "flake8",
         ],

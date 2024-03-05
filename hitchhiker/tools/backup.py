@@ -94,8 +94,7 @@ _backup_formats = {
 @contextmanager
 def backup(path: str, fmt: str) -> Iterator[GenericBackup]:
     if fmt not in _backup_formats:
-        # pylint: disable=broad-exception-raised
-        raise Exception("Invalid backup format")
+        raise RuntimeError("Invalid backup format")
     b = _backup_formats[fmt](path)
     try:
         yield b
