@@ -2,6 +2,23 @@
 
 
 
+## v0.10.0 (2024-03-05)
+
+### Feature
+
+* feat: odoo db copy, restore and neutralize ([`6142830`](https://github.com/42nerds/hitchhiker/commit/61428301bf82a19a6668034f2965e28c04260d52))
+
+### Unknown
+
+* Merge pull request #41 from 42nerds/develop
+
+hitchhiker 0.10.0 ([`febabf9`](https://github.com/42nerds/hitchhiker/commit/febabf98c8c3a9dd77f17a14f6b54b215c3659c3))
+
+* Merge pull request #40 from 42nerds/feature/8971-copy-odoo-db
+
+feat: odoo db copy, restore and neutralize ([`d532ac4`](https://github.com/42nerds/hitchhiker/commit/d532ac4eb19098332625da996dfa82469d0a1ca3))
+
+
 ## v0.9.1 (2024-03-04)
 
 ### Fix
