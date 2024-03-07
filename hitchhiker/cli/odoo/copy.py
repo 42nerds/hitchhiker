@@ -11,7 +11,7 @@ from . import click_odoo_ext
 
 
 # https://github.com/odoo/odoo/blob/96a06df867fcef1fd24a1798bd5d6decc423933b/odoo/service/db.py#L153C1-L178C16
-def _copy_db(srcdb: str, destdb: str, neutralize: bool, copy: bool) -> None:
+def _copy_db(srcdb: str, destdb: str) -> None:
     click.echo(f"copying database {srcdb} to {destdb}")
     odoo.sql_db.close_db(srcdb)
     db = odoo.sql_db.db_connect("postgres")
@@ -27,16 +27,6 @@ def _copy_db(srcdb: str, destdb: str, neutralize: bool, copy: bool) -> None:
                 sql.Identifier(destdb), sql.Identifier(srcdb)
             )
         )
-    registry = odoo.modules.registry.Registry.new(destdb)
-    with registry.cursor() as cr:
-        if copy:
-            click.echo(f"reinitializing database {destdb}")
-            # force generation of a new dbuuid
-            env = odoo.api.Environment(cr, odoo.SUPERUSER_ID, {})
-            env["ir.config_parameter"].init(force=True)
-        if neutralize:
-            click.echo(f"neutralizing database {destdb}")
-            odoo.modules.neutralize.neutralize_database(cr)
 
 
 def _copy_filestore(srcdb: str, destdb: str) -> None:
@@ -57,18 +47,6 @@ def _copy_filestore(srcdb: str, destdb: str) -> None:
 @click.option("--source-db", required=True, help="source database name")
 @click.option("--dest-db", required=True, help="destination database name")
 @click.option(
-    "--copy/--move",
-    is_flag=True,
-    default=True,
-    help="Is this a database copy or move? When i doubt always use copy",
-)
-@click.option(
-    "--neutralize",
-    is_flag=True,
-    default=False,
-    help="neutralize destination after copying?",
-)
-@click.option(
     "--force",
     is_flag=True,
     default=False,
@@ -79,12 +57,9 @@ def copy_cmd(
     env: Any,  # pylint: disable=unused-argument
     source_db: str,
     dest_db: str,
-    copy: bool,
-    neutralize: bool,
     force: bool,
 ) -> None:
-    """Copy Odoo DB & filestore"""
-    # TODO: check if source db exists
+    """Copy Odoo DB & filestore. Does not do any operations on the database. Use reinit & neutralize commands for that"""
     if not odoo.service.db.exp_db_exist(source_db):
         raise RuntimeError("source database does not exist")
     if odoo.service.db.exp_db_exist(dest_db):
@@ -92,5 +67,5 @@ def copy_cmd(
             raise RuntimeError("destination database already exists")
         if not odoo.service.db.exp_drop(dest_db):
             raise RuntimeError("error dropping old destination database")
-    _copy_db(source_db, dest_db, neutralize, copy)
+    _copy_db(source_db, dest_db)
     _copy_filestore(source_db, dest_db)
