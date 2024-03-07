@@ -7,8 +7,8 @@ test:
 .PHONY: coverage
 coverage:
 	@coverage run --source . -m pytest -vv --tb=long
-	@coverage html
-	@coverage report -m
+	@coverage html --omit="tests/*"
+	@coverage report -m --omit="tests/*"
 	@echo "coverage OK"
 
 .PHONY: type-checking
