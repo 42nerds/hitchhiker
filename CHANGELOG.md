@@ -2,6 +2,21 @@
 
 
 
+## v0.10.1 (2024-03-07)
+
+### Fix
+
+* fix: improved the odoo copy command ([`eec67a1`](https://github.com/42nerds/hitchhiker/commit/eec67a17f0656155593399fa641a33dd6bbfd391))
+
+* fix: ignore tests in coverage report ([`8264f66`](https://github.com/42nerds/hitchhiker/commit/8264f6681b2d012dcaa5612687da4b16c4fcfea3))
+
+### Unknown
+
+* Merge pull request #42 from 42nerds/develop
+
+hitchhiker 0.10.1 ([`ddd189e`](https://github.com/42nerds/hitchhiker/commit/ddd189eb297c65189756815f6c1de3071898c2d9))
+
+
 ## v0.10.0 (2024-03-05)
 
 ### Feature
