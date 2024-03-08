@@ -2,6 +2,17 @@
 
 
 
+## v0.10.2 (2024-03-08)
+
+### Fix
+
+* fix: added a warning when filestore not found ([`369a820`](https://github.com/42nerds/hitchhiker/commit/369a820b2086fdacd0e6c40942b33f6ba63a18f3))
+
+### Unknown
+
+* Merge branch &#39;develop&#39; ([`80b245b`](https://github.com/42nerds/hitchhiker/commit/80b245bef21b87151e57cabb5633b4a146dfbcde))
+
+
 ## v0.10.1 (2024-03-07)
 
 ### Fix
