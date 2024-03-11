@@ -203,7 +203,10 @@ class Version:
             return len(self.prerelease.split(".")) < len(obj.prerelease.split("."))
 
         # it should be _impossible_ to get here!
-        raise Exception("unreachable")  # pylint: disable=broad-exception-raised # FIXME: we need hitchhiker exceptions!!
+        # pylint: disable=broad-exception-raised
+        raise Exception(
+            "unreachable"
+        )  # FIXME: we need hitchhiker exceptions!!
 
     def __lt__(self, obj: object) -> bool:
         """
@@ -232,6 +235,9 @@ class Version:
             return ver_lt
 
         return self.__prerelease_lt(obj)
+
+    def __le__(self, obj: object) -> bool:
+        return self.__lt__(obj) or self.__eq__(obj)
 
     def parse(self, version: str) -> Self:
         """
