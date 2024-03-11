@@ -2,6 +2,19 @@
 
 
 
+## v0.11.0 (2024-03-11)
+
+### Feature
+
+* feat: print module directory ([`a580f41`](https://github.com/42nerds/hitchhiker/commit/a580f41bb1503aa045aff82b0c1d26d6d8edba25))
+
+### Unknown
+
+* Merge pull request #43 from 42nerds/develop
+
+feat: print module directory ([`c846323`](https://github.com/42nerds/hitchhiker/commit/c84632306662e5da905d03920e05be1bb24e444b))
+
+
 ## v0.10.2 (2024-03-08)
 
 ### Fix
