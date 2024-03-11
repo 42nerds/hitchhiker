@@ -2,6 +2,27 @@
 
 
 
+## v0.12.0 (2024-03-11)
+
+### Feature
+
+* feat: added path column for modules list ([`d568edb`](https://github.com/42nerds/hitchhiker/commit/d568edbd73664aa648b8aa3f701214e8f72ac363))
+
+### Fix
+
+* fix: python 3.7/3.8 ([`123a569`](https://github.com/42nerds/hitchhiker/commit/123a5698fb22d8917bf8e2f90a13d969c41d9325))
+
+* fix: tests ([`8cb97c2`](https://github.com/42nerds/hitchhiker/commit/8cb97c272ccbe7f69b0e26d73d3a38db1d0dbff4))
+
+### Unknown
+
+* Merge pull request #44 from 42nerds/develop
+
+hitchhiker 0.12.0 ([`5339973`](https://github.com/42nerds/hitchhiker/commit/53399737742f17f7b672f6d8c088c80928dfac91))
+
+* CI: use checkout@v4 and setup-python@v5 ([`1e5ba00`](https://github.com/42nerds/hitchhiker/commit/1e5ba0068a688b784a922bf812d308c189ecaaa4))
+
+
 ## v0.11.0 (2024-03-11)
 
 ### Feature
