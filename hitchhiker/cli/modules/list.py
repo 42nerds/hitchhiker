@@ -88,7 +88,7 @@ def list_cmd(
     """
 
     modules = discover_modules(glob)
-    modules.sort(key=lambda x: x.get_int_name())
+    modules.sort(key=lambda x: (x.get_int_name(), x.get_dir()))
 
     if save is not None:
         with open(save, "r+", encoding="utf-8") as f:

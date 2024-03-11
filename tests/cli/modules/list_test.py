@@ -70,14 +70,14 @@ def test_list_dupe_mods(dupe_mods):
     expected_output = """MODULE                       VERSION
 a_another_cool_odoo_module   19.8.1
 b_very_cool_odoo_module      1.2.3
-    !!! duplicate: b_very_cool_odoo_module (./b_very_cool_odoo_module, ./somedir/b_very_cool_odoo_module)
-b_very_cool_odoo_module      1.2.3
     !!! duplicate: b_very_cool_odoo_module (./somedir/b_very_cool_odoo_module, ./b_very_cool_odoo_module)
+b_very_cool_odoo_module      1.2.3
+    !!! duplicate: b_very_cool_odoo_module (./b_very_cool_odoo_module, ./somedir/b_very_cool_odoo_module)
 c_some_cool_odoo_module      0.5.3
 d_extremely_cool_odoo_module 0.0.0
-    !!! duplicate: d_extremely_cool_odoo_module (./d_extremely_cool_odoo_module, ./somedir/d_extremely_cool_odoo_module)
-d_extremely_cool_odoo_module 0.0.0
     !!! duplicate: d_extremely_cool_odoo_module (./somedir/d_extremely_cool_odoo_module, ./d_extremely_cool_odoo_module)
+d_extremely_cool_odoo_module 0.0.0
+    !!! duplicate: d_extremely_cool_odoo_module (./d_extremely_cool_odoo_module, ./somedir/d_extremely_cool_odoo_module)
 """
     result = CliRunner().invoke(cli, ["modules", "list", "--output-format", "text"])
     print(f'got: """{result.output}""" expected: """{expected_output}"""')
@@ -198,14 +198,14 @@ def test_list_dupe_mods_save(dupe_mods, tmp_path_factory):
     expected_output = """MODULE                       VERSION
 a_another_cool_odoo_module   19.8.1
 b_very_cool_odoo_module      1.2.3
-    !!! duplicate: b_very_cool_odoo_module (./b_very_cool_odoo_module, ./somedir/b_very_cool_odoo_module)
-b_very_cool_odoo_module      1.2.3
     !!! duplicate: b_very_cool_odoo_module (./somedir/b_very_cool_odoo_module, ./b_very_cool_odoo_module)
+b_very_cool_odoo_module      1.2.3
+    !!! duplicate: b_very_cool_odoo_module (./b_very_cool_odoo_module, ./somedir/b_very_cool_odoo_module)
 c_some_cool_odoo_module      0.5.3
 d_extremely_cool_odoo_module 0.0.0
-    !!! duplicate: d_extremely_cool_odoo_module (./d_extremely_cool_odoo_module, ./somedir/d_extremely_cool_odoo_module)
-d_extremely_cool_odoo_module 0.0.0
     !!! duplicate: d_extremely_cool_odoo_module (./somedir/d_extremely_cool_odoo_module, ./d_extremely_cool_odoo_module)
+d_extremely_cool_odoo_module 0.0.0
+    !!! duplicate: d_extremely_cool_odoo_module (./d_extremely_cool_odoo_module, ./somedir/d_extremely_cool_odoo_module)
 """
     testf = tmp_path_factory.mktemp("tdir") / "test.md"
     with open(testf, "w") as f:
