@@ -2,6 +2,25 @@
 
 
 
+## v0.13.0 (2024-03-11)
+
+### Refactor
+
+* refactor: modules repo ([`31a178d`](https://github.com/42nerds/hitchhiker/commit/31a178d7b4d40cfe9dba92848086e9ec6fa9ae2e))
+
+### Unknown
+
+* Merge pull request #45 from 42nerds/develop
+
+hitchhiker 0.13.0 ([`df250f6`](https://github.com/42nerds/hitchhiker/commit/df250f62b3138d405bcfb301a200dcbcb6e5b3cb))
+
+* Merge pull request #34 from 42nerds/feature/8394-customer-repo-tool
+
+feat: customer repo tool ([`77e13a2`](https://github.com/42nerds/hitchhiker/commit/77e13a2c1e1daf4d4e2494c5dd517f055df69a19))
+
+* Merge branch &#39;develop&#39; into feature/8394-customer-repo-tool ([`89467cf`](https://github.com/42nerds/hitchhiker/commit/89467cf7447e2606a2cbb8e36fa35c560d905ac6))
+
+
 ## v0.12.0 (2024-03-11)
 
 ### Feature
@@ -48,6 +67,10 @@ feat: print module directory ([`c846323`](https://github.com/42nerds/hitchhiker/
 
 
 ## v0.10.1 (2024-03-07)
+
+### Feature
+
+* feat: added use_latest ([`c2e08f8`](https://github.com/42nerds/hitchhiker/commit/c2e08f881937b2d585f7cce4349e9561245f7518))
 
 ### Fix
 
@@ -138,6 +161,16 @@ Feature/8972 hitchhiker python 3.7 ([`39e1c5a`](https://github.com/42nerds/hitch
 * feat: odoo backup command ([`778a158`](https://github.com/42nerds/hitchhiker/commit/778a1585f274ab3bfe84f02fb26bcfce6fc0b51f))
 
 * feat: odoo backup command ([`c498a90`](https://github.com/42nerds/hitchhiker/commit/c498a90d3573e6d968c3846e787e5d8d1384cf15))
+
+* feat: customer repo tool ([`08fc796`](https://github.com/42nerds/hitchhiker/commit/08fc796605a936560d59875b06173691f87251ea))
+
+### Fix
+
+* fix: warning ([`324f2fe`](https://github.com/42nerds/hitchhiker/commit/324f2feeb7367e11dbaa4ddd633a700de654f7b6))
+
+* fix: tests ([`60dd8d1`](https://github.com/42nerds/hitchhiker/commit/60dd8d1d3bf73393fe2dc7c02febc270e739e615))
+
+* fix: tests ([`8484710`](https://github.com/42nerds/hitchhiker/commit/848471032b22883b7034dd62a645287f640582aa))
 
 ### Unknown
 
