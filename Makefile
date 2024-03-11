@@ -7,8 +7,8 @@ test:
 .PHONY: coverage
 coverage:
 	@coverage run --source . -m pytest -vv --tb=long
-	@coverage html
-	@coverage report -m
+	@coverage html --omit="tests/*"
+	@coverage report -m --omit="tests/*"
 	@echo "coverage OK"
 
 .PHONY: type-checking
@@ -23,13 +23,12 @@ install:
 .PHONY: distclean
 distclean:
 	@find . | grep -E "(/__pycache__$$)" | xargs rm -rf
-	@rm -rf .pytest_cache/ build/ ./html_docs
+	@rm -rf .mypy_cache/ hitchhiker.egg-info/ hitchhiker/hitchhiker.egg-info/ .pytest_cache/ build/ ./html_docs ./htmlcov .coverage
 
 .PHONY: setup-devcontainer
 setup-devcontainer:
 	@pip install coverage
-	@python setup.py egg_info
-	@pip install `grep -v '^\[' *.egg-info/requires.txt`
+	@pip install -e .[release,odoo,test,docs,copier]
 
 .PHONY: docs
 docs:

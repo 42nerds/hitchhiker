@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -22,14 +22,14 @@ jobs:
       - name: Test with pytest and generate coverage report
         run: |
           coverage run --source . -m pytest -vv --tb=long
-          coverage xml -o coverage.xml
+          coverage xml --omit="tests/*" -o coverage.xml
 
   coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python 3.11
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install dependencies
@@ -39,7 +39,7 @@ jobs:
       - name: Test with pytest and generate coverage report
         run: |
           coverage run --source . -m pytest -vv --tb=long
-          coverage xml -o coverage.xml
+          coverage xml --omit="tests/*" -o coverage.xml
       - name: Codacy Coverage Reporter
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
@@ -50,11 +50,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -69,16 +69,18 @@ jobs:
       - name: Run
         run: |
           hitchhiker --help
+          hitchhiker --version
+          hitchhiker modules list
 
   type-check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -91,11 +93,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
+        python-version: ["3.11", "3.10", "3.9", "3.8"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies

@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 import glob as pyglob
-from functools import cmp_to_key
 from pathlib import Path
 from typing import Union
 
 import click
 
 import hitchhiker.odoo.module as odoo_mod
+from hitchhiker.tools.nice_table import gen_nice_table
 
 
 def discover_modules(glob: str) -> list[odoo_mod.Module]:
@@ -20,32 +22,31 @@ def discover_modules(glob: str) -> list[odoo_mod.Module]:
 
 
 def _gen_list_output(output_format: str, modules: list[odoo_mod.Module]) -> None:
-    def cmp_module(a: odoo_mod.Module, b: odoo_mod.Module) -> int:
-        if len(a.get_int_name()) < len(b.get_int_name()):
-            return -1
-        if len(a.get_int_name()) > len(b.get_int_name()):
-            return 1
-        return 0
-
     if output_format == "text":
-        spaces = len(
-            sorted(modules, key=cmp_to_key(cmp_module), reverse=True)[0].get_int_name()
-        )
-        print(f"MODULE {(spaces - 6) * ' '}VERSION")
+        rows: list[Union[list[str], str]] = [["MODULE", "VERSION", "PATH"]]
         for module in modules:
-            print(
-                f"{module.get_int_name()} {(spaces - len(module.get_int_name())) * ' '}{str(module.get_version())}"
+            rows.append(
+                [
+                    module.get_int_name(),
+                    str(module.get_version()),
+                    module.get_dir_name(),
+                ]
             )
             for mod in modules:
                 if (
                     mod.get_int_name() == module.get_int_name()
                     and mod.get_dir() != module.get_dir()
                 ):
-                    print(f"    !!! duplicate: {mod.get_int_name()}")
+                    rows.append(
+                        f"    !!! duplicate: {mod.get_int_name()} ({mod.get_dir()}, {module.get_dir()})"
+                    )
+        print(gen_nice_table(rows), end="")
     elif output_format == "markdown":
-        print("| module | version |\n|---|---|")
+        print("| module | version | path |\n|---|---|---|")
         for module in modules:
-            print(f"| {module.get_int_name()} | {str(module.get_version())} |")
+            print(
+                f"| {module.get_int_name()} | {str(module.get_version())} | {module.get_dir_name()} |"
+            )
 
 
 @click.command(name="list", short_help="list Odoo modules and their versions")
@@ -86,7 +87,7 @@ def list_cmd(
     """
 
     modules = discover_modules(glob)
-    modules.sort(key=lambda x: x.get_int_name())
+    modules.sort(key=lambda x: (x.get_int_name(), x.get_dir()))
 
     if save is not None:
         with open(save, "r+", encoding="utf-8") as f:
@@ -98,11 +99,9 @@ def list_cmd(
             ncontent = content
             if start_pos >= 0 and end_pos >= 0:
                 ncontent = f"{content[: start_pos + len(start_marker)]}\n"
-                ncontent += "| module | version |\n|---|---|\n"
+                ncontent += "| module | version | path |\n|---|---|---|\n"
                 for module in modules:
-                    ncontent += (
-                        f"| {module.get_int_name()} | {str(module.get_version())} |\n"
-                    )
+                    ncontent += f"| {module.get_int_name()} | {str(module.get_version())} | {module.get_dir_name()} |\n"
                 ncontent += "\n\n"
                 for module in modules:
                     for mod in modules:

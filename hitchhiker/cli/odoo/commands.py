@@ -2,31 +2,17 @@ import click
 
 from hitchhiker.cli.odoo.dependency_graph import dependency_graph
 
+from . import backup, copy, neutralize, restore
+
 
 @click.group()
-@click.option(
-    "-c",
-    "--config",
-    default="./odoo.conf",
-    help="path to odoo configuration file",
-    type=click.Path(exists=True),
-)
-@click.pass_context
-def odoo(ctx: click.Context, config: str) -> None:
+def odoo() -> None:
     """Odoo related commands"""
-    ctx.obj["ODOO_CONF"] = config
-
-
-@odoo.command()
-@click.pass_context
-def backup(_ctx: click.Context) -> None:
-    """Backup Odoo"""
-
-
-@odoo.command()
-@click.pass_context
-def staging(_ctx: click.Context) -> None:
-    """Backup Odoo"""
 
 
 odoo.add_command(dependency_graph)
+odoo.add_command(backup.backup_cmd)
+odoo.add_command(restore.restore_cmd)
+odoo.add_command(neutralize.neutralize_cmd)
+odoo.add_command(neutralize.reinit_cmd)
+odoo.add_command(copy.copy_cmd)

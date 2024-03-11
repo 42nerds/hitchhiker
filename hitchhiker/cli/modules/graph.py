@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import click
 
 from hitchhiker.cli.modules.list import discover_modules
