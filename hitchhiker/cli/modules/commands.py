@@ -20,6 +20,17 @@ modules.add_command(graph_cmd)
 modules.add_command(list_mod.list_cmd)
 modules.add_command(generate_addons_path_mod.generate_addons_path_cmd)
 
+
+try:
+    import hitchhiker.cli.modules.repo as repo_mod
+
+    modules.add_command(repo_mod.repo_group)
+except ImportError:
+    pass
+    # FIXME: do these errors differently
+    # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+
+
 try:
     import hitchhiker.cli.modules.new as new_mod
 

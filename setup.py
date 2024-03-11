@@ -19,7 +19,11 @@ setup(
     ],
     extras_require={
         "release": ["gitpython>=3.1.40,<4", "PyGithub>=2.1.1,<3"],
-        "odoo": ["click-odoo>=1.6,<2"],
+        "odoo": [
+            "click-odoo>=1.6,<2",
+            "pyyaml>=6.0.1,<7",
+            "PyGithub>=2.1.1,<3",
+        ],
         "test": [
             "pytest>=7,<8",
             "mypy",

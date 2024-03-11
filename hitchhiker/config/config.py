@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 
 class ConfigManager:
@@ -51,6 +51,16 @@ class ConfigManager:
         with open(self._fpath, "w", encoding="utf-8") as f:
             f.write(json.dumps(self._confdict))
 
+    def _init_config(self) -> None:
+        """
+        Initializes configuration
+        """
+        self._confdict: Union[Dict[str, Any], None] = self._read_config()
+        # append new default config keys to config
+        for key in self._default_conf.keys():
+            if key not in self._confdict.keys():
+                self.set_key(key, self._default_conf[key])
+
     def __init__(self, path: str, defaultconf: Dict[str, Any]):
         """
         Initialize a ConfigManager instance with the specified file path and default configuration.
@@ -64,12 +74,7 @@ class ConfigManager:
         """
         self._fpath = os.path.expanduser(path)
         self._default_conf = defaultconf
-        self._confdict = self._read_config()
-
-        # append new default config keys to config
-        for key in self._default_conf.keys():
-            if key not in self._confdict.keys():
-                self.set_key(key, self._default_conf[key])
+        self._confdict = None
 
     def get_key(self, key: str) -> Any:
         """
@@ -84,8 +89,10 @@ class ConfigManager:
         Raises:
             KeyError: If the key does not exist in the configuration.
         """
-        if key in self._confdict.keys():
-            return self._confdict[key]
+        if self._confdict is None:
+            self._init_config()
+        if key in self._confdict.keys():  # type: ignore [union-attr]
+            return self._confdict[key]  # type: ignore [union-attr, index]
         raise KeyError(key)
 
     def set_key(self, key: str, value: Any) -> None:
@@ -99,7 +106,9 @@ class ConfigManager:
         Returns:
             None
         """
-        self._confdict[key] = value
+        if self._confdict is None:
+            self._init_config()
+        self._confdict[key] = value  # type: ignore [union-attr, index]
         self._write_config()
 
     def has_key(self, key: str) -> bool:
@@ -112,4 +121,6 @@ class ConfigManager:
         Returns:
             bool: True if the key exists in the configuration, False otherwise.
         """
-        return key in self._confdict.keys()
+        if self._confdict is None:
+            self._init_config()
+        return key in self._confdict.keys()  # type: ignore [union-attr]
