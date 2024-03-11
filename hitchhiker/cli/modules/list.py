@@ -43,7 +43,7 @@ def _gen_list_output(output_format: str, modules: list[odoo_mod.Module]) -> None
                     mod.get_int_name() == module.get_int_name()
                     and mod.get_dir() != module.get_dir()
                 ):
-                    print(f"    !!! duplicate: {mod.get_int_name()}")
+                    print(f"    !!! duplicate: {mod.get_int_name()} ({mod.get_dir()}, {module.get_dir()})")
     elif output_format == "markdown":
         print("| module | version |\n|---|---|")
         for module in modules:
