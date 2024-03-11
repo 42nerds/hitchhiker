@@ -79,6 +79,19 @@ class Module:
         """
         return self._moduledir
 
+    def get_dir_name(self) -> str:
+        """
+        Gets the name of the module together with it's parent directory (something like some/parent/cool_module)
+
+        Returns:
+            str: The name of the module together with it's directory
+
+        Description:
+        This method retrieves the directory path of the Odoo module.
+
+        """
+        return self._moduledir.strip("./")
+
     def get_int_name(self) -> str:
         """
         Gets the internal name of the Odoo module.
