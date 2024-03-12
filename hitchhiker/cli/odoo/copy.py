@@ -34,8 +34,7 @@ def _copy_filestore(srcdb: str, destdb: str) -> None:
     store_src = odoo.tools.config.filestore(srcdb)
     click.echo(f"source filestore: {store_src}")
     if not os.path.isdir(store_src):
-        click.echo("source filestore is not a directory!")
-        return
+        raise RuntimeError(f"could not find filestore at {store_src}")
     store_dst = odoo.tools.config.filestore(destdb)
     click.echo(f"destination filestore: {store_dst}")
     rsync_exec = ["rsync", "-a", "--delete-delay", store_src + "/", store_dst]
