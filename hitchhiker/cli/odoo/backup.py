@@ -15,8 +15,7 @@ from . import click_odoo_ext
 def __backup_filestore(b: backup.GenericBackup, dbname: str) -> None:
     path = odoo.tools.config.filestore(dbname)
     if not os.path.isdir(path):
-        click.echo(f"WARNING: could not find filestore at {path}")
-        return
+        raise RuntimeError(f"could not find filestore at {path}")
     b.add_dir(path, "filestore")
 
 
