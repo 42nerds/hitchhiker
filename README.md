@@ -8,7 +8,7 @@ Hitchhiker has many different usecases and there are various different dependenc
 
 For developing Odoo modules:
 ```
-pip install "hitchhiker[copier,odoo] @ git+https://github.com/42nerds/hitchhiker.git"
+pip install "hitchhiker[copier,odoo-dev] @ git+https://github.com/42nerds/hitchhiker.git"
 ```
 
 To update an existing hitchhiker installation run
