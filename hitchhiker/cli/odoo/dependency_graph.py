@@ -10,7 +10,7 @@ from hitchhiker.odoo.dependency_graph_gen import gen_dependency_graph
 
 
 @click.command()
-@click_odoo.env_options(default_log_level="error")  # type: ignore[misc]
+@click_odoo.env_options(default_log_level="info")  # type: ignore[misc]
 @click.option(
     "--standard", is_flag=True, help="include Odoo standard modules in the output"
 )
