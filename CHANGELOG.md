@@ -2,6 +2,19 @@
 
 
 
+## v0.13.1 (2024-03-12)
+
+### Fix
+
+* fix: error when filestore not found ([`35ab0c0`](https://github.com/42nerds/hitchhiker/commit/35ab0c00d6b0d15cef803b8abdd4916a986aa8b0))
+
+### Unknown
+
+* Merge pull request #46 from 42nerds/develop
+
+fix: error when filestore not found ([`f638879`](https://github.com/42nerds/hitchhiker/commit/f638879ea7f0f713e1563fc199b203cb83acc72f))
+
+
 ## v0.13.0 (2024-03-11)
 
 ### Refactor
