@@ -2,6 +2,17 @@
 
 
 
+## v0.14.0 (2024-03-12)
+
+### Feature
+
+* feat: added addons path for neutralize and reinit ([`66b89c0`](https://github.com/42nerds/hitchhiker/commit/66b89c0179719b245f6b2a8fc1aadb721ddc2bcb))
+
+### Unknown
+
+* Merge branch &#39;develop&#39; ([`14a8d7c`](https://github.com/42nerds/hitchhiker/commit/14a8d7ce14d626fb7550b0e31b32d8b8793ad8db))
+
+
 ## v0.13.2 (2024-03-12)
 
 ### Fix
