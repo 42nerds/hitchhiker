@@ -2,6 +2,19 @@
 
 
 
+## v0.13.2 (2024-03-12)
+
+### Fix
+
+* fix: added odoo-dev optional dependency group ([`0372fe3`](https://github.com/42nerds/hitchhiker/commit/0372fe30dd490f7128f627fd3c24c7c808ef2ee8))
+
+### Unknown
+
+* Merge pull request #47 from 42nerds/develop
+
+fix: added odoo-dev optional dependency group ([`61062f1`](https://github.com/42nerds/hitchhiker/commit/61062f1c03b12a177e1d028c041c670f7d84e127))
+
+
 ## v0.13.1 (2024-03-12)
 
 ### Fix
