@@ -2,6 +2,19 @@
 
 
 
+## v0.15.0 (2024-03-15)
+
+### Feature
+
+* feat: neutralize for Odoo &lt; 16 ([`ee9fc98`](https://github.com/42nerds/hitchhiker/commit/ee9fc98fc8ffecad7e1e1cbd25eaecde4d360bd7))
+
+### Unknown
+
+* Merge pull request #48 from 42nerds/develop
+
+hitchhiker 0.15.0 ([`8063422`](https://github.com/42nerds/hitchhiker/commit/806342288c097cb063925ff94063ef6e24ac17de))
+
+
 ## v0.14.0 (2024-03-12)
 
 ### Feature
