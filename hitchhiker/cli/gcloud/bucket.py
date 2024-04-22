@@ -12,6 +12,15 @@ def bucket_group() -> None:
     """Google Cloud Bucket related commands"""
 
 
+# required to support old python versions where PurePath.is_relative_to does not exist
+def _path_is_relative_to(path: PurePath, folder: PurePath) -> bool:
+    try:
+        path.parent.relative_to(folder)
+    except ValueError:
+        return False
+    return True
+
+
 def _paths_filter_relative_to(
     paths: list[PurePath], folder: PurePath
 ) -> list[PurePath]:
@@ -23,7 +32,7 @@ def _paths_filter_relative_to(
         folder = Path("/home/user")
         returns: [Path("/home/user/Downloads")]
     """
-    return [path for path in paths if path.is_relative_to(folder)]
+    return [path for path in paths if _path_is_relative_to(path, folder)]
 
 
 def _path_relative_to_folder(path: PurePath, folder: PurePath) -> PurePath:
