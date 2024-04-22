@@ -41,6 +41,9 @@ setup(
         "copier": [
             "copier>=8.0.0,<10",  # between copier 8 and 9 there is a breaking change that does not affect us. (Changes the return code for unsafe template error)
         ],
+        "gcloud": [
+            "google-cloud-storage>=2.16.0,<3",
+        ],
     },
     entry_points={
         "console_scripts": [

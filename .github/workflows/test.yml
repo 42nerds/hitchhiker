@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install coverage
-          pip install -e ".[release, odoo, test, docs, copier]"
+          pip install -e ".[release, odoo, test, docs, copier, gcloud]"
       - name: Test with pytest and generate coverage report
         run: |
           coverage run --source . -m pytest -vv --tb=long
@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install coverage
-          pip install -e ".[release, odoo, test, docs, copier]"
+          pip install -e ".[release, odoo, test, docs, copier, gcloud]"
       - name: Test with pytest and generate coverage report
         run: |
           coverage run --source . -m pytest -vv --tb=long
@@ -85,7 +85,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install -e ".[release, odoo, test, docs, copier]"
+          pip install -e ".[release, odoo, test, docs, copier, gcloud]"
       - name: Type check with mypy
         run: mypy --install-types --non-interactive ./hitchhiker --strict --no-warn-unused-ignores
 
@@ -102,6 +102,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install -e ".[release, odoo, test, docs, copier]"
+          pip install -e ".[release, odoo, test, docs, copier, gcloud]"
       - name: Lint
         run: make lint

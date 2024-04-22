@@ -62,3 +62,12 @@ except ImportError:
     pass
     # FIXME: do these errors differently
     # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
+
+try:
+    from .gcloud import commands as gcloud
+
+    cli.add_command(gcloud.gcloud)
+except ImportError:
+    pass
+    # FIXME: do these errors differently
+    # click.secho(f"Please install {e.name} for full functionality.", err=True, fg="red")
