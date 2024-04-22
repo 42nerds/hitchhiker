@@ -2,6 +2,31 @@
 
 
 
+## v0.16.0 (2024-04-22)
+
+### Feature
+
+* feat: option to sync to google cloud bucket ([`b06b87d`](https://github.com/42nerds/hitchhiker/commit/b06b87d2f8720575e7d819ca22e8bb826a1d1289))
+
+### Fix
+
+* fix: support older python versions ([`8e1bb80`](https://github.com/42nerds/hitchhiker/commit/8e1bb807cab483866f18f764757ef68745fadd5e))
+
+* fix: support older python versions ([`e015525`](https://github.com/42nerds/hitchhiker/commit/e01552573eb048f9a1872d90609a833c60671641))
+
+* fix: support older python versions ([`6b46bc4`](https://github.com/42nerds/hitchhiker/commit/6b46bc40c42edef40e41339aa0540a6f49e969fd))
+
+* fix: allow gcloud tests to run ([`15c1910`](https://github.com/42nerds/hitchhiker/commit/15c19102e17873814bbc2ae9f73e3627b5c3fe09))
+
+* fix: allow gcloud tests to run ([`30213aa`](https://github.com/42nerds/hitchhiker/commit/30213aab1c6a17b6c445bc74f69020a182235038))
+
+### Unknown
+
+* Merge pull request #49 from 42nerds/feature/9288-gcloud-bucket-sync
+
+feat: option to sync to google cloud bucket ([`fef9561`](https://github.com/42nerds/hitchhiker/commit/fef95617d48839da11ca7a0cfe7993dcfb257fa4))
+
+
 ## v0.15.0 (2024-03-15)
 
 ### Feature
