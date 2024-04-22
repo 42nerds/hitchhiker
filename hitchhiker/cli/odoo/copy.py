@@ -10,17 +10,17 @@ from psycopg2 import sql  # pylint: disable=import-error
 from . import click_odoo_ext
 
 
-# https://github.com/odoo/odoo/blob/96a06df867fcef1fd24a1798bd5d6decc423933b/odoo/service/db.py#L153C1-L178C16
 def _copy_db(srcdb: str, destdb: str) -> None:
     click.echo(f"copying database {srcdb} to {destdb}")
     odoo.sql_db.close_db(srcdb)
     db = odoo.sql_db.db_connect("postgres")
     with closing(db.cursor()) as cr:
-        if odoo.release.version_info[0] <= 14:
-            cr.autocommit(True)  # avoid transaction block
-        else:
-            # database-altering operations cannot be executed inside a transaction
+        # we have to enable autocommit otherwise we can't run CREATE DATABASE because psycopg2 will complain
+        if odoo.release.version_info[0] > 14:
             cr._cnx.autocommit = True  # pylint: disable=protected-access
+        else:
+            cr.autocommit(True)
+
         odoo.service.db._drop_conn(cr, srcdb)  # pylint: disable=protected-access
         cr.execute(
             sql.SQL("CREATE DATABASE {} ENCODING 'unicode' TEMPLATE {}").format(
