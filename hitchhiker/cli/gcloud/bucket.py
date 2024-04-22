@@ -4,7 +4,7 @@ import sys
 from pathlib import Path, PurePath, PurePosixPath
 
 import click
-from google.cloud import storage  # type: ignore[import, import-untyped]
+from google.cloud import storage  # type: ignore[import, import-untyped, attr-defined]
 
 
 @click.group("bucket")
