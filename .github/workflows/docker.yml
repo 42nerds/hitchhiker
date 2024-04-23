@@ -1,0 +1,42 @@
+name: Build Docker Image
+
+on:
+  #workflow_run:
+  #  workflows: ["Version"]
+  #  types:
+  #    - completed
+  push:
+    #branches:
+    #  - main
+
+env:
+  REGISTRY: ghcr.io
+  SUBPATH: 42nerds
+  IMAGE_NAME: hitchhiker
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: log into ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: get hitchhiker version
+        id: version
+        run: |
+          export VERSION=$(sed -n 's/^_hitchhiker_version = "\(.*\)"/\1/p' setup.py)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.SUBPATH }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
