@@ -2,6 +2,21 @@
 
 
 
+## v0.17.0 (2024-04-23)
+
+### Feature
+
+* feat: build docker image ([`62ff8a3`](https://github.com/42nerds/hitchhiker/commit/62ff8a34675acd35d07e7fa6e03a00475bbbe955))
+
+* feat: build docker image ([`f065406`](https://github.com/42nerds/hitchhiker/commit/f065406c70f606743cb3d0a183debbaa68ad5ef6))
+
+### Unknown
+
+* Merge pull request #50 from 42nerds/feature/9288-hitchhiker-docker-image
+
+Feature/9288 hitchhiker docker image ([`83630f3`](https://github.com/42nerds/hitchhiker/commit/83630f3e33b2eeda22ce675d8151251c97ca6381))
+
+
 ## v0.16.0 (2024-04-22)
 
 ### Feature
