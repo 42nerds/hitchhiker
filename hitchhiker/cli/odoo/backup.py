@@ -49,7 +49,7 @@ def __dump_manifest(b: backup.GenericBackup, dbname: str) -> None:
 @click.command("backup")
 @click_odoo_ext.env_options(default_log_level="info")  # type: ignore[misc]
 @click.option("-o", "--output", required=True, help="output zip file path")
-def backup_cmd(env: Any, output: str) -> None:  # pylint: disable=unused-argument
+def backup_cmd(env: Any, output: str, with_addons_path=True) -> None:  # pylint: disable=unused-argument
     """Backup Odoo"""
     dbname = odoo.tools.config["db_name"]
     click.echo(f"starting backup on database: {dbname}")
