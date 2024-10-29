@@ -8,7 +8,7 @@ from . import click_odoo_ext
 
 
 @click.command("restore")
-@click_odoo_ext.env_options(default_log_level="info", with_database=False, with_rollback=False)  # type: ignore[misc]
+@click_odoo_ext.env_options(default_log_level="info", with_database=False, with_rollback=False, with_addons_path=True)  # type: ignore[misc]
 @click.option("-i", "--input", "input_path", required=True, help="input zip file path")
 @click.option("-d", "--db_name", required=True, help="database name")
 @click.option(
