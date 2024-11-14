@@ -36,11 +36,16 @@ def restore_cmd(
     """Restore Odoo DB & filestore"""
     if os.path.isfile(input_path):
         click.echo(f"restoring database: {db_name}")
+        if odoo.release.version_info[0] < 16 and neutralize:
+            raise RuntimeError(f"restore with neutralize is only supported in Odoo >= 16. If you are using Odoo < 16 use the neutralize command")
         if odoo.service.db.exp_db_exist(db_name):
             if not force:
                 raise RuntimeError("database already exists")
             if not odoo.service.db.exp_drop(db_name):
                 raise RuntimeError("error dropping old database")
-        odoo.service.db.restore_db(db_name, input_path, copy, neutralize)
+        if odoo.release.version_info[0] >= 16:
+            odoo.service.db.restore_db(db_name, input_path, copy, neutralize)
+        else:
+            odoo.service.db.restore_db(db_name, input_path, copy)
     else:
         raise RuntimeError("unsupported backup format")
