@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.22.1 (2024-11-14)
+
+### Bug Fixes
+
+- Allow odoo restore for odoo < 16
+  ([`6af4f98`](https://github.com/42nerds/hitchhiker/commit/6af4f9891a0bd8a148717d6177aef5ae2d6abf40))
+
+
 ## v0.22.0 (2024-11-14)
 
 ### Features
