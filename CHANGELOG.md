@@ -1,6 +1,16 @@
 # CHANGELOG
 
 
+## v0.22.0 (2024-11-14)
+
+### Features
+
+- Revert "feat: allow neutralize to be reused"
+  ([`452d748`](https://github.com/42nerds/hitchhiker/commit/452d7482bcac53234079fd52c23f3d214dc6e0a5))
+
+This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
+
+
 ## v0.21.0 (2024-11-14)
 
 ### Features
