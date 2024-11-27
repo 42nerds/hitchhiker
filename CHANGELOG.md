@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.22.2 (2024-11-27)
+
+### Bug Fixes
+
+- Support Odoo 18 backup
+  ([`5fe8637`](https://github.com/42nerds/hitchhiker/commit/5fe86372208dbdd2fdf6f03c82aa58bc2730b831))
+
+
 ## v0.22.1 (2024-11-14)
 
 ### Bug Fixes
