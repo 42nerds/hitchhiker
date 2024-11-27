@@ -20,8 +20,12 @@ def __backup_filestore(b: backup.GenericBackup, dbname: str) -> None:
 
 
 def __backup_database(b: backup.GenericBackup, dbname: str) -> None:
-    cmd = [odoo.tools.find_pg_tool("pg_dump"), "--no-owner", dbname]
-    env = odoo.tools.exec_pg_environ()
+    if odoo.release.version_info[0] >= 18:
+        cmd = [odoo.tools.misc.find_pg_tool("pg_dump"), "--no-owner", dbname]
+        env = odoo.tools.misc.exec_pg_environ()
+    else:
+        cmd = [odoo.tools.find_pg_tool("pg_dump"), "--no-owner", dbname]
+        env = odoo.tools.exec_pg_environ()
     with tempfile.NamedTemporaryFile("w") as f:
         cmd.insert(-1, "--file=" + f.name)
         subprocess.run(
