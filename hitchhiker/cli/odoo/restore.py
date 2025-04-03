@@ -37,7 +37,7 @@ def restore_cmd(
     if os.path.isfile(input_path):
         click.echo(f"restoring database: {db_name}")
         if odoo.release.version_info[0] < 16 and neutralize:
-            raise RuntimeError(f"restore with neutralize is only supported in Odoo >= 16. If you are using Odoo < 16 use the neutralize command")
+            raise RuntimeError("restore with neutralize is only supported in Odoo >= 16. If you are using Odoo < 16 use the neutralize command")
         if odoo.service.db.exp_db_exist(db_name):
             if not force:
                 raise RuntimeError("database already exists")
