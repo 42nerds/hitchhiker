@@ -201,7 +201,7 @@ def discover_modules(files: list[str]) -> list[Module]:
 
     modules = []
     for fname in files:
-        if "vendor/" in fname:
+        if "vendor/" in fname or "vendored/" in fname:
             continue
         module = Module(fname)
         if not module.is_valid():
