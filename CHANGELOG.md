@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.22.3 (2025-04-07)
+
+### Bug Fixes
+
+- Support vendored along with vendor directory
+  ([`c5ad024`](https://github.com/42nerds/hitchhiker/commit/c5ad0242401b33d4f0068dafc3d94ea498509e7b))
+
+
 ## v0.22.2 (2024-11-27)
 
 ### Bug Fixes
@@ -77,6 +85,12 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 ### Bug Fixes
 
+- Allow gcloud tests to run
+  ([`15c1910`](https://github.com/42nerds/hitchhiker/commit/15c19102e17873814bbc2ae9f73e3627b5c3fe09))
+
+- Allow gcloud tests to run
+  ([`30213aa`](https://github.com/42nerds/hitchhiker/commit/30213aab1c6a17b6c445bc74f69020a182235038))
+
 - Support older python versions
   ([`8e1bb80`](https://github.com/42nerds/hitchhiker/commit/8e1bb807cab483866f18f764757ef68745fadd5e))
 
@@ -85,12 +99,6 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 - Support older python versions
   ([`6b46bc4`](https://github.com/42nerds/hitchhiker/commit/6b46bc40c42edef40e41339aa0540a6f49e969fd))
-
-- Allow gcloud tests to run
-  ([`15c1910`](https://github.com/42nerds/hitchhiker/commit/15c19102e17873814bbc2ae9f73e3627b5c3fe09))
-
-- Allow gcloud tests to run
-  ([`30213aa`](https://github.com/42nerds/hitchhiker/commit/30213aab1c6a17b6c445bc74f69020a182235038))
 
 ### Features
 
@@ -134,14 +142,14 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 ### Bug Fixes
 
-- Warning
-  ([`324f2fe`](https://github.com/42nerds/hitchhiker/commit/324f2feeb7367e11dbaa4ddd633a700de654f7b6))
-
 - Tests
   ([`60dd8d1`](https://github.com/42nerds/hitchhiker/commit/60dd8d1d3bf73393fe2dc7c02febc270e739e615))
 
 - Tests
   ([`8484710`](https://github.com/42nerds/hitchhiker/commit/848471032b22883b7034dd62a645287f640582aa))
+
+- Warning
+  ([`324f2fe`](https://github.com/42nerds/hitchhiker/commit/324f2feeb7367e11dbaa4ddd633a700de654f7b6))
 
 ### Features
 
@@ -193,11 +201,11 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 ### Bug Fixes
 
-- Improved the odoo copy command
-  ([`eec67a1`](https://github.com/42nerds/hitchhiker/commit/eec67a17f0656155593399fa641a33dd6bbfd391))
-
 - Ignore tests in coverage report
   ([`8264f66`](https://github.com/42nerds/hitchhiker/commit/8264f6681b2d012dcaa5612687da4b16c4fcfea3))
+
+- Improved the odoo copy command
+  ([`eec67a1`](https://github.com/42nerds/hitchhiker/commit/eec67a17f0656155593399fa641a33dd6bbfd391))
 
 
 ## v0.10.0 (2024-03-05)
@@ -221,9 +229,6 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 - Added a comment on why we use setup.py
   ([`b885177`](https://github.com/42nerds/hitchhiker/commit/b88517731ede26266a4715d336ef523dd6ec8fa1))
 
-- Now using just setup.py
-  ([`b1af78f`](https://github.com/42nerds/hitchhiker/commit/b1af78f4b3e507b4c8520fdd84947c205b987255))
-
 - Added setup.py for backwards compat with old pip
   ([`f8915d5`](https://github.com/42nerds/hitchhiker/commit/f8915d5e23ff2a6b5a09496e61a9e04de17c7886))
 
@@ -233,10 +238,19 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 - Added setup.py for backwards compat with old pip
   ([`c7d84c0`](https://github.com/42nerds/hitchhiker/commit/c7d84c0aa5b7fd4e2973fb5216420c3ae16d0a16))
 
+- Now using just setup.py
+  ([`b1af78f`](https://github.com/42nerds/hitchhiker/commit/b1af78f4b3e507b4c8520fdd84947c205b987255))
+
 - Remove setup.py
   ([`37516a2`](https://github.com/42nerds/hitchhiker/commit/37516a27951f60912da9fa5242bc5bc9cca4f79c))
 
 ### Features
+
+- Odoo backup command
+  ([`778a158`](https://github.com/42nerds/hitchhiker/commit/778a1585f274ab3bfe84f02fb26bcfce6fc0b51f))
+
+- Odoo backup command
+  ([`c498a90`](https://github.com/42nerds/hitchhiker/commit/c498a90d3573e6d968c3846e787e5d8d1384cf15))
 
 - Python 3.7 compat
   ([`06d1241`](https://github.com/42nerds/hitchhiker/commit/06d124175c0364445c9a6cd2b62712247e178eb0))
@@ -255,12 +269,6 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 - Python 3.7 compat
   ([`125cc2d`](https://github.com/42nerds/hitchhiker/commit/125cc2dab826249e26f51a0af0e229d608f485d1))
-
-- Odoo backup command
-  ([`778a158`](https://github.com/42nerds/hitchhiker/commit/778a1585f274ab3bfe84f02fb26bcfce6fc0b51f))
-
-- Odoo backup command
-  ([`c498a90`](https://github.com/42nerds/hitchhiker/commit/c498a90d3573e6d968c3846e787e5d8d1384cf15))
 
 
 ## v0.7.0 (2024-02-02)
@@ -347,22 +355,13 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 ### Chores
 
-- Pre-commit hooks
-  ([`cb3178d`](https://github.com/42nerds/hitchhiker/commit/cb3178da9e6181baefb07ba5fba843e375dbd036))
-
 - Add license
   ([`da3b353`](https://github.com/42nerds/hitchhiker/commit/da3b35315df6b880a7078c10b832596faf778d45))
 
+- Pre-commit hooks
+  ([`cb3178d`](https://github.com/42nerds/hitchhiker/commit/cb3178da9e6181baefb07ba5fba843e375dbd036))
+
 ### Features
-
-- Use GITHUB_TOKEN from env for update
-  ([`c786066`](https://github.com/42nerds/hitchhiker/commit/c786066d82812ed8a5e221abbd44bd0b7eed1f04))
-
-- Use GITHUB_TOKEN from env for update
-  ([`f0aa611`](https://github.com/42nerds/hitchhiker/commit/f0aa6117f74d4d01ea1d12de2c154bc462947121))
-
-- Modules list warn duplicate
-  ([`d139c20`](https://github.com/42nerds/hitchhiker/commit/d139c200bd22798a6852800343eeb3d16ac75ed3))
 
 - Modules list markdown
   ([`41ff9cf`](https://github.com/42nerds/hitchhiker/commit/41ff9cfe87525187aaabd132c20276d23d36fd70))
@@ -379,13 +378,19 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 - Modules list sort
   ([`28d7d83`](https://github.com/42nerds/hitchhiker/commit/28d7d83f8a4eb434ba11c0d6e5570a027baf7db8))
 
+- Modules list warn duplicate
+  ([`d139c20`](https://github.com/42nerds/hitchhiker/commit/d139c200bd22798a6852800343eeb3d16ac75ed3))
+
+- Use GITHUB_TOKEN from env for update
+  ([`c786066`](https://github.com/42nerds/hitchhiker/commit/c786066d82812ed8a5e221abbd44bd0b7eed1f04))
+
+- Use GITHUB_TOKEN from env for update
+  ([`f0aa611`](https://github.com/42nerds/hitchhiker/commit/f0aa6117f74d4d01ea1d12de2c154bc462947121))
+
 
 ## v0.3.0 (2023-10-26)
 
 ### Bug Fixes
-
-- Requests dependency in pyproject.toml
-  ([`7031b6e`](https://github.com/42nerds/hitchhiker/commit/7031b6efb31498545e9b29bc981a4f111af44126))
 
 - _create_file_if_nonexistant
   ([`7aef835`](https://github.com/42nerds/hitchhiker/commit/7aef835a18b6ff39bdc243580dc38c8b9f982d2a))
@@ -395,6 +400,9 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 - Hitchhiker should not depend on PyGithub
   ([`e51cdba`](https://github.com/42nerds/hitchhiker/commit/e51cdba9431c62cddf9f7a75aa06799a960b85cf))
+
+- Requests dependency in pyproject.toml
+  ([`7031b6e`](https://github.com/42nerds/hitchhiker/commit/7031b6efb31498545e9b29bc981a4f111af44126))
 
 ### Features
 
@@ -442,16 +450,16 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 - Fix Odoo module discovery error
   ([`5cbc30e`](https://github.com/42nerds/hitchhiker/commit/5cbc30e077c9dc7e2f8264307734e82d8ae75ae6))
 
-- **release**: Fix conflicting project name bug
-  ([`1611a1f`](https://github.com/42nerds/hitchhiker/commit/1611a1f6c0623b3a1ea59603aa5a575bb6ff791a))
-
 - Importlib.metadata instead of pkg_resources
   ([`53483ae`](https://github.com/42nerds/hitchhiker/commit/53483ae64827008ed3d982de3aa7b3baba01fced))
 
+- **release**: Fix conflicting project name bug
+  ([`1611a1f`](https://github.com/42nerds/hitchhiker/commit/1611a1f6c0623b3a1ea59603aa5a575bb6ff791a))
+
 ### Chores
 
-- Removed inaccurate FIXME comment
-  ([`ae4921c`](https://github.com/42nerds/hitchhiker/commit/ae4921c5e7fe3208c395f80274e991915ea242f3))
+- Add mypy type checking
+  ([`cf138f5`](https://github.com/42nerds/hitchhiker/commit/cf138f5448cd4140783f7cb2226f672a85060cbf))
 
 - Added lint and precommit target to Makefile
   ([`ae8f458`](https://github.com/42nerds/hitchhiker/commit/ae8f4581b3a2b3b9ba50c9c6d8ed5d8c0a09a606))
@@ -462,47 +470,44 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 - Pdoc setup
   ([`9978836`](https://github.com/42nerds/hitchhiker/commit/997883695b64c2ba7dac7596d9706ae8eb875eff))
 
+- Removed inaccurate FIXME comment
+  ([`ae4921c`](https://github.com/42nerds/hitchhiker/commit/ae4921c5e7fe3208c395f80274e991915ea242f3))
+
 - Typing
   ([`0bd1fa8`](https://github.com/42nerds/hitchhiker/commit/0bd1fa8b353a7d383bcc3df9565d468a4b414e27))
 
 - Typing
   ([`21d3ae0`](https://github.com/42nerds/hitchhiker/commit/21d3ae0828d74102e8a4f51f5576f57e545fe616))
 
-- Add mypy type checking
-  ([`cf138f5`](https://github.com/42nerds/hitchhiker/commit/cf138f5448cd4140783f7cb2226f672a85060cbf))
-
 ### Code Style
-
-- **7889**: Fix whitespace
-  ([`53e07e1`](https://github.com/42nerds/hitchhiker/commit/53e07e1f8d0c2526509c6b1d836fb21c75a39083))
 
 - Use isinstance instead of type
   ([`fbafd2b`](https://github.com/42nerds/hitchhiker/commit/fbafd2be3751b8d7a64de169cd6313da5284ab81))
 
+- **7889**: Fix whitespace
+  ([`53e07e1`](https://github.com/42nerds/hitchhiker/commit/53e07e1f8d0c2526509c6b1d836fb21c75a39083))
+
 ### Continuous Integration
-
-- Fix codacy
-  ([`4b47a21`](https://github.com/42nerds/hitchhiker/commit/4b47a2103559fa91ed4dfb83f4cff7513b7804f7))
-
-- Mypy do not error on unused ignore comments
-  ([`271eab0`](https://github.com/42nerds/hitchhiker/commit/271eab080ac075408450eb34abf3d487f0f78fd9))
 
 - Check if typed version is available with mypy
   ([`a349626`](https://github.com/42nerds/hitchhiker/commit/a34962693252253876738a72b14d9290c3333b30))
 
+- Fix codacy
+  ([`4b47a21`](https://github.com/42nerds/hitchhiker/commit/4b47a2103559fa91ed4dfb83f4cff7513b7804f7))
+
 - Fix missing dependencies
   ([`f55da6a`](https://github.com/42nerds/hitchhiker/commit/f55da6a717261ae25a7aacd8fbca946c39d54f6d))
+
+- Mypy do not error on unused ignore comments
+  ([`271eab0`](https://github.com/42nerds/hitchhiker/commit/271eab080ac075408450eb34abf3d487f0f78fd9))
 
 - Use codacy/codacy-coverage-reporter-action
   ([`91fa558`](https://github.com/42nerds/hitchhiker/commit/91fa5582210973ae54a3391b62abc0ef8242ebef))
 
 ### Documentation
 
-- **7889**: Documentation of the hitchhiker code
-  ([`72948e7`](https://github.com/42nerds/hitchhiker/commit/72948e7418ac76f9251f84f723d3b1798b45e533))
-
-- **7889**: :memo: documentation of the hitchhiker code
-  ([`8e6406a`](https://github.com/42nerds/hitchhiker/commit/8e6406ae4b1a3e30c4fffbbc8ac59bfa4ca38f79))
+- Add main branch in GitHub actions example
+  ([`b88cfcc`](https://github.com/42nerds/hitchhiker/commit/b88cfcc9b9ce3c3afbfa90492e2edb8d0dcda9b5))
 
 - Added some comments
   ([`8b84b0e`](https://github.com/42nerds/hitchhiker/commit/8b84b0e5e290144f76f270e3c8ddbc7859e4addb))
@@ -510,8 +515,11 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 - Gh actions example
   ([`43666ea`](https://github.com/42nerds/hitchhiker/commit/43666ea4e7f7dc5ff4a35f57208b0c894c87cf55))
 
-- Add main branch in GitHub actions example
-  ([`b88cfcc`](https://github.com/42nerds/hitchhiker/commit/b88cfcc9b9ce3c3afbfa90492e2edb8d0dcda9b5))
+- **7889**: :memo: documentation of the hitchhiker code
+  ([`8e6406a`](https://github.com/42nerds/hitchhiker/commit/8e6406ae4b1a3e30c4fffbbc8ac59bfa4ca38f79))
+
+- **7889**: Documentation of the hitchhiker code
+  ([`72948e7`](https://github.com/42nerds/hitchhiker/commit/72948e7418ac76f9251f84f723d3b1798b45e533))
 
 ### Features
 
@@ -526,105 +534,105 @@ This reverts commit 92194a72ea1aaa454c1cd7feb57bbd950c4e5b9d.
 
 ### Bug Fixes
 
-- **release**: Sort projects list for odoo modules
-  ([`089252c`](https://github.com/42nerds/hitchhiker/commit/089252c4846eced10537ae3012a954360cf64641))
-
-- **update**: Improved strings
-  ([`debde07`](https://github.com/42nerds/hitchhiker/commit/debde07e7473a8d41882ca9deae351c013284bb7))
-
-- Remove unreachable code from ConfigManager
-  ([`902ceb6`](https://github.com/42nerds/hitchhiker/commit/902ceb66f3ecdc77529758fad2a30fa571c86bb2))
+- Added copier dependency in pyproject.toml
+  ([`009c0ed`](https://github.com/42nerds/hitchhiker/commit/009c0ed20418c491efc6cc21b2b203d0f8989ca5))
 
 - Configmanager test bug
   ([`16954cd`](https://github.com/42nerds/hitchhiker/commit/16954cd170b955f5129c8983663cb3ed019fa653))
 
-- Added copier dependency in pyproject.toml
-  ([`009c0ed`](https://github.com/42nerds/hitchhiker/commit/009c0ed20418c491efc6cc21b2b203d0f8989ca5))
-
-- **release**: Various TODO's fixed
-  ([`8b49d62`](https://github.com/42nerds/hitchhiker/commit/8b49d62a812efded9ab24b7fa70aa417d6fc498f))
-
-- **release**: Incorrect prerelease bump for major
-  ([`e9c13b9`](https://github.com/42nerds/hitchhiker/commit/e9c13b9a6123d5ee3bda642464d21754be5ade9b))
-
-- **release**: Bump prerelease correctly
-  ([`783c173`](https://github.com/42nerds/hitchhiker/commit/783c173689a4ce13cd4703b57515d51f9269985a))
-
-- **release**: Use click.echo instead of print
-  ([`b666b99`](https://github.com/42nerds/hitchhiker/commit/b666b99837ad44d7ddbf30f636fc79787ccd55d1))
-
-- **release**: Improved error handling
-  ([`f359188`](https://github.com/42nerds/hitchhiker/commit/f3591883939975fccfd59367287170095208726b))
+- Hardcoded git repo path
+  ([`908d9ae`](https://github.com/42nerds/hitchhiker/commit/908d9aefda6cfba90972010055a9ceb0ee9f1ad1))
 
 - Prerelease
   ([`49fbaea`](https://github.com/42nerds/hitchhiker/commit/49fbaea0a16c4d5133e33ef3a0491e308e40336e))
+
+- Readd main.py
+  ([`e0c6a12`](https://github.com/42nerds/hitchhiker/commit/e0c6a1217ee09d00a840eb7edace6a089d8f8406))
+
+- Remove unreachable code from ConfigManager
+  ([`902ceb6`](https://github.com/42nerds/hitchhiker/commit/902ceb66f3ecdc77529758fad2a30fa571c86bb2))
 
 - Use dict for ctx in release
   ([`30b26ee`](https://github.com/42nerds/hitchhiker/commit/30b26ee4736a7f2d6c55252dc9e250a35cf97c3d))
 
 this allows us to use the ctx.obj["DEBUG"] flag
 
-- Readd main.py
-  ([`e0c6a12`](https://github.com/42nerds/hitchhiker/commit/e0c6a1217ee09d00a840eb7edace6a089d8f8406))
+- **release**: Bump prerelease correctly
+  ([`783c173`](https://github.com/42nerds/hitchhiker/commit/783c173689a4ce13cd4703b57515d51f9269985a))
 
-- Hardcoded git repo path
-  ([`908d9ae`](https://github.com/42nerds/hitchhiker/commit/908d9aefda6cfba90972010055a9ceb0ee9f1ad1))
+- **release**: Improved error handling
+  ([`f359188`](https://github.com/42nerds/hitchhiker/commit/f3591883939975fccfd59367287170095208726b))
+
+- **release**: Incorrect prerelease bump for major
+  ([`e9c13b9`](https://github.com/42nerds/hitchhiker/commit/e9c13b9a6123d5ee3bda642464d21754be5ade9b))
+
+- **release**: Sort projects list for odoo modules
+  ([`089252c`](https://github.com/42nerds/hitchhiker/commit/089252c4846eced10537ae3012a954360cf64641))
+
+- **release**: Use click.echo instead of print
+  ([`b666b99`](https://github.com/42nerds/hitchhiker/commit/b666b99837ad44d7ddbf30f636fc79787ccd55d1))
+
+- **release**: Various TODO's fixed
+  ([`8b49d62`](https://github.com/42nerds/hitchhiker/commit/8b49d62a812efded9ab24b7fa70aa417d6fc498f))
+
+- **update**: Improved strings
+  ([`debde07`](https://github.com/42nerds/hitchhiker/commit/debde07e7473a8d41882ca9deae351c013284bb7))
 
 ### Chores
 
 - Ability to generate coverage report locally
   ([`9ed6318`](https://github.com/42nerds/hitchhiker/commit/9ed6318a2dde69e911480f685688b3333e22e3dd))
 
-- Set up python-semantic-release
-  ([`b61a5b0`](https://github.com/42nerds/hitchhiker/commit/b61a5b095ce7280f203b4af349bbb018aa01cc75))
-
-- Moved some comments
-  ([`01d1263`](https://github.com/42nerds/hitchhiker/commit/01d12638d1135b7300149f9d6fd824523103c68b))
+- Devcontainer
+  ([`de6b3e2`](https://github.com/42nerds/hitchhiker/commit/de6b3e21b045b82117251b36e033fbb56e92a3be))
 
 - Move code from private repo
   ([`9430765`](https://github.com/42nerds/hitchhiker/commit/943076570782e55cf6976fac2eb39cd09cbc2483))
 
-- Devcontainer
-  ([`de6b3e2`](https://github.com/42nerds/hitchhiker/commit/de6b3e21b045b82117251b36e033fbb56e92a3be))
+- Moved some comments
+  ([`01d1263`](https://github.com/42nerds/hitchhiker/commit/01d12638d1135b7300149f9d6fd824523103c68b))
+
+- Set up python-semantic-release
+  ([`b61a5b0`](https://github.com/42nerds/hitchhiker/commit/b61a5b095ce7280f203b4af349bbb018aa01cc75))
 
 ### Code Style
-
-- **modules**: Minor style fixes
-  ([`2a1d680`](https://github.com/42nerds/hitchhiker/commit/2a1d680adbb93a103a868173d0d613e40f1df85f))
-
-- **release**: Whitespace fix
-  ([`d8b598a`](https://github.com/42nerds/hitchhiker/commit/d8b598a19c5591eba7ca2b0fe45f1973d406444c))
-
-- **release**: Fixed too long lines + whitespace
-  ([`157d2a4`](https://github.com/42nerds/hitchhiker/commit/157d2a4480ca4c9895520cab89a5fee4199d6414))
 
 - Removed unused imports and some other stuff
   ([`6eb1cb1`](https://github.com/42nerds/hitchhiker/commit/6eb1cb1668ae16ebc9a17595400f83149a3eeb64))
 
-### Continuous Integration
+- **modules**: Minor style fixes
+  ([`2a1d680`](https://github.com/42nerds/hitchhiker/commit/2a1d680adbb93a103a868173d0d613e40f1df85f))
 
-- Pytest long backtraces
-  ([`271fe9e`](https://github.com/42nerds/hitchhiker/commit/271fe9ef190d64595cfe1a1105a05675167661d3))
+- **release**: Fixed too long lines + whitespace
+  ([`157d2a4`](https://github.com/42nerds/hitchhiker/commit/157d2a4480ca4c9895520cab89a5fee4199d6414))
+
+- **release**: Whitespace fix
+  ([`d8b598a`](https://github.com/42nerds/hitchhiker/commit/d8b598a19c5591eba7ca2b0fe45f1973d406444c))
+
+### Continuous Integration
 
 - Fix missing deps
   ([`98e8412`](https://github.com/42nerds/hitchhiker/commit/98e8412778880fbbbef48e4dd6c6298f0e731901))
 
-- Test only with python3.11
-  ([`cf4227f`](https://github.com/42nerds/hitchhiker/commit/cf4227f338c6adabc79369657a95c84554704e2c))
-
 - Generate coverage and upload to codacy
   ([`7bb14f9`](https://github.com/42nerds/hitchhiker/commit/7bb14f9ad8fc2ad2e0aeffeadc7881b6a06a8481))
 
+- Pytest long backtraces
+  ([`271fe9e`](https://github.com/42nerds/hitchhiker/commit/271fe9ef190d64595cfe1a1105a05675167661d3))
+
+- Test only with python3.11
+  ([`cf4227f`](https://github.com/42nerds/hitchhiker/commit/cf4227f338c6adabc79369657a95c84554704e2c))
+
 ### Documentation
+
+- Fixed ci example workflow
+  ([`6456058`](https://github.com/42nerds/hitchhiker/commit/64560581c9fb217d92f876c2913bfd7585f6c07e))
 
 - Improved readability of README.md
   ([`4c3a907`](https://github.com/42nerds/hitchhiker/commit/4c3a9070fef45ff327570f80d4402ce1c2a050cd))
 
 - Simple installation and update instructions
   ([`a8e3d41`](https://github.com/42nerds/hitchhiker/commit/a8e3d419cc0c3d4a9628af5345d30d455e109870))
-
-- Fixed ci example workflow
-  ([`6456058`](https://github.com/42nerds/hitchhiker/commit/64560581c9fb217d92f876c2913bfd7585f6c07e))
 
 - **release**: Github actions example workflow
   ([`69651c2`](https://github.com/42nerds/hitchhiker/commit/69651c2e81d101862e9e31caef6685ea4e050278))
@@ -634,8 +642,8 @@ this allows us to use the ctx.obj["DEBUG"] flag
 
 ### Features
 
-- **release**: Support for setup.cfg
-  ([`e833b3e`](https://github.com/42nerds/hitchhiker/commit/e833b3e55fe6a840626d1acabef24c0a24b9b7b2))
+- Configmanager
+  ([`b93c023`](https://github.com/42nerds/hitchhiker/commit/b93c0237127616f295319bdc63d2e686528019f6))
 
 - Hitchhiker update
   ([`334bf13`](https://github.com/42nerds/hitchhiker/commit/334bf13543b1d88921e63d054f6ae550d3962d3b))
@@ -643,11 +651,8 @@ this allows us to use the ctx.obj["DEBUG"] flag
 - Instance of ConfigManager in click context
   ([`72e10e5`](https://github.com/42nerds/hitchhiker/commit/72e10e53d90749d3feb294d80b22ab07dddc1939))
 
-- Configmanager
-  ([`b93c023`](https://github.com/42nerds/hitchhiker/commit/b93c0237127616f295319bdc63d2e686528019f6))
-
-- **release**: --ghtoken argument
-  ([`f841a19`](https://github.com/42nerds/hitchhiker/commit/f841a196ab5dfb401fcfbf0db4501365575eda53))
+- Use github API to create releases
+  ([`dd3c244`](https://github.com/42nerds/hitchhiker/commit/dd3c244b83cfa7e978be73e0df687302b101f552))
 
 - **modules**: Modules new - run copier
   ([`313457a`](https://github.com/42nerds/hitchhiker/commit/313457a4e5946b3982857d0c9c8a12ed831b20cb))
@@ -658,11 +663,14 @@ this allows us to use the ctx.obj["DEBUG"] flag
 - **modules**: Odoo modules list
   ([`1527eb1`](https://github.com/42nerds/hitchhiker/commit/1527eb183c1e734e31e81f955ec5caab14fa836c))
 
+- **release**: --ghtoken argument
+  ([`f841a19`](https://github.com/42nerds/hitchhiker/commit/f841a196ab5dfb401fcfbf0db4501365575eda53))
+
+- **release**: Changelog added
+  ([`eee7478`](https://github.com/42nerds/hitchhiker/commit/eee7478e5edb8ce1c845e88ccf3d174ce98b81b3))
+
 - **release**: Option to select branch with regex
   ([`e01deed`](https://github.com/42nerds/hitchhiker/commit/e01deed467e95e521862058c64f49a6c96d993d1))
-
-- **release**: Prerelease token config option
-  ([`a8ac9e6`](https://github.com/42nerds/hitchhiker/commit/a8ac9e688f482013695c3b316e9530d9bc3ae236))
 
 - **release**: Option to specify config file path
   ([`d6b5a61`](https://github.com/42nerds/hitchhiker/commit/d6b5a6185c3695533fb5183676dd2bbf7732e9bf))
@@ -670,22 +678,13 @@ this allows us to use the ctx.obj["DEBUG"] flag
 - **release**: Per-project prerelease setting
   ([`29a785f`](https://github.com/42nerds/hitchhiker/commit/29a785f922a75c4479d70300f0fae8c4ae76017c))
 
-- **release**: Changelog added
-  ([`eee7478`](https://github.com/42nerds/hitchhiker/commit/eee7478e5edb8ce1c845e88ccf3d174ce98b81b3))
+- **release**: Prerelease token config option
+  ([`a8ac9e6`](https://github.com/42nerds/hitchhiker/commit/a8ac9e688f482013695c3b316e9530d9bc3ae236))
 
-- Use github API to create releases
-  ([`dd3c244`](https://github.com/42nerds/hitchhiker/commit/dd3c244b83cfa7e978be73e0df687302b101f552))
+- **release**: Support for setup.cfg
+  ([`e833b3e`](https://github.com/42nerds/hitchhiker/commit/e833b3e55fe6a840626d1acabef24c0a24b9b7b2))
 
 ### Refactoring
-
-- **release**: Formatting
-  ([`9035762`](https://github.com/42nerds/hitchhiker/commit/9035762801707307a62305fae14d1408b12fbaee))
-
-- **release**: Dict for conf instead of class
-  ([`e5b4a8b`](https://github.com/42nerds/hitchhiker/commit/e5b4a8b1602fa7bf9dc92d0d7aca8e279e40bd48))
-
-- **release**: Clean up version command
-  ([`cc8212a`](https://github.com/42nerds/hitchhiker/commit/cc8212a618719e5ac7d4862fe311f7423b316378))
 
 - Add missing __init__.py
   ([`8a55e8d`](https://github.com/42nerds/hitchhiker/commit/8a55e8d076ee9731ab3d8265e088e9d5e2698281))
@@ -704,16 +703,34 @@ We decided the tool to be named as hitchhiker from now on
 - Version_test
   ([`183a03e`](https://github.com/42nerds/hitchhiker/commit/183a03ec14c2b858e5a72c11f4f7dfc740c177ee))
 
+- **release**: Clean up version command
+  ([`cc8212a`](https://github.com/42nerds/hitchhiker/commit/cc8212a618719e5ac7d4862fe311f7423b316378))
+
+- **release**: Dict for conf instead of class
+  ([`e5b4a8b`](https://github.com/42nerds/hitchhiker/commit/e5b4a8b1602fa7bf9dc92d0d7aca8e279e40bd48))
+
+- **release**: Formatting
+  ([`9035762`](https://github.com/42nerds/hitchhiker/commit/9035762801707307a62305fae14d1408b12fbaee))
+
 ### Testing
 
-- **release**: Check if changelog was created
-  ([`457af01`](https://github.com/42nerds/hitchhiker/commit/457af01ec0095b2276f125ee7c58f8c3659df205))
+- Add test for cli entry point
+  ([`b100616`](https://github.com/42nerds/hitchhiker/commit/b100616ea2b5cd5697967f73be07159fd9da1853))
+
+- Check output of version subcommand
+  ([`5021a25`](https://github.com/42nerds/hitchhiker/commit/5021a25ab44f85a8afe964c6c097f97d88760d03))
 
 - Cover cli entry point from version_test
   ([`7eaf374`](https://github.com/42nerds/hitchhiker/commit/7eaf3741cc0286fc3eee7622087303bf58b16563))
 
-- Add test for cli entry point
-  ([`b100616`](https://github.com/42nerds/hitchhiker/commit/b100616ea2b5cd5697967f73be07159fd9da1853))
+- Git_fixtures fix __init__.py files not added
+  ([`7d08deb`](https://github.com/42nerds/hitchhiker/commit/7d08deb15d159b0610feef9c69ad78792ecdc61d))
+
+- Improved coverage for semver.py
+  ([`13d768e`](https://github.com/42nerds/hitchhiker/commit/13d768ee9723307f26310ae4434bb3e288cc515e))
+
+- Improved random filenames for git repos
+  ([`a7e0260`](https://github.com/42nerds/hitchhiker/commit/a7e026039d32e5b0bd9f6c6a3522a276b6b678b9))
 
 - Modified tests to use higher initial version
   ([`52f1edc`](https://github.com/42nerds/hitchhiker/commit/52f1edc00b1d7697e0ec6b562444e79b46036e8d))
@@ -721,14 +738,5 @@ We decided the tool to be named as hitchhiker from now on
 - Version_test added check for prev. version
   ([`dbe9a3a`](https://github.com/42nerds/hitchhiker/commit/dbe9a3a4ecec009b8cf092a118ca1ca79c5b6947))
 
-- Git_fixtures fix __init__.py files not added
-  ([`7d08deb`](https://github.com/42nerds/hitchhiker/commit/7d08deb15d159b0610feef9c69ad78792ecdc61d))
-
-- Check output of version subcommand
-  ([`5021a25`](https://github.com/42nerds/hitchhiker/commit/5021a25ab44f85a8afe964c6c097f97d88760d03))
-
-- Improved random filenames for git repos
-  ([`a7e0260`](https://github.com/42nerds/hitchhiker/commit/a7e026039d32e5b0bd9f6c6a3522a276b6b678b9))
-
-- Improved coverage for semver.py
-  ([`13d768e`](https://github.com/42nerds/hitchhiker/commit/13d768ee9723307f26310ae4434bb3e288cc515e))
+- **release**: Check if changelog was created
+  ([`457af01`](https://github.com/42nerds/hitchhiker/commit/457af01ec0095b2276f125ee7c58f8c3659df205))
