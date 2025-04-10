@@ -1,6 +1,41 @@
 # CHANGELOG
 
 
+## v0.23.0 (2025-04-10)
+
+### Bug Fixes
+
+- Allow hitchhiker to run inside the nix-shell environment
+  ([`58cdd97`](https://github.com/42nerds/hitchhiker/commit/58cdd97956accda709fb1c8620deb69779ecb5a3))
+
+- Disable pylint unknown-option-value to please linter in older python versions
+  ([`f6377ea`](https://github.com/42nerds/hitchhiker/commit/f6377eae9810e81993ffdce9c99941395d95c345))
+
+- Fix missing placeholders in f-string
+  ([`1394ad3`](https://github.com/42nerds/hitchhiker/commit/1394ad32688d1b2d78f22d7d2c6e7e0eae9053cf))
+
+- Improve DirectoryBackup
+  ([`49ef08f`](https://github.com/42nerds/hitchhiker/commit/49ef08fad3c4798939db7aacf5f2e960b3d3ab0e))
+
+- Repo.py typing issues
+  ([`15843f8`](https://github.com/42nerds/hitchhiker/commit/15843f82a9f525a47c9c0821d1f7c57a380c8d5a))
+
+- Semver.py typing issues
+  ([`f970a35`](https://github.com/42nerds/hitchhiker/commit/f970a35b50043ece2103e5b72012aad91a76e3d0))
+
+### Chores
+
+- Disable some linter errors
+  ([`149004c`](https://github.com/42nerds/hitchhiker/commit/149004ccd76a86e3c3dcac08fc1faebe050a5e74))
+
+### Features
+
+- Add Odoo backup --store-type option
+  ([`1df2194`](https://github.com/42nerds/hitchhiker/commit/1df2194cfc8f9abe3c6449f9d0c2327de4639f49))
+
+This allows backups into directories instead of zip files
+
+
 ## v0.22.3 (2025-04-07)
 
 ### Bug Fixes
