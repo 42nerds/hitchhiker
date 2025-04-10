@@ -38,9 +38,9 @@ docs:
 lint:
 	@flake8 --ignore=E501,W503
 	@echo "flake8 OK"
-	@pylint --disable=fixme,missing-function-docstring,missing-class-docstring ./hitchhiker # TODO: write more docs so this can be disabled
+	@pylint --disable=fixme,missing-function-docstring,missing-class-docstring,unknown-option-value ./hitchhiker # TODO: write more docs so this can be disabled
 	@echo "pylint hitchhiker OK"
-	@#pylint --disable=missing-function-docstring,missing-class-docstring ./tests # FIXME: please linter in tests/
+	@#pylint --disable=missing-function-docstring,missing-class-docstring,unknown-option-value ./tests # FIXME: please linter in tests/
 	@#echo "pylint tests OK"
 
 .PHONY: precommit
