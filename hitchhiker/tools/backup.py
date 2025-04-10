@@ -5,7 +5,7 @@ import tempfile
 import zipfile
 import subprocess
 from contextlib import contextmanager
-from typing import BinaryIO, Iterator
+from typing import BinaryIO, Iterator, Set
 
 
 class GenericBackup:
@@ -71,10 +71,10 @@ class DirectoryRsyncBackup(GenericBackup):
             raise RuntimeError("rsync executable not found")
         self.rsync_exec = rsync_exec
         # keeps track of which paths rsync was used on, helpful for deleting things that are not meant to exist
-        self.rsynced_paths: set[str] = set()
+        self.rsynced_paths: Set[str] = set()
         # keeps track of which files were created in the destination, also helpful for deleting things
         # that are not meant to exist
-        self.files_created: set[str] = set()
+        self.files_created: Set[str] = set()
 
     def add_dir(self, src: str, dst: str) -> None:
         real_dst = os.path.join(self.path, dst)
