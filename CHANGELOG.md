@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.24.1 (2025-04-10)
+
+### Bug Fixes
+
+- Linter issues
+  ([`3ae66a0`](https://github.com/42nerds/hitchhiker/commit/3ae66a004e6a9e5e4ceca2575a66e6aa39f771be))
+
+
 ## v0.24.0 (2025-04-10)
 
 ### Features
