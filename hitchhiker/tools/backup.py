@@ -3,6 +3,7 @@ import pathlib
 import shutil
 import tempfile
 import zipfile
+import subprocess
 from contextlib import contextmanager
 from typing import BinaryIO, Iterator
 
@@ -36,17 +37,97 @@ class DirectoryBackup(GenericBackup):
         pathlib.Path(self.path).mkdir(parents=True)
 
     def add_dir(self, src: str, dst: str) -> None:
-        shutil.copytree(src, os.path.join(self.path, dst))
+        real_dst = os.path.join(self.path, dst)
+        pathlib.Path(real_dst).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(src, real_dst)
 
     def add_file(self, src: str, dst: str) -> None:
-        shutil.copyfile(src, os.path.join(self.path, dst))
+        real_dst = os.path.join(self.path, dst)
+        pathlib.Path(real_dst).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src, real_dst)
 
     def write(self, stream: BinaryIO, filename: str) -> None:
+        real_dst = os.path.join(self.path, filename)
+        pathlib.Path(real_dst).parent.mkdir(parents=True, exist_ok=True)
         with open(os.path.join(self.path, filename), "wb") as f:
             shutil.copyfileobj(stream, f)
 
     def close(self) -> None:
         pass
+
+    def destroy(self) -> None:
+        shutil.rmtree(self.path)
+
+
+# TODO: tests
+class DirectoryRsyncBackup(GenericBackup):
+    def __init__(self, path: str) -> None:
+        super().__init__(path)
+        if os.path.isfile(self.path):
+            raise RuntimeError(f"Backup destination ({path}) is a file")
+        pathlib.Path(self.path).mkdir(parents=True, exist_ok=True)
+        self.rsync_exec = shutil.which("rsync")
+        if self.rsync_exec is None:
+            raise RuntimeError("rsync executable not found")
+        # keeps track of which paths rsync was used on, helpful for deleting things that are not meant to exist
+        self.rsynced_paths = set()
+        # keeps track of which files were created in the destination, also helpful for deleting things
+        # that are not meant to exist
+        self.files_created = set()
+
+    def add_dir(self, src: str, dst: str) -> None:
+        real_dst = os.path.join(self.path, dst)
+        pathlib.Path(real_dst).mkdir(parents=True, exist_ok=True)
+        self.rsynced_paths.add(real_dst)
+        # just to be safe we check if real_dst so we don't delete root.. we call rsync with delete so better be careful
+        if not real_dst or not real_dst.strip("/"):
+            raise RuntimeError("root as destination with rsync and delete option..")
+        subprocess.run(
+            [self.rsync_exec, "-avh", "--delete-before", f"{src}/", f"{real_dst}/"],
+            check=True,
+        )
+
+    def add_file(self, src: str, dst: str) -> None:
+        real_dst = os.path.join(self.path, dst)
+        pathlib.Path(real_dst).parent.mkdir(parents=True, exist_ok=True)
+        self.files_created.add(real_dst)
+        shutil.copyfile(src, real_dst)
+
+    def write(self, stream: BinaryIO, filename: str) -> None:
+        real_dst = os.path.join(self.path, filename)
+        pathlib.Path(real_dst).parent.mkdir(parents=True, exist_ok=True)
+        self.files_created.add(real_dst)
+        with open(real_dst, "wb") as f:
+            shutil.copyfileobj(stream, f)
+
+    def close(self) -> None:
+        def is_rsynced_path(path: str):
+            return any(
+                os.path.commonpath([path, rp]) == rp for rp in self.rsynced_paths
+            )
+
+        def is_created_file(path: str):
+            return file_path in self.files_created
+
+        for root, dirs, files in os.walk(self.path, topdown=True):
+            # Skip walking into any rsynced path
+            # note: slice assignment
+            dirs[:] = [d for d in dirs if not is_rsynced_path(os.path.join(root, d))]
+
+            # Remove untracked files
+            for file in files:
+                file_path = os.path.join(root, file)
+                if not is_created_file(file_path):
+                    os.remove(file_path)
+
+        # Now clean up empty directories that are not rsynced
+        for root, dirs, _ in os.walk(self.path, topdown=False):
+            if is_rsynced_path(root) or root == self.path:
+                continue
+            try:
+                os.rmdir(root)
+            except OSError:
+                pass  # directory not empty or permission error
 
     def destroy(self) -> None:
         shutil.rmtree(self.path)
@@ -90,6 +171,7 @@ class ZipBackup(GenericBackup):
 _backup_formats = {
     "zip": ZipBackup,
     "dir": DirectoryBackup,
+    "dir_rsync": DirectoryRsyncBackup,
 }
 
 
@@ -100,6 +182,7 @@ def backup(path: str, fmt: str) -> Iterator[GenericBackup]:
     b = _backup_formats[fmt](path)
     try:
         yield b
+        b.close()
     except Exception as e:
         b.destroy()
         raise e
