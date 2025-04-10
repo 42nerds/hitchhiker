@@ -123,7 +123,8 @@ def version(
     ghtoken: str,
 ) -> None:
     """Figure out new version and apply it"""
-    # pylint: disable=too-many-arguments,too-many-branches,too-many-locals # TODO: split this function up further
+    # pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-branches,too-many-locals
+    # TODO: split this function up further
     if ghrelease and not push:
         raise click.BadOptionUsage(
             "ghrelease", "--ghrelease must be used together with --push"

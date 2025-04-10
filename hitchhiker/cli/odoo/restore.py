@@ -24,7 +24,7 @@ from . import click_odoo_ext
     default=False,
     help="overwrite even if the database already exists",
 )
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def restore_cmd(
     env: Any,  # pylint: disable=unused-argument
     input_path: str,
