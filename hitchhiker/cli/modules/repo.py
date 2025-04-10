@@ -33,11 +33,7 @@ def _get_github_token(ctx: click.Context) -> str:
         )
     return os.environ.get(
         "GITHUB_TOKEN",
-        (
-            ctx.obj["CONF"].get_key("GITHUB_TOKEN")
-            if ctx.obj["CONF"].has_key("GITHUB_TOKEN")
-            else None
-        ),
+        str(ctx.obj["CONF"].get_key("GITHUB_TOKEN")),
     )
 
 
