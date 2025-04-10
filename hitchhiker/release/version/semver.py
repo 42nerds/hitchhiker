@@ -100,7 +100,7 @@ class Version:
 
         """
         if not isinstance(obj, Version):
-            return NotImplemented
+            raise NotImplementedError
         return (
             self.major == obj.major
             and self.minor == obj.minor
@@ -132,7 +132,7 @@ class Version:
         """
         # pylint: disable=too-many-return-statements
         if not isinstance(obj, Version):
-            return NotImplemented
+            raise NotImplementedError
         if self.major < obj.major:
             return True
         if self.major > obj.major:
@@ -177,7 +177,7 @@ class Version:
 
         """
         if not isinstance(obj, Version):
-            return NotImplemented
+            raise NotImplementedError
         assert self.prerelease is not None
         assert obj.prerelease is not None
         for selfid, objid in zip(self.prerelease.split("."), obj.prerelease.split(".")):
@@ -229,7 +229,7 @@ class Version:
 
         """
         if not isinstance(obj, Version):
-            return NotImplemented
+            raise NotImplementedError
         ver_lt = self.__ver_lt(obj)
         if ver_lt is not None:
             return ver_lt
