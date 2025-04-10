@@ -1,4 +1,5 @@
 import os
+import pathlib
 import shutil
 import tempfile
 import zipfile
@@ -30,8 +31,9 @@ class GenericBackup:
 class DirectoryBackup(GenericBackup):
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        if not os.path.isdir(self.path):
-            os.mkdir(self.path)
+        if os.path.exists(self.path):
+            raise RuntimeError(f"Backup destination ({path}) already exists")
+        pathlib.Path(self.path).mkdir(parents=True)
 
     def add_dir(self, src: str, dst: str) -> None:
         shutil.copytree(src, os.path.join(self.path, dst))
