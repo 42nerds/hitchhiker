@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.24.2 (2025-04-10)
+
+### Bug Fixes
+
+- Typing for python 3.7
+  ([`00cada6`](https://github.com/42nerds/hitchhiker/commit/00cada602b1533eda7643782cb3ab327f7ae46f3))
+
+
 ## v0.24.1 (2025-04-10)
 
 ### Bug Fixes
