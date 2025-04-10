@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.24.0 (2025-04-10)
+
+### Features
+
+- Directoryrsyncbackup
+  ([`100db9f`](https://github.com/42nerds/hitchhiker/commit/100db9f0d14e0fd59c1f9105f6a1e994690711a0))
+
+
 ## v0.23.0 (2025-04-10)
 
 ### Bug Fixes
