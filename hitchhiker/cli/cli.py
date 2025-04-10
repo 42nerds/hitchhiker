@@ -8,17 +8,20 @@ from .auth import commands as auth
 from .modules import commands as modules
 
 if sys.version_info[1] > 7:
-    import importlib.metadata
+    try:
+        import importlib.metadata
 
-    _hitchhiker_version = importlib.metadata.version("hitchhiker")
+        _HITCHHIKER_VERSION = importlib.metadata.version("hitchhiker")
+    except importlib.metadata.PackageNotFoundError:
+        _HITCHHIKER_VERSION = "unknown"
 else:
     import pkg_resources
 
-    _hitchhiker_version = pkg_resources.get_distribution("hitchhiker").version
+    _HITCHHIKER_VERSION = pkg_resources.get_distribution("hitchhiker").version
 
 
 @click.group()
-@click.version_option(version=_hitchhiker_version)
+@click.version_option(version=_HITCHHIKER_VERSION)
 @click.option(
     "--conf", default="~/.config/hitchhiker/config.json", help="Configuration file path"
 )
@@ -30,7 +33,7 @@ def cli(ctx: click.Context, debug: bool, conf: str) -> None:
 
     ctx.obj["DEBUG"] = debug
     ctx.obj["CONF"] = ConfigManager(conf, {})
-    ctx.obj["VERSION"] = _hitchhiker_version
+    ctx.obj["VERSION"] = _HITCHHIKER_VERSION
 
 
 cli.add_command(modules.modules)
