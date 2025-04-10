@@ -66,14 +66,15 @@ class DirectoryRsyncBackup(GenericBackup):
         if os.path.isfile(self.path):
             raise RuntimeError(f"Backup destination ({path}) is a file")
         pathlib.Path(self.path).mkdir(parents=True, exist_ok=True)
-        self.rsync_exec = shutil.which("rsync")
-        if self.rsync_exec is None:
+        rsync_exec = shutil.which("rsync")
+        if rsync_exec is None:
             raise RuntimeError("rsync executable not found")
+        self.rsync_exec = rsync_exec
         # keeps track of which paths rsync was used on, helpful for deleting things that are not meant to exist
-        self.rsynced_paths = set()
+        self.rsynced_paths: set[str] = set()
         # keeps track of which files were created in the destination, also helpful for deleting things
         # that are not meant to exist
-        self.files_created = set()
+        self.files_created: set[str] = set()
 
     def add_dir(self, src: str, dst: str) -> None:
         real_dst = os.path.join(self.path, dst)
@@ -101,13 +102,13 @@ class DirectoryRsyncBackup(GenericBackup):
             shutil.copyfileobj(stream, f)
 
     def close(self) -> None:
-        def is_rsynced_path(path: str):
+        def is_rsynced_path(path: str) -> bool:
             return any(
                 os.path.commonpath([path, rp]) == rp for rp in self.rsynced_paths
             )
 
-        def is_created_file(path: str):
-            return file_path in self.files_created
+        def is_created_file(path: str) -> bool:
+            return path in self.files_created
 
         for root, dirs, files in os.walk(self.path, topdown=True):
             # Skip walking into any rsynced path
