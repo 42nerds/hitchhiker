@@ -1,7 +1,7 @@
 with import <nixpkgs> {};
 let
 in stdenv.mkDerivation {
-  name = "python-click-experiments";
+  name = "hitchhiker";
   buildInputs = [
     python311
     python311Packages.setuptools
@@ -16,6 +16,7 @@ in stdenv.mkDerivation {
 
     python311Packages.types-requests
     python311Packages.types-deprecated
+    python311Packages.types-psycopg2
 
     python311Packages.click
 
@@ -25,5 +26,11 @@ in stdenv.mkDerivation {
     python311Packages.PyGithub
 
     python311Packages.google-cloud-storage
+
+    python311Packages.pylint
+    python311Packages.flake8
+    python311Packages.coverage
+
+    gnumake
   ];
 }

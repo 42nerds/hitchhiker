@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
@@ -25,7 +25,7 @@ jobs:
           coverage xml --omit="tests/*" -o coverage.xml
 
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
@@ -47,7 +47,7 @@ jobs:
           coverage-reports: coverage.xml
 
   test-no-optional-deps:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
@@ -73,7 +73,7 @@ jobs:
           hitchhiker modules list
 
   type-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ["3.11", "3.10", "3.9", "3.8", "3.7"]
@@ -90,7 +90,7 @@ jobs:
         run: mypy --install-types --non-interactive ./hitchhiker --strict --no-warn-unused-ignores
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ["3.11", "3.10", "3.9", "3.8"]

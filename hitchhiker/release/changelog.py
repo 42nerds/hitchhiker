@@ -88,7 +88,7 @@ def gen_changelog(
     print(changelog)
     ```
     """
-    # pylint: disable=too-many-arguments,too-many-locals
+    # pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
     out = f"\n## v{new_version}\n"
     out += "### Projects\n| module | version |\n| -------- | ----------- |\n"
     for oldp, newp in zip(projects_old, projects_new):
