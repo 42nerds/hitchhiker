@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.24.3 (2025-04-14)
+
+### Bug Fixes
+
+- Close backup instead of destroying it on error
+  ([`f6254df`](https://github.com/42nerds/hitchhiker/commit/f6254df0036fef741356eab2546511ef76c1fed9))
+
+
 ## v0.24.2 (2025-04-10)
 
 ### Bug Fixes
