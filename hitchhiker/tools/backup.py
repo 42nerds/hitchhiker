@@ -185,5 +185,5 @@ def backup(path: str, fmt: str) -> Iterator[GenericBackup]:
         yield b
         b.close()
     except Exception as e:
-        b.destroy()
+        b.close()
         raise e
