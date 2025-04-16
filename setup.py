@@ -2,7 +2,7 @@ from setuptools import find_namespace_packages, setup
 
 # we use setup.py to be compatible with old versions of pip and python
 
-_hitchhiker_version = "0.24.3"
+_hitchhiker_version = "0.24.4"
 
 setup(
     name="hitchhiker",

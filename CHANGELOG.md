@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.24.4 (2025-04-16)
+
+### Bug Fixes
+
+- Ignore Partial transfer due to vanished source files when running rsync
+  ([`0dc7020`](https://github.com/42nerds/hitchhiker/commit/0dc7020ffbc48bb4648c0e160d52394955c53d4b))
+
+
 ## v0.24.3 (2025-04-14)
 
 ### Bug Fixes
