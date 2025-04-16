@@ -83,10 +83,14 @@ class DirectoryRsyncBackup(GenericBackup):
         # just to be safe we check if real_dst so we don't delete root.. we call rsync with delete so better be careful
         if not real_dst or not real_dst.strip("/"):
             raise RuntimeError("root as destination with rsync and delete option..")
-        subprocess.run(
-            [self.rsync_exec, "-avh", "--delete-before", f"{src}/", f"{real_dst}/"],
-            check=True,
-        )
+        try:
+            subprocess.run(
+                [self.rsync_exec, "-avh", "--delete-before", "--no-owner", "--no-group", f"{src}/", f"{real_dst}/"],
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            if e.returncode != 24:  # rsync exit code 24: Partial transfer due to vanished source files
+                raise e
 
     def add_file(self, src: str, dst: str) -> None:
         real_dst = os.path.join(self.path, dst)
