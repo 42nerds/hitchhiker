@@ -2,30 +2,21 @@ from __future__ import annotations
 
 import os
 import os.path
-import re
+import json
 import shutil
 import tarfile
 import tempfile
-from typing import Any
+import hashlib
+from typing import Any, Optional
 
 import click
-import github
 import requests
 import yaml  # type: ignore[import]
 
-from hitchhiker.cli.modules.list import discover_modules
-from hitchhiker.release.version import semver
-
-
 # pylint: disable=R0901
-class IndentDumper(yaml.Dumper):  # type: ignore[misc]
-    def increase_indent(
-        self, flow: bool = False, indentless: bool = False
-    ) -> Any:  # the indentless argument is required
-        return super().increase_indent(flow, False)
-
-
 # pylint: disable=R0801
+
+
 def _get_github_token(ctx: click.Context) -> str:
     if "GITHUB_TOKEN" not in os.environ and not ctx.obj["CONF"].has_key("GITHUB_TOKEN"):
         raise click.UsageError(
@@ -54,6 +45,7 @@ def _do_cached_download(ctx: click.Context, url: str) -> str:
             headers={"Authorization": f"Bearer {_get_github_token(ctx)}"},
             timeout=30,
         )
+        req.raise_for_status()
         with open(fname, "wb") as f:  # type: ignore[assignment]
             f.write(req.content)  # type: ignore[arg-type]
         _do_cached_download_cache[url] = fname
@@ -70,64 +62,6 @@ def _clear_download_cache() -> None:
     _do_cached_download_cache = {}
 
 
-def _tag_as_version(tag: str, odoo_version: int) -> semver.Version:
-    tag_regex = rf"^{odoo_version}\.0-v?(\d+\.\d+\.\d+)$"
-    return semver.Version().parse(
-        re.match(tag_regex, tag).group(1)  # type: ignore[union-attr]
-    )
-
-
-_get_repo_latest_tag_cache: dict[str, tuple[str, str]] = {}
-
-
-def _get_repo_latest_tag(
-    ctx: click.Context, repo: str, odoo_version: int
-) -> tuple[str, str]:
-    """
-    Retrieves the latest tag from a module repo
-
-    Parameters:
-        ctx (click.Context): The Click context object.
-
-    Returns:
-        tuple[str, str]: tuple[tagname, tgzurl].
-
-    """
-    cache_key = repo + str(odoo_version)
-    if cache_key in _get_repo_latest_tag_cache:
-        return _get_repo_latest_tag_cache[cache_key]
-
-    try:
-        gh = github.Github(_get_github_token(ctx))
-        tags = gh.get_repo(repo).get_tags()
-    except Exception as e:
-        click.secho(
-            "Error getting tags from GitHub. Is something wrong with your token?",
-            err=True,
-            fg="red",
-        )
-        raise e
-    tag_regex = rf"^{odoo_version}\.0-v?(\d+\.\d+\.\d+)$"
-    tags_sorted = sorted(
-        list(filter(lambda r: re.match(tag_regex, r.name), tags)),
-        key=lambda r: _tag_as_version(r.name, odoo_version),
-        reverse=True,
-    )
-    if len(tags_sorted) == 0:
-        errstr = f"No tags found in repo {repo} for odoo version {odoo_version}"
-        click.secho(
-            errstr,
-            err=True,
-            fg="red",
-        )
-        raise RuntimeError(errstr)
-
-    tag = tags_sorted[0]
-
-    _get_repo_latest_tag_cache[cache_key] = (tag.name, tag.tarball_url)
-    return _get_repo_latest_tag_cache[cache_key]
-
-
 @click.group("repo")
 @click.pass_context
 def repo_group(ctx: click.Context) -> None:
@@ -137,13 +71,7 @@ def repo_group(ctx: click.Context) -> None:
     ctx.ensure_object(dict)
 
 
-@click.command(name="create", short_help="Create vogon.yaml and populate it")
-@click.option(
-    "--glob",
-    is_flag=False,
-    default="./**/__manifest__.py",
-    help="module search path glob",
-)
+@repo_group.command(name="create", short_help="Create sample vogon.yaml")
 @click.option(
     "--overwrite",
     is_flag=True,
@@ -151,74 +79,73 @@ def repo_group(ctx: click.Context) -> None:
     help="overwrite the vogon.yaml even if it already exists",
 )
 @click.pass_context
-def create_cmd(_ctx: click.Context, glob: str, overwrite: bool) -> None:
+def create_cmd(_ctx: click.Context, overwrite: bool) -> None:
     """
     Creates vogon.yaml and populates it with modules found in the current working directory
 
     Parameters:
-        --glob (str): The glob pattern to search for Odoo modules (default: `./**/__manifest__.py`).
         --overwrite (bool): allows overwriting the vogon.yaml
 
     """
     if not overwrite and os.path.isfile("vogon.yaml"):
         click.echo("vogon.yaml already exists and --overwrite is not set")
         return
-    modules = discover_modules(glob)
-    modules.sort(key=lambda x: x.get_int_name())
     click.echo("Creating vogon.yaml")
     with open("vogon.yaml", "w", encoding="utf-8") as f:
-        mods = []
-        for module in modules:
-            mod = {}
-            mod["name"] = module.get_int_name()
-            path = str(os.path.dirname(module.get_dir()))
-            if path != ".":
-                mod["path"] = path
-            mods.append(mod)
         f.write(
-            """# Example:
-#odoo_version: 17
-#modules:
-#  - name: test_abc
-#    path: ./test_modules
-#    git: 42nerds/module_test_inroot
-#    git_tag: 17.0-v0.2.0
-#    git_path: . # by default git path will be the same as the module name
-#  - name: test_abcd
-#    path: ./test_modules
-#    use_latest: true # if true will always clone the latest version update it in the vogon.yaml. False by default
-#    git: 42nerds/module_test
-#    git_tag: 17.0-v0.0.1
-#  - name: another_module
-#    git: 42nerds/module_test
-#    git_tag: 17.0-v0.1.0
-#  - name: module_without_git
-# Autogenerated from modules found in the current working directory:
+            """## EXAMPLE:
+# modules:
+#   # internal is the quick and easy-to-read format for 42 N.E.R.D.S. style repos
+#   # This basically just resolves into a modules entry with a bunch of default values that make sense for 42 N.E.R.D.S.
+#   internal:
+#     warranty_claims:
+#       repo: module_warranty_claims
+#       # currently, a commit or tag must be specified, it is impossible to specify just a branch
+#       tag: 16.0-v0.5.0
+#       # path: ./module_warranty_claims/warranty_claims # the default value is always repo name + / + name of module
+#     warranty_claims_portal:
+#       repo: module_warranty_claims
+#       commit: a661f86bd1d9440d999bb407cfbf9d1e55466056
+#     voip_placetel_enterprise:
+#       repo: module_voip
+#       commit: 5d4e56d64d51b50624e3b1fa0d7010110c6a976d
+#       path: ./custom_path/voip_placetel_enterprise # we want to put this one in a path that is not the repo name
+
+#   # in case you want to add e.g. a OCA module you must use this, longer, format for that one module.
+#   external:
+#     voip_placetel_standalone:
+#       path: ./module_voip/voip_placetel_standalone
+#       #source_path: test_abc # the default value for source_path is always the module name
+#       source:
+#         type: github_tarball
+#         repo: 42nerds/module_voip
+#         tag: 17.0-v0.4.0
+#     sale_workflow_full:
+#       path: ./thirdparty_modules/full_oca_sale_workflow
+#       source_path: . # We want to pull all modules from this repo at once
+#       source:
+#         type: github_tarball
+#         repo: OCA/sale-workflow
+#         commit: 33436df12bb75f5fe2f6fbf090529871f4fb8928
+#     partner_sale_pivot:
+#       path: ./thirdparty/oca/partner_sale_pivot
+#       source:
+#         type: github_tarball
+#         repo: OCA/sale-workflow
+#         commit: b69ea9154864d5aa132f880a4ec33aa3f279fa20
 """
         )
-        f.write("odoo_version: 0 # set this!!!\n")
-        f.write(
-            yaml.dump(
-                {"modules": mods},
-                indent=2,
-                sort_keys=False,
-                Dumper=IndentDumper,
-                allow_unicode=True,
-            )
-        )
 
 
-repo_group.add_command(create_cmd)
-
-
-def _extract_tarball(ctx: click.Context, url: str, git_path: str, tgt_path: str) -> None:
+def _extract_tarball_subdir(ctx: click.Context, url: str, path: str, tgt_path: str) -> None:
+    print(url)
     # extract the tar file to a temporary directory, then copy what we need and delete it again
     with tarfile.open(_do_cached_download(ctx, url)) as tar:
         # https://stackoverflow.com/a/43094365
         def remove_top_dir(tf: Any) -> Any:
             top = (
                 os.path.commonprefix(tf.getnames()) + "/"
-            )  # NOTE: works ONLY with module repos
+            )
             for member in tf.getmembers():
                 if member.path.startswith(top):
                     member.path = member.path[len(top):]
@@ -228,102 +155,146 @@ def _extract_tarball(ctx: click.Context, url: str, git_path: str, tgt_path: str)
             tar.extractall(path=tmpdir, members=remove_top_dir(tar))
             if os.path.isdir(tgt_path):
                 shutil.rmtree(tgt_path)
-            shutil.copytree(tmpdir + "/" + git_path, tgt_path)
+            shutil.copytree(tmpdir + "/" + path, tgt_path)
 
 
-# prospector: disable=MC0001
-# pylint: disable=R0901,R0914
-@click.command(name="update", short_help="Update modules")
+def _get_vogon_yaml() -> dict[Any, Any]:
+    def _parse_vogon_yaml(vogon: dict[Any, Any]) -> dict[Any, Any]:
+        # convert repos specified in the internal shorthand format to the external format
+        if "external" not in vogon["modules"]:
+            vogon["external"] = {}
+        if "internal" in vogon["modules"]:
+            for k, v in vogon["modules"]["internal"].items():
+                if k in vogon["modules"]["external"]:
+                    raise RuntimeError("duplicate module key")
+                version_key = next((k for k in ('tag', 'branch', 'commit') if k in v))
+                vogon["modules"]["external"][k] = {
+                    "path": (v["repo"] + "/" + k) if "path" not in v else v["path"],
+                    "source": {
+                        "type": "github_tarball",
+                        "repo": f"42nerds/{v['repo']}",
+                        version_key: v[version_key],
+                    },
+                }
+            del vogon["modules"]["internal"]
+
+        # check if sources are valid
+        for mod in vogon["modules"]["external"].values():
+            if mod["source"]["type"] == "github_tarball":
+                if "branch" in mod["source"]:
+                    raise NotImplementedError("can't pull from branches, need a specific tag or commit")
+                if "commit" in mod['source'] and "tag" in mod['source']:
+                    raise RuntimeError("both commit and tag specified in source")
+            else:
+                raise NotImplementedError("unknown source type")
+
+        # Insert default values for source_path
+        for k, mod in dict(vogon["modules"]["external"]).items():
+            if "source_path" not in mod:
+                # the default value for source_path is always the module name
+                vogon["modules"]["external"][k]["source_path"] = f"{k}"
+
+        return vogon
+    if not os.path.isfile("vogon.yaml"):
+        raise RuntimeError("no vogon.yaml found")
+    with open("vogon.yaml", "r", encoding="utf-8") as f:
+        vogon = _parse_vogon_yaml(yaml.safe_load(f))
+    return vogon
+
+
+def _lockfile_set(module: str, key: str, value: str) -> None:
+    if os.path.isfile("vogon-lock.json"):
+        with open("vogon-lock.json", "r", encoding="utf-8") as f:
+            lockfile = json.loads(f.read())
+    else:
+        lockfile = {}
+
+    if "modules" not in lockfile:
+        lockfile["modules"] = {}
+    if module not in lockfile["modules"]:
+        lockfile["modules"][module] = {}
+    lockfile["modules"][module][key] = value
+
+    with open("vogon-lock.json", "w", encoding="utf-8") as f:
+        f.write(
+            json.dumps(lockfile, indent=4, sort_keys=True)
+        )
+
+
+def _lockfile_get(module: str, key: str) -> Optional[Any]:
+    if os.path.isfile("vogon-lock.json"):
+        with open("vogon-lock.json", "r", encoding="utf-8") as f:
+            lockfile = json.loads(f.read())
+    else:
+        return None
+
+    if "modules" not in lockfile or module not in lockfile["modules"]:
+        return None
+    return lockfile["modules"][module].get(key, None)
+
+
+def _hash_module_definition(name: str, mdef: dict[str, Any]) -> str:
+    return hashlib.sha256(repr({"name": name, "mdef": mdef}).encode("utf-8")).hexdigest()
+
+
+def _pretty_source_version(source: dict[str, Any]) -> str:
+    if source["type"] != "github_tarball":
+        raise NotImplementedError("unknown source type")
+    return f"{source['repo']} version {source.get('tag') or source.get('commit')}"
+
+
+@repo_group.command(name="sync", short_help="synchronize modules")
 @click.option(
     "--module",
     is_flag=False,
     default=None,
-    help="updates only one module",
+    help="synchronizes only one module",
 )
 @click.pass_context
-def update_cmd(ctx: click.Context, module: str) -> None:
+def sync(ctx: click.Context, module: str) -> None:
     """
-    Finds the latest version for all modules in vogon.yaml and updates their versions in the file.
-    Then it downloads each tarball and extracts it in the correct directory (if the version does not match)
+    Synchronize.
+
+    Looks at all (or one specified) module(s) in vogon.yaml, downloads their tarballs
+    in their respective version and extracts them in the correct directory.
+
+    The lockfile will also be updated.
 
     Parameters:
-        --module (str): Update only a single module
+        --module (str): Sync only a single module
 
     """
-    if not os.path.isfile("vogon.yaml"):
-        click.echo("no vogon.yaml found")
-        return
-    with open("vogon.yaml", "r", encoding="utf-8") as f:
-        conf = yaml.safe_load(f)
-    to_update = conf["modules"]
-    if module is not None:
-        try:
-            to_update = [
-                next(item for item in conf["modules"] if item["name"] == module)
-            ]
-        except StopIteration:
-            click.echo(f"module {module} not found")
-            return
-    conf["modules"] = []  # we add the modules back into the list after we made changes.
-    for mod in to_update:
-        click.echo(f"processing {mod['name']}")
-        repo = mod.get("git")
-        if repo is None:  # no git repo set, continuing is pointless
-            click.echo("    skipping.. No repo set")
-            conf["modules"].append(mod)
+    vogon = _get_vogon_yaml()
+    if module is None:
+        modules = vogon["modules"]["external"]
+    else:
+        modules = {module: vogon["modules"]["external"][module]}
+
+    for name, mdef in modules.items():
+        # currently only concrete versions are supported, so there
+        # is no way the module definiton would be different for two different versions
+
+        # We hash the whole module definition to include things like the paths, module name etc.
+        # since if that changes we need to pull the module again anyway
+        installed_hash = _lockfile_get(name, "installed_def_hash")
+        to_be_installed_hash = _hash_module_definition(name, mdef)
+        if installed_hash == to_be_installed_hash:
+            print(f"{name}: up to date")
             continue
+        print(f"{name}: updating")
 
-        # initialize our paths
-        mod_path = mod.get("path", ".") + "/" + mod["name"]
-        git_path = mod.get("git_path", f"./{mod['name']}")
+        print(f"Downloading {_pretty_source_version(mdef['source'])}")
 
-        # do we not want to upgrade the module?
-        if not mod.get("use_latest"):
-            # does the module not exist yet?
-            if not os.path.isdir(mod_path):
-                click.echo("    performing initial download")
-                _extract_tarball(
-                    ctx,
-                    f"https://api.github.com/repos/{repo}/tarball/{mod['tag']}",
-                    git_path,
-                    mod_path,
-                )
-            else:
-                click.echo("    skipping.. Already exists and no use_latest")
-            conf["modules"].append(mod)
-            continue
+        if mdef['source']['type'] != "github_tarball":
+            raise NotImplementedError("unknown source type")
 
-        # is there a newer version available?
-        if (mod.get("tag") is not None) and (
-            _tag_as_version(
-                _get_repo_latest_tag(ctx, repo, conf["odoo_version"])[0],
-                conf["odoo_version"],
-            )
-            <= _tag_as_version(mod["tag"], conf["odoo_version"])
-        ):
-            click.echo(f"    no newer tag in repo {repo}")
-            conf["modules"].append(mod)
-            continue
-        new_tag, new_tar_url = _get_repo_latest_tag(ctx, repo, conf["odoo_version"])
-        click.echo(f"    updating to {new_tag} from { mod.get('tag', 'no tag set')}")
-        mod["tag"] = new_tag
-        conf["modules"].append(mod)
+        if mdef['source'].get('tag'):
+            url = f"https://github.com/{mdef['source']['repo']}/archive/refs/tags/{mdef['source']['tag']}.tar.gz"
+        else:
+            url = f"https://github.com/{mdef['source']['repo']}/archive/{mdef['source']['commit']}.tar.gz"
 
-        _extract_tarball(ctx, new_tar_url, git_path, mod_path)
+        _extract_tarball_subdir(ctx, url, mdef["source_path"], mdef["path"])
 
-    # clear the download cache
+        _lockfile_set(name, "installed_def_hash", to_be_installed_hash)
+
     _clear_download_cache()
-    # write back to our config
-    with open("vogon.yaml", "w", encoding="utf-8") as f:
-        f.write(
-            yaml.dump(
-                conf,
-                indent=2,
-                sort_keys=False,
-                Dumper=IndentDumper,
-                allow_unicode=True,
-            )
-        )
-
-
-repo_group.add_command(update_cmd)
