@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.25.0 (2025-04-25)
+
+### Bug Fixes
+
+- Add skip ci to version commit
+  ([`1d5ddc7`](https://github.com/42nerds/hitchhiker/commit/1d5ddc7f2a14239edbbfee279daf67259fc2800a))
+
+### Features
+
+- Improve odoo module management
+  ([`406f11d`](https://github.com/42nerds/hitchhiker/commit/406f11d43fad5822ddffad4d4ee2553ba02f5bdd))
+
+
 ## v0.24.4 (2025-04-16)
 
 ### Bug Fixes
