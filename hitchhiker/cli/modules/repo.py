@@ -7,6 +7,7 @@ import shutil
 import tarfile
 import tempfile
 import hashlib
+import copy
 from typing import Any, Optional
 
 import click
@@ -94,6 +95,19 @@ def create_cmd(_ctx: click.Context, overwrite: bool) -> None:
     with open("vogon.yaml", "w", encoding="utf-8") as f:
         f.write(
             """## EXAMPLE:
+# # for specifying entire repos of modules to pull, just a
+# # shorthand instead of specifying a bunch of similar moudles entries
+# module_groups:
+#     - module_type: internal
+#       modules:
+#         configurator: {}
+#         configurator_sale: {}
+#         configurator_website_sale:
+#           # the common attrs can be overridden here
+#           path: ./module_shop_configurator/renamed_module_configurator_website_sale
+#       common_attrs:
+#         repo: module_shop_configurator
+#         tag: 16.0-v0.14.4
 # modules:
 #   # internal is the quick and easy-to-read format for 42 N.E.R.D.S. style repos
 #   # This basically just resolves into a modules entry with a bunch of default values that make sense for 42 N.E.R.D.S.
@@ -159,10 +173,37 @@ def _extract_tarball_subdir(ctx: click.Context, url: str, path: str, tgt_path: s
 
 
 def _get_vogon_yaml() -> dict[Any, Any]:
+    # pylint: disable=too-many-branches
     def _parse_vogon_yaml(vogon: dict[Any, Any]) -> dict[Any, Any]:
+        def merge_dicts_recursive(a: dict[Any, Any], b: dict[Any, Any]) -> dict[Any, Any]:
+            # b overrides a
+            for key, value in b.items():
+                if key in a and isinstance(a[key], dict) and isinstance(value, dict):
+                    a[key] = merge_dicts_recursive(a[key], value)
+                else:
+                    a[key] = value
+            return a
+        # add required keys and their default values
+        # global
+        for key, value in [("modules", {}), ("module_groups", [])]:  # type: ignore[var-annotated]
+            if key not in vogon:
+                vogon[key] = value
+        # modules
+        for key, value in [("external", {}), ("internal", {})]:
+            if key not in vogon["modules"]:
+                vogon["modules"][key] = value
+
+        # resolve module_groups
+        for group in vogon["module_groups"]:
+            for mname, mattrs in group["modules"].items():
+                if mname in vogon["modules"][group["module_type"]]:
+                    raise RuntimeError("module from module_groups is already in modules")
+                vogon["modules"][group["module_type"]][mname] = merge_dicts_recursive(
+                    copy.deepcopy(group["common_attrs"]),
+                    mattrs,
+                )
+
         # convert repos specified in the internal shorthand format to the external format
-        if "external" not in vogon["modules"]:
-            vogon["external"] = {}
         if "internal" in vogon["modules"]:
             for k, v in vogon["modules"]["internal"].items():
                 if k in vogon["modules"]["external"]:
