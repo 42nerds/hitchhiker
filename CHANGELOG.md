@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.26.0 (2025-04-25)
+
+### Features
+
+- Vogon.yaml module_groups
+  ([`3ac2c69`](https://github.com/42nerds/hitchhiker/commit/3ac2c697aeeb63573b6a0b7ef167df27acf0a38b))
+
+
 ## v0.25.0 (2025-04-25)
 
 ### Bug Fixes
