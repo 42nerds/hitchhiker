@@ -1,9 +1,9 @@
 import os
 import pathlib
 import shutil
+import subprocess
 import tempfile
 import zipfile
-import subprocess
 from contextlib import contextmanager
 from typing import BinaryIO, Iterator, Set
 
@@ -141,11 +141,12 @@ class DirectoryRsyncBackup(GenericBackup):
 class ZipBackup(GenericBackup):
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        if not os.path.exists(self.path):
-            # pylint: disable=consider-using-with
-            self.file = zipfile.ZipFile(
-                self.path, "w", compression=zipfile.ZIP_DEFLATED, allowZip64=True
-            )
+        if os.path.exists(self.path):
+            raise RuntimeError(f"output file {self.path} exists already")
+        # pylint: disable=consider-using-with
+        self.file = zipfile.ZipFile(
+            self.path, "w", compression=zipfile.ZIP_DEFLATED, allowZip64=True
+        )
 
     def add_dir(self, src: str, dst: str) -> None:
         prefix_len = len(src) + 1
