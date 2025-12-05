@@ -9,7 +9,7 @@ from click_odoo import odoo  # type: ignore[import, import-untyped]
 
 from hitchhiker.tools import backup
 
-from . import click_odoo_ext
+from . import click_odoo_ext, o_helpers
 
 
 def __backup_filestore(b: backup.GenericBackup, dbname: str) -> None:
@@ -56,7 +56,7 @@ def __dump_manifest(b: backup.GenericBackup, dbname: str) -> None:
 @click.option("-t", "--store-type", default="zip", help="output backup type - zip, dir (directory) or dir_rsync")
 def backup_cmd(env: Any, output: str, store_type: str) -> None:  # pylint: disable=unused-argument
     """Backup Odoo"""
-    dbname = odoo.tools.config["db_name"]
+    dbname = o_helpers.get_db_name()
     click.echo(f"starting backup on database: {dbname}")
     with backup.backup(output, store_type) as b:
         click.echo("backing up filestore")
