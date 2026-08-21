@@ -31,7 +31,7 @@ jobs:
           export VERSION=$(sed -n 's/^_hitchhiker_version = "\(.*\)"/\1/p' setup.py)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
