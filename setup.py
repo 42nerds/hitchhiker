@@ -42,7 +42,7 @@ setup(
             "copier>=8.0.0,<10",  # between copier 8 and 9 there is a breaking change that does not affect us. (Changes the return code for unsafe template error)
         ],
         "gcloud": [
-            "google-cloud-storage>=2.16.0,<3",
+            "google-cloud-storage>=3.13.1,<4",
         ],
     },
     entry_points={
