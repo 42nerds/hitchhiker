@@ -8,7 +8,7 @@ setup(
     name="hitchhiker",
     version=_hitchhiker_version,
     description="",
-    python_requires=">=3.7",
+    python_requires=">=3.10",
     install_requires=[
         "click>=8,<9",
         "tomlkit>=0.12.3,<1",
