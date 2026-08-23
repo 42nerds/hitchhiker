@@ -1,4 +1,4 @@
-import sys
+import importlib.metadata
 
 import click
 
@@ -7,17 +7,10 @@ from hitchhiker.config.config import ConfigManager
 from .auth import commands as auth
 from .modules import commands as modules
 
-if sys.version_info[1] > 7:
-    try:
-        import importlib.metadata
-
-        _HITCHHIKER_VERSION = importlib.metadata.version("hitchhiker")
-    except importlib.metadata.PackageNotFoundError:
-        _HITCHHIKER_VERSION = "unknown"
-else:
-    import pkg_resources
-
-    _HITCHHIKER_VERSION = pkg_resources.get_distribution("hitchhiker").version
+try:
+    _HITCHHIKER_VERSION = importlib.metadata.version("hitchhiker")
+except importlib.metadata.PackageNotFoundError:
+    _HITCHHIKER_VERSION = "unknown"
 
 
 @click.group()
