@@ -28,7 +28,7 @@ setup(
             "PyGithub>=2.1.1,<3",
         ],
         "test": [
-            "pytest>=7,<8",
+            "pytest>=9,<10",
             "mypy",
             "types-requests",
             "types-psycopg2",
